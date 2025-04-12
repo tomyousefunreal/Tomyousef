@@ -1,1766 +1,244 @@
- <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام إدارة السعرات المصري</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <title>Yousef Mohamed Salah - CV</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css">
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
         body {
-            font-family: 'Arial', 'Helvetica', sans-serif;
-            background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
-            margin: 0;
-            padding: 10px;
-            transition: background 0.3s ease;
-        }
-        body.dark-mode {
-            background: linear-gradient(135deg, #263238, #455a64);
-            color: #eceff1;
+            font-family: 'Arial', sans-serif;
+            color: #333;
+            line-height: 1.6;
         }
         .container {
-            max-width: 1600px;
+            max-width: 850px;
             margin: 0 auto;
-            background: #ffffff;
             padding: 20px;
+        }
+        .section {
+            margin-bottom: 25px;
+        }
+        .section-title {
+            border-bottom: 2px solid #3182ce;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+            color: #2c5282;
+        }
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        .contact-item i {
+            width: 20px;
+            margin-right: 10px;
+            color: #4299e1;
+        }
+        .timeline-item {
+            margin-bottom: 15px;
+            position: relative;
+        }
+        .timeline-title {
+            font-weight: bold;
+        }
+        .timeline-period {
+            color: #718096;
+            font-style: italic;
+        }
+        .skill-tag {
+            background-color: #ebf8ff;
             border-radius: 15px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-            transition: background 0.3s ease, transform 0.3s ease;
+            padding: 5px 10px;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            display: inline-block;
+            color: #2b6cb0;
+            font-size: 0.9rem;
         }
-        .container:hover {
-            transform: translateY(-5px);
-        }
-        .container.dark-mode {
-            background: #37474f;
-            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.1);
-        }
-        .navbar {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            background: #0288d1;
-            padding: 10px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-        .nav-item {
-            color: white;
-            cursor: pointer;
-            padding: 8px 15px;
-            border-radius: 8px;
-            transition: background 0.3s ease, transform 0.3s ease;
-            font-size: 1em;
-        }
-        .nav-item:hover {
-            background: #0277bd;
-            transform: scale(1.05);
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .header h1 {
-            color: #0277bd;
-            font-size: 2em;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
-        }
-        .dark-mode .header h1 {
-            color: #4fc3f7;
-        }
-        .breadcrumbs {
-            font-size: 0.9em;
-            color: #0288d1;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-        .dark-mode .breadcrumbs {
-            color: #4fc3f7;
-        }
-        .login-container, .stats, .calculator, .owner-options, .meals {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-            padding: 15px;
-            background: #f5f5f5;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-            transition: background 0.3s ease;
-        }
-        .dark-mode .login-container, .dark-mode .stats, .dark-mode .calculator, .dark-mode .owner-options, .dark-mode .meals {
-            background: #455a64;
-        }
-        .login-box, .stat-box, .calc-box, .option-box, .meal-box {
-            background: #e1f5fe;
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s ease, background 0.3s ease;
-        }
-        .dark-mode .login-box, .dark-mode .stat-box, .dark-mode .calc-box, .dark-mode .option-box, .dark-mode .meal-box {
-            background: #546e7a;
-        }
-        .login-box:hover, .stat-box:hover, .calc-box:hover, .option-box:hover, .meal-box:hover {
-            transform: translateY(-3px);
-        }
-        h3 {
-            color: #0277bd;
-            margin: 0 0 10px;
-            font-size: 1.3em;
-        }
-        .dark-mode h3 {
-            color: #4fc3f7;
-        }
-        .food-item {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            align-items: center;
-            margin: 10px 0;
-            background: #f5f5f5;
-            padding: 10px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
-            transition: background 0.3s ease, transform 0.3s ease;
-        }
-        .dark-mode .food-item {
-            background: #455a64;
-        }
-        .food-item:hover {
-            transform: scale(1.02);
-        }
-        .food-item.completed {
-            background: #b3e5fc;
-        }
-        .dark-mode .food-item.completed {
-            background: #78909c;
-        }
-        .checkmark {
-            color: #0288d1;
-            font-size: 1.5em;
-            margin-left: 10px;
-        }
-        .hidden {
-            display: none !important;
-            visibility: hidden !important;
-            opacity: 0 !important;
-        }
-        select, button, input, textarea {
-            padding: 10px 15px;
-            border-radius: 8px;
-            border: 1px solid #b0bec5;
-            background: #ffffff;
-            cursor: pointer;
-            font-size: 0.9em;
-            transition: all 0.3s ease;
-            margin: 5px 0;
-            width: 100%;
-        }
-        .dark-mode select, .dark-mode button, .dark-mode input, .dark-mode textarea {
-            background: #607d8b;
-            color: #eceff1;
-            border: 1px solid #90a4ae;
-        }
-        button {
-            background: #0288d1;
-            color: white;
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            padding: 10px;
-        }
-        .dark-mode button {
-            background: #4fc3f7;
-            color: #263238;
-        }
-        button:hover {
-            background: #0277bd;
-            transform: scale(1.05);
-        }
-        .dark-mode button:hover {
-            background: #29b6f6;
-        }
-        .category {
-            margin: 20px 0;
-            padding: 15px;
-            background: #f5f5f5;
-            border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
-        }
-        .dark-mode .category {
-            background: #455a64;
-        }
-        h2 {
-            color: #0277bd;
-            font-size: 1.5em;
-            margin-bottom: 15px;
-        }
-        .dark-mode h2 {
-            color: #4fc3f7;
-        }
-        .negative {
-            color: #ef5350;
-        }
-        .near-target {
-            color: #4caf50;
-        }
-        .owner-only, .client-only, #add-client-form, #food-modal, #custom-food-modal, #notification-modal {
-            display: none;
-        }
-        .owner-only.active, .client-only.active, #add-client-form.active {
-            display: block;
-        }
-        #client-details, #client-macros {
-            margin-top: 15px;
-            padding: 15px;
-            background: #e1f5fe;
-            border-radius: 10px;
-        }
-        .dark-mode #client-details, .dark-mode #client-macros {
-            background: #546e7a;
-        }
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            display: flex !important;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            visibility: hidden;
-            opacity: 0;
-            transition: visibility 0.3s, opacity 0.3s;
-        }
-        .modal:not(.hidden) {
-            visibility: visible;
-            opacity: 1;
-        }
-        .modal-content {
-            background: white;
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-            width: 90%;
-            max-width: 350px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            border: 2px solid #0288d1;
-        }
-        .dark-mode .modal-content {
-            background: #546e7a;
-            border: 2px solid #4fc3f7;
-        }
-        .close-modal {
-            float: left;
-            font-size: 1.2em;
-            cursor: pointer;
-            color: #ef5350;
-        }
-        #chart-container {
-            width: 100%;
-            max-width: 500px;
-            margin: 15px auto;
-            display: none;
-        }
-        .performance-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 10px;
-            padding: 15px;
-            background: #f5f5f5;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-        .dark-mode .performance-stats {
-            background: #455a64;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
+        @media print {
             body {
-                padding: 5px;
-            }
-            .container {
-                padding: 10px;
-                border-radius: 8px;
-            }
-            .navbar {
-                flex-direction: column;
-                padding: 5px;
-            }
-            .nav-item {
-                padding: 8px;
-                margin: 2px 0;
-                font-size: 0.9em;
-            }
-            .header h1 {
-                font-size: 1.5em;
-            }
-            h2 {
-                font-size: 1.2em;
-            }
-            h3 {
-                font-size: 1.1em;
-            }
-            .login-container, .stats, .meals, .performance-stats {
-                grid-template-columns: 1fr;
-                gap: 10px;
-            }
-            .stat-box, .meal-box {
-                padding: 10px;
-            }
-            button, select, input, textarea {
-                padding: 8px;
-                font-size: 0.85em;
-            }
-            .modal-content {
-                width: 95%;
-                padding: 10px;
-            }
-            #chart-container {
-                max-width: 100%;
-            }
-        }
-        @media (max-width: 480px) {
-            .header h1 {
-                font-size: 1.2em;
-            }
-            h2 {
-                font-size: 1em;
-            }
-            h3 {
-                font-size: 0.95em;
-            }
-            .food-item {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .checkmark {
-                font-size: 1.2em;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <nav class="navbar hidden" id="navbar">
-            <div class="nav-item" onclick="showSection('owner-meals')">إدارة العملاء</div>
-            <div class="nav-item" onclick="showSection('add-client-form')">إضافة عميل</div>
-            <div class="nav-item" onclick="toggleTheme()">تغيير الثيم</div>
-            <div class="nav-item" onclick="clearDatabase()">حذف قاعدة البيانات</div>
-            <div class="nav-item" onclick="logout()">تسجيل الخروج</div>
-        </nav>
-        <div class="header">
-            <h1>نظام إدارة السعرات المصري</h1>
-        </div>
-        <div class="breadcrumbs hidden" id="breadcrumbs">الرئيسية</div>
+<body class="bg-gray-50">
+    <div class="container bg-white shadow-md rounded-lg">
+        <!-- Header Section -->
+        <header class="section pb-4">
+            <div class="flex flex-wrap justify-between items-center">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-800">Yousef Mohamed Salah</h1>
+                    <p class="text-xl text-blue-600">AI Enthusiast | Former Game Developer</p>
+                    <p class="text-gray-600">📍 Egypt</p>
+                </div>
+                <div class="mt-4 md:mt-0">
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <a href="mailto:yousefunreal2024@gmail.com" class="text-blue-600 hover:underline">yousefunreal2024@gmail.com</a>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <a href="tel:01019646537" class="text-blue-600 hover:underline">01019646537</a>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fab fa-linkedin"></i>
+                        <a href="https://www.linkedin.com/in/yousef-mohamed-3522b2313/" target="_blank" class="text-blue-600 hover:underline">LinkedIn</a>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fab fa-facebook"></i>
+                        <a href="https://www.facebook.com/profile.php?id=100084425587109" target="_blank" class="text-blue-600 hover:underline">Facebook</a>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-gamepad"></i>
+                        <a href="https://tomyousef.itch.io/" target="_blank" class="text-blue-600 hover:underline">Game Portfolio</a>
+                    </div>
+                </div>
+            </div>
+        </header>
 
-        <!-- شاشة تسجيل الدخول -->
-        <div class="login-container" id="login-screen">
-            <div class="login-box">
-                <h3>تسجيل الدخول</h3>
-                <select id="user-type">
-                    <option value="owner">المالك</option>
-                    <option value="client">العميل</option>
-                </select>
-                <input type="text" id="username" placeholder="اسم المستخدم">
-                <input type="password" id="password" placeholder="كلمة المرور">
-                <button onclick="login()"><i class="fas fa-sign-in-alt"></i> تسجيل الدخول</button>
-            </div>
-        </div>
+        <!-- Professional Summary -->
+        <section class="section">
+            <h2 class="section-title text-xl font-semibold">Professional Summary</h2>
+            <p>
+                Self-taught AI engineer with a strong background in game development. Transitioned from designing interactive 3D games to the field of artificial intelligence in early 2025. Currently developing practical skills in deep learning, computer vision, and natural language processing using Python libraries. Member of the National Center for Digital Transformation, with a passion for continuous learning and innovation.
+            </p>
+        </section>
 
-        <!-- واجهة المالك -->
-        <div class="owner-only hidden" id="owner-interface">
-            <div id="add-client-form" class="hidden">
-                <h2>إضافة عميل جديد</h2>
-                <input type="text" id="client-username" placeholder="اسم المستخدم للعميل">
-                <input type="password" id="client-password" placeholder="كلمة المرور للعميل">
-                <input type="number" id="client-age" placeholder="العمر">
-                <input type="number" id="client-height" placeholder="الطول (سم)">
-                <input type="number" id="client-weight" placeholder="الوزن (كجم)">
-                <select id="client-gender">
-                    <option value="male">ذكر</option>
-                    <option value="female">أنثى</option>
-                </select>
-                <select id="client-activity">
-                    <option value="1.2">قليل النشاط</option>
-                    <option value="1.375">خفيف</option>
-                    <option value="1.55">متوسط</option>
-                    <option value="1.725">نشط</option>
-                </select>
-                <select id="client-goal">
-                    <option value="loss">فقدان الوزن</option>
-                    <option value="gain">زيادة الوزن</option>
-                    <option value="maintain">المحافظة على الوزن</option>
-                </select>
-                <input type="number" id="target-calories" placeholder="السعرات المستهدفة (اختياري)">
-                <input type="number" id="protein-grams" placeholder="جرام بروتين">
-                <input type="number" id="carbs-grams" placeholder="جرام كارب">
-                <input type="number" id="fats-grams" placeholder="جرام دهون">
-                <input type="number" id="fiber-grams" placeholder="جرام ألياف">
-                <input type="number" id="usage-days" placeholder="عدد أيام الاستخدام">
-                <select id="client-lifestyle">
-                    <option value="sedentary">جالس (مكتبي)</option>
-                    <option value="active">نشط (رياضي)</option>
-                    <option value="mixed">مختلط</option>
-                </select>
-                <button onclick="addClient()"><i class="fas fa-user-plus"></i> حفظ العميل</button>
+        <!-- Technical Skills -->
+        <section class="section">
+            <h2 class="section-title text-xl font-semibold">Technical Skills</h2>
+            
+            <div class="mb-3">
+                <h3 class="font-semibold">Programming Languages:</h3>
+                <div class="flex flex-wrap">
+                    <span class="skill-tag">Python (Advanced)</span>
+                    <span class="skill-tag">C++ (Basics)</span>
+                    <span class="skill-tag">C# (Basics)</span>
+                </div>
             </div>
+            
+            <div class="mb-3">
+                <h3 class="font-semibold">AI/ML Tools:</h3>
+                <div class="flex flex-wrap">
+                    <span class="skill-tag">TensorFlow</span>
+                    <span class="skill-tag">PyTorch</span>
+                    <span class="skill-tag">Keras</span>
+                    <span class="skill-tag">Pandas</span>
+                    <span class="skill-tag">NumPy</span>
+                    <span class="skill-tag">Matplotlib</span>
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <h3 class="font-semibold">Deep Learning Models:</h3>
+                <div class="flex flex-wrap">
+                    <span class="skill-tag">Artificial Neural Networks (ANN)</span>
+                    <span class="skill-tag">Convolutional Neural Networks (CNN)</span>
+                    <span class="skill-tag">Recurrent Neural Networks (RNN)</span>
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <h3 class="font-semibold">Specialization Areas:</h3>
+                <div class="flex flex-wrap">
+                    <span class="skill-tag">Natural Language Processing (NLP)</span>
+                    <span class="skill-tag">Computer Vision</span>
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <h3 class="font-semibold">Game Development:</h3>
+                <div class="flex flex-wrap">
+                    <span class="skill-tag">Unreal Engine 5</span>
+                    <span class="skill-tag">Unity</span>
+                </div>
+            </div>
+        </section>
 
-            <div id="owner-meals" class="hidden">
-                <h2>إدارة العملاء والدايت</h2>
-                <select id="client-selector" onchange="loadOwnerClientData()">
-                    <option value="">اختر عميل</option>
-                </select>
-                <div id="client-details"></div>
-                <div id="client-macros"></div>
-                <button onclick="addMeal()"><i class="fas fa-plus"></i> إضافة وجبة</button>
-                <button onclick="showCustomFoodForm()"><i class="fas fa-utensils"></i> إضافة طعام مخصص</button>
-                <div id="meals-container"></div>
-                <button onclick="shareClientLink()"><i class="fas fa-share-alt"></i> مشاركة للعميل</button>
-                <button onclick="exportOwnerClientReport('daily')"><i class="fas fa-file-pdf"></i> تقرير يومي</button>
-                <button onclick="exportOwnerClientReport('weekly')"><i class="fas fa-file-pdf"></i> تقرير أسبوعي</button>
-                <button onclick="exportOwnerClientReport('monthly')"><i class="fas fa-file-pdf"></i> تقرير شهري</button>
-                <button onclick="showNotificationForm()"><i class="fas fa-bell"></i> إرسال إشعار</button>
+        <!-- AI Experience -->
+        <section class="section">
+            <h2 class="section-title text-xl font-semibold">AI Experience</h2>
+            <div class="timeline-item">
+                <div class="timeline-title">AI Developer (Self-taught)</div>
+                <div class="timeline-period">January 2025 - Present</div>
+                <ul class="list-disc pl-5 mt-2">
+                    <li>Building and training deep learning models using TensorFlow and PyTorch</li>
+                    <li>Implementing practical projects in areas like image classification and text summarization</li>
+                    <li>Studying and applying different neural network architectures like ANN, CNN, and RNN</li>
+                </ul>
             </div>
-        </div>
+        </section>
 
-        <!-- واجهة العميل -->
-        <div class="client-only hidden" id="client-interface">
-            <div class="stats">
-                <div class="stat-box">
-                    <h3>السعرات المتبقية</h3>
-                    <p id="client-calories">0</p>
-                </div>
-                <div class="stat-box">
-                    <h3>الكارب (جم)</h3>
-                    <p id="client-carbs">0</p>
-                </div>
-                <div class="stat-box">
-                    <h3>البروتين (جم)</h3>
-                    <p id="client-protein">0</p>
-                </div>
-                <div class="stat-box">
-                    <h3>الدهون (جم)</h3>
-                    <p id="client-fats">0</p>
-                </div>
-                <div class="stat-box">
-                    <h3>الألياف (جم)</h3>
-                    <p id="client-fiber">0</p>
-                </div>
-                <div class="stat-box">
-                    <h3>النقاط</h3>
-                    <p id="client-points">0</p>
-                </div>
+        <!-- Previous Experience -->
+        <section class="section">
+            <h2 class="section-title text-xl font-semibold">Previous Experience</h2>
+            <div class="timeline-item">
+                <div class="timeline-title">Game Developer</div>
+                <div class="timeline-period">2021 - 2024</div>
+                <ul class="list-disc pl-5 mt-2">
+                    <li>Developed indie games using Unity and C# with a focus on gameplay mechanics</li>
+                    <li>Full year working on Unreal Engine 5 for 3D environment design</li>
+                    <li>Implemented game logic, physics simulation, and visual design</li>
+                </ul>
             </div>
-            <div class="performance-stats" id="performance-stats">
-                <div class="stat-box">
-                    <h3>الوجبات المكتملة</h3>
-                    <p id="completed-meals">0</p>
-                </div>
-                <div class="stat-box">
-                    <h3>إجمالي النقاط</h3>
-                    <p id="total-points">0</p>
-                </div>
-                <div class="stat-box">
-                    <h3>متوسط السعرات</h3>
-                    <p id="avg-calories">0</p>
-                </div>
-            </div>
-            <div id="client-meals" class="meals"></div>
-            <div class="category">
-                <h2>تصدير التقارير</h2>
-                <button onclick="exportClientReport('daily')"><i class="fas fa-file-pdf"></i> تقرير يومي</button>
-                <button onclick="exportClientReport('weekly')"><i class="fas fa-file-pdf"></i> تقرير أسبوعي</button>
-                <button onclick="exportClientReport('monthly')"><i class="fas fa-file-pdf"></i> تقرير شهري</button>
-            </div>
-            <div class="category" id="client-notifications">
-                <h2>الإشعارات</h2>
-                <div id="notifications-list"></div>
-            </div>
-            <div class="category">
-                <h2>اقتراحات توقيت الوجبات</h2>
-                <div id="meal-timing-suggestions"></div>
-            </div>
-            <div class="category">
-                <button onclick="logout()"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</button>
-            </div>
-            <div id="chart-container">
-                <canvas id="macrosChart"></canvas>
-            </div>
-        </div>
+        </section>
 
-        <!-- مودال إضافة طعام من قاعدة البيانات -->
-        <div id="food-modal" class="modal hidden">
-            <div class="modal-content">
-                <span class="close-modal" onclick="closeModal('food-modal')">×</span>
-                <h3>إضافة طعام</h3>
-                <select id="modal-food-type" onchange="updateModalFoodOptions()">
-                    <option value="">اختر نوع الطعام</option>
-                    <option value="carbs">كربوهيدرات</option>
-                    <option value="protein">بروتين</option>
-                    <option value="fats">دهون</option>
-                    <option value="custom">مخصص</option>
-                </select>
-                <input type="text" id="modal-food-search" placeholder="ابحث عن طعام" onkeyup="searchFood()">
-                <select id="modal-food-name">
-                    <option value="">اختر الطعام</option>
-                </select>
-                <select id="modal-unit">
-                    <option value="spoon">ملعقة</option>
-                    <option value="cup">كوب</option>
-                    <option value="count">عدد</option>
-                    <option value="grams">جرام</option>
-                    <option value="ml">مل</option>
-                </select>
-                <select id="modal-size">
-                    <option value="small">صغير</option>
-                    <option value="medium">متوسط</option>
-                    <option value="large">كبير</option>
-                </select>
-                <input type="number" id="modal-quantity" placeholder="الكمية" min="1" value="1">
-                <button onclick="addFoodFromModal()"><i class="fas fa-plus"></i> إضافة</button>
+        <!-- Education and Memberships -->
+        <section class="section">
+            <h2 class="section-title text-xl font-semibold">Education and Memberships</h2>
+            <div class="timeline-item">
+                <div>Self-taught through YouTube tutorials and personal projects</div>
             </div>
-        </div>
+            <div class="timeline-item">
+                <div class="timeline-title">Member of the National Center for Digital Transformation</div>
+                <div><a href="https://www.facebook.com/NationalCenterdigital" target="_blank" class="text-blue-600 hover:underline">Organization Profile</a></div>
+            </div>
+        </section>
 
-        <!-- مودال إضافة طعام مخصص -->
-        <div id="custom-food-modal" class="modal hidden">
-            <div class="modal-content">
-                <span class="close-modal" onclick="closeModal('custom-food-modal')">×</span>
-                <h3>إضافة طعام مخصص</h3>
-                <input type="text" id="custom-food-name" placeholder="اسم الطعام">
-                <input type="number" id="custom-food-calories" placeholder="السعرات">
-                <input type="number" id="custom-food-carbs" placeholder="الكارب (جم)">
-                <input type="number" id="custom-food-protein" placeholder="البروتين (جم)">
-                <input type="number" id="custom-food-fats" placeholder="الدهون (جم)">
-                <input type="number" id="custom-food-fiber" placeholder="الألياف (جم)">
-                <input type="number" id="custom-food-base-grams" placeholder="الوزن الأساسي (جم)">
-                <input type="text" id="custom-food-vitamins" placeholder="الفيتامينات (اختياري)">
-                <button onclick="addCustomFoodFromModal()"><i class="fas fa-plus"></i> حفظ الطعام</button>
+        <!-- Certifications -->
+        <section class="section">
+            <h2 class="section-title text-xl font-semibold">Certifications</h2>
+            <div class="timeline-item">
+                <div class="timeline-title">Introduction to Game Development - GOMYCODE</div>
+                <div class="timeline-period">June 26, 2022 - July 26, 2022</div>
             </div>
-        </div>
+        </section>
 
-        <!-- مودال إرسال إشعار -->
-        <div id="notification-modal" class="modal hidden">
-            <div class="modal-content">
-                <span class="close-modal" onclick="closeModal('notification-modal')">×</span>
-                <h3>إرسال إشعار للعميل</h3>
-                <input type="text" id="notification-title" placeholder="عنوان الإشعار">
-                <textarea id="notification-message" placeholder="الرسالة"></textarea>
-                <button onclick="sendNotification()"><i class="fas fa-paper-plane"></i> إرسال</button>
+        <!-- Projects -->
+        <section class="section">
+            <h2 class="section-title text-xl font-semibold">Projects</h2>
+            <div class="timeline-item">
+                <div class="timeline-title">Arabic Text Summarization using NLP</div>
+                <p>A project focused on natural language processing techniques for automatic summarization of Arabic text.</p>
             </div>
-        </div>
+            <div class="timeline-item">
+                <div class="timeline-title">2D Platformer Game using Unreal Engine 5</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-title">Games Published on itch.io</div>
+                <div><a href="https://tomyousef.itch.io/" target="_blank" class="text-blue-600 hover:underline">tomyousef.itch.io</a></div>
+                <div class="mt-1">
+                    <span class="text-gray-700">📈 36.5K views - 15.8K downloads</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Languages -->
+        <section class="section">
+            <h2 class="section-title text-xl font-semibold">Languages</h2>
+            <div class="flex flex-wrap">
+                <div class="w-full md:w-1/2 mb-2">
+                    <span class="font-semibold">Arabic:</span> Native
+                </div>
+                <div class="w-full md:w-1/2 mb-2">
+                    <span class="font-semibold">English:</span> Good (Reading and Writing)
+                </div>
+            </div>
+        </section>
     </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script>
-        const { jsPDF } = window.jspdf;
-
-        // متغيرات عالمية
-        let isOwnerLoggedIn = false;
-        let currentUserType = null;
-        let currentClientId = null;
-        let currentMealIndex = null;
-        let currentClientIdForModal = null;
-        let chartInstance = null;
-
-        // دالة SHA-256 بسيطة لتشفير كلمة المرور
-        function simpleSHA256(str) {
-            let hash = 0;
-            for (let i = 0; i < str.length; i++) {
-                const char = str.charCodeAt(i);
-                hash = ((hash << 5) - hash) + char;
-                hash = hash & hash;
-            }
-            return hash.toString(16);
-        }
-
-        // بيانات تسجيل الدخول للمالك
-        const OWNER_CREDENTIALS = {
-            usernameHash: simpleSHA256("admin"),
-            passwordHash: simpleSHA256("123456")
-        };
-
-        // قاعدة بيانات الأطعمة مع baseGrams و units
-        let foodDatabase = {
-    carbs: [
-        { name: "عيش بلدي", calories: 150, carbs: 30, protein: 5, fat: 1, fiber: 2, vitamins: "B1", baseGrams: 50, units: { spoon: 10, cup: 100, count: 50, grams: 1, ml: 0 } },
-        { name: "أرز مصري", calories: 130, carbs: 28, protein: 2.5, fat: 0.5, fiber: 0.5, vitamins: "B3", baseGrams: 100, units: { spoon: 15, cup: 200, count: 100, grams: 1, ml: 0 } },
-        { name: "فول مدمس", calories: 110, carbs: 20, protein: 7, fat: 1, fiber: 5, vitamins: "B9", baseGrams: 100, units: { spoon: 15, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "عدس مسلوق", calories: 115, carbs: 20, protein: 9, fat: 0.5, fiber: 8, vitamins: "B6", baseGrams: 100, units: { spoon: 15, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "مكرونة", calories: 131, carbs: 25, protein: 5, fat: 1, fiber: 2, vitamins: "B1", baseGrams: 100, units: { spoon: 15, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "بطاطس مسلوقة", calories: 77, carbs: 17, protein: 2, fat: 0.1, fiber: 2, vitamins: "C", baseGrams: 100, units: { spoon: 15, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "بطاطس محمرة", calories: 312, carbs: 41, protein: 5, fat: 15, fiber: 4, vitamins: "C", baseGrams: 100, units: { spoon: 15, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "خبز أبيض", calories: 265, carbs: 49, protein: 9, fat: 3, fiber: 2, vitamins: "B1", baseGrams: 100, units: { spoon: 10, cup: 100, count: 50, grams: 1, ml: 0 } },
-        { name: "ترمس", calories: 119, carbs: 16, protein: 10, fat: 2, fiber: 5, vitamins: "B6", baseGrams: 100, units: { spoon: 15, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "حمص مسلوق", calories: 164, carbs: 27, protein: 9, fat: 3, fiber: 8, vitamins: "B9", baseGrams: 100, units: { spoon: 15, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "فاصوليا بيضاء", calories: 123, carbs: 22, protein: 9, fat: 0.5, fiber: 6, vitamins: "B1", baseGrams: 100, units: { spoon: 15, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "ذرة مسلوقة", calories: 96, carbs: 21, protein: 3, fat: 1, fiber: 2, vitamins: "C", baseGrams: 100, units: { spoon: 15, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "شوفان", calories: 68, carbs: 12, protein: 3, fat: 1, fiber: 2, vitamins: "B1", baseGrams: 100, units: { spoon: 10, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "كسكسي", calories: 112, carbs: 23, protein: 4, fat: 0.5, fiber: 1, vitamins: "B3", baseGrams: 100, units: { spoon: 15, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "بليلة", calories: 120, carbs: 22, protein: 5, fat: 1, fiber: 3, vitamins: "B6", baseGrams: 100, units: { spoon: 15, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "بطاطس مهروسة", calories: 83, carbs: 18, protein: 2, fat: 0.5, fiber: 2, vitamins: "C", baseGrams: 100, units: { spoon: 15, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "بازلاء مسلوقة", calories: 81, carbs: 14, protein: 5, fat: 0.5, fiber: 5, vitamins: "C", baseGrams: 100, units: { spoon: 15, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "جزر مسلوق", calories: 35, carbs: 8, protein: 1, fat: 0.2, fiber: 3, vitamins: "A", baseGrams: 100, units: { spoon: 15, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "كوسة مسلوقة", calories: 17, carbs: 3, protein: 1, fat: 0.2, fiber: 1, vitamins: "C", baseGrams: 100, units: { spoon: 15, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "بامية مسلوقة", calories: 33, carbs: 7, protein: 2, fat: 0.2, fiber: 3, vitamins: "C", baseGrams: 100, units: { spoon: 15, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "ملوخية", calories: 40, carbs: 8, protein: 2, fat: 0.5, fiber: 2, vitamins: "A", baseGrams: 100, units: { spoon: 15, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "سبانخ مسلوقة", calories: 23, carbs: 4, protein: 3, fat: 0.3, fiber: 2, vitamins: "A", baseGrams: 100, units: { spoon: 15, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "فاصوليا خضراء", calories: 31, carbs: 7, protein: 2, fat: 0.2, fiber: 3, vitamins: "C", baseGrams: 100, units: { spoon: 15, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "قرع مسلوق", calories: 20, carbs: 5, protein: 1, fat: 0.1, fiber: 1, vitamins: "A", baseGrams: 100, units: { spoon: 15, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "لوبيا", calories: 116, carbs: 21, protein: 8, fat: 0.5, fiber: 6, vitamins: "B9", baseGrams: 100, units: { spoon: 15, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "عدس أصفر", calories: 116, carbs: 20, protein: 9, fat: 0.5, fiber: 8, vitamins: "B6", baseGrams: 100, units: { spoon: 15, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "فلفل أخضر", calories: 20, carbs: 5, protein: 1, fat: 0.2, fiber: 2, vitamins: "C", baseGrams: 100, units: { spoon: 15, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "بنجر مسلوق", calories: 44, carbs: 10, protein: 2, fat: 0.2, fiber: 3, vitamins: "B9", baseGrams: 100, units: { spoon: 15, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "خيار", calories: 15, carbs: 4, protein: 1, fat: 0.1, fiber: 1, vitamins: "K", baseGrams: 100, units: { spoon: 15, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "طماطم", calories: 18, carbs: 4, protein: 1, fat: 0.2, fiber: 1, vitamins: "C", baseGrams: 100, units: { spoon: 15, cup: 150, count: 100, grams: 1, ml: 0 } }
-    ],
-    protein: [
-        { name: "فراخ مشوية", calories: 165, carbs: 0, protein: 31, fat: 4, fiber: 0, vitamins: "B3", baseGrams: 100, units: { spoon: 20, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "سمك بلطي", calories: 128, carbs: 0, protein: 26, fat: 3, fiber: 0, vitamins: "D", baseGrams: 100, units: { spoon: 20, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "لحمة مشوية", calories: 250, carbs: 0, protein: 25, fat: 17, fiber: 0, vitamins: "B12", baseGrams: 100, units: { spoon: 20, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "كبدة مشوية", calories: 175, carbs: 4, protein: 26, fat: 5, fiber: 0, vitamins: "A", baseGrams: 100, units: { spoon: 20, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "بيض مسلوق", calories: 78, carbs: 1, protein: 6, fat: 5, fiber: 0, vitamins: "B12", baseGrams: 50, units: { spoon: 0, cup: 0, count: 50, grams: 1, ml: 0 } },
-        { name: "جبنة قريش", calories: 98, carbs: 3, protein: 11, fat: 4, fiber: 0, vitamins: "B2", baseGrams: 100, units: { spoon: 15, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "جمبري", calories: 99, carbs: 1, protein: 24, fat: 0.5, fiber: 0, vitamins: "B12", baseGrams: 100, units: { spoon: 20, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "تونة", calories: 132, carbs: 0, protein: 29, fat: 1, fiber: 0, vitamins: "D", baseGrams: 100, units: { spoon: 20, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "سمك ماكريل", calories: 205, carbs: 0, protein: 19, fat: 14, fiber: 0, vitamins: "D", baseGrams: 100, units: { spoon: 20, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "بيض مقلي", calories: 90, carbs: 1, protein: 7, fat: 7, fiber: 0, vitamins: "B12", baseGrams: 50, units: { spoon: 0, cup: 0, count: 50, grams: 1, ml: 0 } },
-        { name: "فراخ بانيه", calories: 296, carbs: 14, protein: 20, fat: 20, fiber: 0, vitamins: "B3", baseGrams: 100, units: { spoon: 20, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "كفتة مشوية", calories: 217, carbs: 5, protein: 18, fat: 15, fiber: 1, vitamins: "B12", baseGrams: 100, units: { spoon: 20, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "سجق", calories: 296, carbs: 2, protein: 14, fat: 26, fiber: 0, vitamins: "B12", baseGrams: 100, units: { spoon: 20, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "سمك فيليه", calories: 120, carbs: 0, protein: 23, fat: 3, fiber: 0, vitamins: "D", baseGrams: 100, units: { spoon: 20, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "رنجة", calories: 217, carbs: 0, protein: 18, fat: 16, fiber: 0, vitamins: "D", baseGrams: 100, units: { spoon: 20, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "فسيخ", calories: 190, carbs: 0, protein: 20, fat: 12, fiber: 0, vitamins: "D", baseGrams: 100, units: { spoon: 20, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "كبدة مقلية", calories: 200, carbs: 5, protein: 25, fat: 10, fiber: 0, vitamins: "A", baseGrams: 100, units: { spoon: 20, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "لحمة مفرومة", calories: 332, carbs: 0, protein: 17, fat: 30, fiber: 0, vitamins: "B12", baseGrams: 100, units: { spoon: 20, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "بيض أومليت", calories: 110, carbs: 1, protein: 8, fat: 8, fiber: 0, vitamins: "B12", baseGrams: 50, units: { spoon: 0, cup: 0, count: 50, grams: 1, ml: 0 } },
-        { name: "جبنة رومي", calories: 350, carbs: 3, protein: 25, fat: 27, fiber: 0, vitamins: "B2", baseGrams: 100, units: { spoon: 15, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "جبنة شيدر", calories: 403, carbs: 1, protein: 25, fat: 33, fiber: 0, vitamins: "A", baseGrams: 100, units: { spoon: 15, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "سمك سلمون", calories: 206, carbs: 0, protein: 22, fat: 13, fiber: 0, vitamins: "D", baseGrams: 100, units: { spoon: 20, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "سمك بوري", calories: 131, carbs: 0, protein: 23, fat: 4, fiber: 0, vitamins: "D", baseGrams: 100, units: { spoon: 20, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "كلاوي مشوية", calories: 140, carbs: 1, protein: 25, fat: 4, fiber: 0, vitamins: "B12", baseGrams: 100, units: { spoon: 20, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "مخ مشوي", calories: 150, carbs: 1, protein: 12, fat: 11, fiber: 0, vitamins: "B12", baseGrams: 100, units: { spoon: 20, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "قلب مشوي", calories: 165, carbs: 0, protein: 26, fat: 6, fiber: 0, vitamins: "B12", baseGrams: 100, units: { spoon: 20, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "سودة مشوية", calories: 160, carbs: 0, protein: 25, fat: 6, fiber: 0, vitamins: "B12", baseGrams: 100, units: { spoon: 20, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "جبنة فيتا", calories: 264, carbs: 4, protein: 14, fat: 21, fiber: 0, vitamins: "B2", baseGrams: 100, units: { spoon: 15, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "لبن رايب", calories: 61, carbs: 4, protein: 3, fat: 4, fiber: 0, vitamins: "B12", baseGrams: 100, units: { spoon: 15, cup: 150, count: 100, grams: 1, ml: 1 } },
-        { name: "زبادي", calories: 59, carbs: 4, protein: 10, fat: 0.5, fiber: 0, vitamins: "B12", baseGrams: 100, units: { spoon: 15, cup: 150, count: 100, grams: 1, ml: 1 } }
-    ],
-    fats: [
-        { name: "زيت زيتون", calories: 884, carbs: 0, protein: 0, fat: 100, fiber: 0, vitamins: "E", baseGrams: 100, units: { spoon: 15, cup: 200, count: 0, grams: 1, ml: 1 } },
-        { name: "زبدة", calories: 717, carbs: 0, protein: 1, fat: 81, fiber: 0, vitamins: "A", baseGrams: 100, units: { spoon: 15, cup: 200, count: 0, grams: 1, ml: 0 } },
-        { name: "لوز", calories: 579, carbs: 22, protein: 21, fat: 50, fiber: 13, vitamins: "E", baseGrams: 100, units: { spoon: 10, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "كاجو", calories: 553, carbs: 30, protein: 18, fat: 44, fiber: 3, vitamins: "B6", baseGrams: 100, units: { spoon: 10, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "طحينة", calories: 595, carbs: 21, protein: 17, fat: 54, fiber: 9, vitamins: "B1", baseGrams: 100, units: { spoon: 15, cup: 200, count: 0, grams: 1, ml: 1 } },
-        { name: "فول سوداني", calories: 567, carbs: 16, protein: 26, fat: 49, fiber: 9, vitamins: "B3", baseGrams: 100, units: { spoon: 10, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "سمن بلدي", calories: 896, carbs: 0, protein: 0, fat: 99, fiber: 0, vitamins: "A", baseGrams: 100, units: { spoon: 15, cup: 200, count: 0, grams: 1, ml: 0 } },
-        { name: "زيت ذرة", calories: 884, carbs: 0, protein: 0, fat: 100, fiber: 0, vitamins: "E", baseGrams: 100, units: { spoon: 15, cup: 200, count: 0, grams: 1, ml: 1 } },
-        { name: "بندق", calories: 628, carbs: 17, protein: 15, fat: 61, fiber: 10, vitamins: "E", baseGrams: 100, units: { spoon: 10, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "جوز", calories: 654, carbs: 14, protein: 15, fat: 65, fiber: 7, vitamins: "B6", baseGrams: 100, units: { spoon: 10, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "زبدة الفول السوداني", calories: 588, carbs: 20, protein: 25, fat: 50, fiber: 6, vitamins: "B3", baseGrams: 100, units: { spoon: 15, cup: 200, count: 0, grams: 1, ml: 0 } },
-        { name: "سمسم", calories: 573, carbs: 23, protein: 18, fat: 50, fiber: 12, vitamins: "B1", baseGrams: 100, units: { spoon: 10, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "زيت عباد الشمس", calories: 884, carbs: 0, protein: 0, fat: 100, fiber: 0, vitamins: "E", baseGrams: 100, units: { spoon: 15, cup: 200, count: 0, grams: 1, ml: 1 } },
-        { name: "عين جمل", calories: 654, carbs: 14, protein: 15, fat: 65, fiber: 7, vitamins: "B6", baseGrams: 100, units: { spoon: 10, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "فستق", calories: 562, carbs: 28, protein: 20, fat: 45, fiber: 10, vitamins: "B6", baseGrams: 100, units: { spoon: 10, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "زيت جوز الهند", calories: 892, carbs: 0, protein: 0, fat: 100, fiber: 0, vitamins: "E", baseGrams: 100, units: { spoon: 15, cup: 200, count: 0, grams: 1, ml: 1 } },
-        { name: "لب عباد الشمس", calories: 584, carbs: 20, protein: 21, fat: 51, fiber: 9, vitamins: "E", baseGrams: 100, units: { spoon: 10, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "لبن كامل الدسم", calories: 61, carbs: 5, protein: 3, fat: 3, fiber: 0, vitamins: "D", baseGrams: 100, units: { spoon: 15, cup: 200, count: 0, grams: 1, ml: 1 } },
-        { name: "قشطة", calories: 210, carbs: 3, protein: 2, fat: 21, fiber: 0, vitamins: "A", baseGrams: 100, units: { spoon: 15, cup: 200, count: 0, grams: 1, ml: 0 } },
-        { name: "زيت كانولا", calories: 884, carbs: 0, protein: 0, fat: 100, fiber: 0, vitamins: "E", baseGrams: 100, units: { spoon: 15, cup: 200, count: 0, grams: 1, ml: 1 } },
-        { name: "سمن نباتي", calories: 900, carbs: 0, protein: 0, fat: 100, fiber: 0, vitamins: "A", baseGrams: 100, units: { spoon: 15, cup: 200, count: 0, grams: 1, ml: 0 } },
-        { name: "مايونيز", calories: 680, carbs: 1, protein: 1, fat: 75, fiber: 0, vitamins: "K", baseGrams: 100, units: { spoon: 15, cup: 200, count: 0, grams: 1, ml: 0 } },
-        { name: "زيت سمك", calories: 902, carbs: 0, protein: 0, fat: 100, fiber: 0, vitamins: "D", baseGrams: 100, units: { spoon: 15, cup: 200, count: 0, grams: 1, ml: 1 } },
-        { name: "بذور الكتان", calories: 534, carbs: 29, protein: 18, fat: 42, fiber: 27, vitamins: "B1", baseGrams: 100, units: { spoon: 10, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "بذور الشيا", calories: 486, carbs: 42, protein: 17, fat: 31, fiber: 34, vitamins: "B3", baseGrams: 100, units: { spoon: 10, cup: 150, count: 100, grams: 1, ml: 0 } },
-        { name: "زبدة اللوز", calories: 614, carbs: 19, protein: 21, fat: 56, fiber: 10, vitamins: "E", baseGrams: 100, units: { spoon: 15, cup: 200, count: 0, grams: 1, ml: 0 } },
-        { name: "زبدة الكاجو", calories: 587, carbs: 30, protein: 18, fat: 49, fiber: 3, vitamins: "B6", baseGrams: 100, units: { spoon: 15, cup: 200, count: 0, grams: 1, ml: 0 } },
-        { name: "زيت السمسم", calories: 884, carbs: 0, protein: 0, fat: 100, fiber: 0, vitamins: "E", baseGrams: 100, units: { spoon: 15, cup: 200, count: 0, grams: 1, ml: 1 } },
-        { name: "جبنة كريمي", calories: 342, carbs: 3, protein: 6, fat: 34, fiber: 0, vitamins: "A", baseGrams: 100, units: { spoon: 15, cup: 200, count: 0, grams: 1, ml: 0 } },
-        { name: "كريمة", calories: 292, carbs: 3, protein: 2, fat: 31, fiber: 0, vitamins: "A", baseGrams: 100, units: { spoon: 15, cup: 200, count: 0, grams: 1, ml: 1 } }
-    ],
-    custom: []
-};
-
-
-        let ownerData = JSON.parse(localStorage.getItem('ownerData')) || { clients: [] };
-
-        // تسجيل الدخول
-        function login() {
-            try {
-                const userType = document.getElementById('user-type').value;
-                const username = document.getElementById('username').value;
-                const password = document.getElementById('password').value;
-                const usernameHash = simpleSHA256(username);
-                const passwordHash = simpleSHA256(password);
-
-                document.getElementById('login-screen').classList.add('hidden');
-                document.getElementById('owner-interface').classList.add('hidden');
-                document.getElementById('client-interface').classList.add('hidden');
-                document.getElementById('navbar').classList.add('hidden');
-                document.getElementById('breadcrumbs').classList.add('hidden');
-
-                if (userType === 'owner' && usernameHash === OWNER_CREDENTIALS.usernameHash && passwordHash === OWNER_CREDENTIALS.passwordHash) {
-                    isOwnerLoggedIn = true;
-                    currentUserType = 'owner';
-                    document.getElementById('owner-interface').classList.remove('hidden');
-                    document.getElementById('owner-interface').classList.add('active');
-                    document.getElementById('navbar').classList.remove('hidden');
-                    document.getElementById('breadcrumbs').classList.remove('hidden');
-                    showSection('owner-meals');
-                    loadClientSelector();
-                } else if (userType === 'client') {
-                    isOwnerLoggedIn = false;
-                    currentUserType = 'client';
-                    const client = ownerData.clients.find(c => simpleSHA256(c.username) === usernameHash && c.password === passwordHash);
-                    if (client) {
-                        currentClientId = client.id;
-                        document.getElementById('client-interface').classList.remove('hidden');
-                        document.getElementById('client-interface').classList.add('active');
-                        document.getElementById('navbar').classList.add('hidden');
-                        document.getElementById('breadcrumbs').classList.add('hidden');
-                        loadClientData(client);
-                    } else {
-                        alert('اسم المستخدم أو كلمة المرور غير صحيحة!');
-                        document.getElementById('login-screen').classList.remove('hidden');
-                    }
-                } else {
-                    alert('اسم المستخدم أو كلمة المرور غير صحيحة!');
-                    document.getElementById('login-screen').classList.remove('hidden');
-                }
-            } catch (error) {
-                console.error('Login error:', error);
-                alert('حدث خطأ أثناء تسجيل الدخول! تحقق من الكونسول للتفاصيل.');
-                document.getElementById('login-screen').classList.remove('hidden');
-            }
-        }
-
-        // حساب الأيام المتبقية
-        function getDaysRemaining(client) {
-            const today = new Date();
-            const startDate = new Date(client.startDate);
-            const daysPassed = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
-            const daysLeft = client.usageDays - daysPassed;
-            return daysLeft > 0 ? daysLeft : 0;
-        }
-
-        // تحميل بيانات العميل في واجهة العميل
-        function loadClientData(client) {
-            const days = client.days || {};
-            let consumedCalories = 0, consumedCarbs = 0, consumedProtein = 0, consumedFats = 0, consumedFiber = 0;
-            for (let day in days) {
-                consumedCalories += days[day].calories || 0;
-                consumedCarbs += days[day].carbs || 0;
-                consumedProtein += days[day].protein || 0;
-                consumedFats += days[day].fats || 0;
-                consumedFiber += days[day].fiber || 0;
-            }
-            const remainingCalories = Math.round(client.targetCalories - consumedCalories);
-            const remainingCarbs = Math.round(client.carbs - consumedCarbs);
-            const remainingProtein = Math.round(client.protein - consumedProtein);
-            const remainingFats = Math.round(client.fats - consumedFats);
-            const remainingFiber = Math.round(client.fiber - consumedFiber);
-
-            updateStatDisplay('client-calories', remainingCalories, client.targetCalories);
-            updateStatDisplay('client-carbs', remainingCarbs, client.carbs);
-            updateStatDisplay('client-protein', remainingProtein, client.protein);
-            updateStatDisplay('client-fats', remainingFats, client.fats);
-            updateStatDisplay('client-fiber', remainingFiber, client.fiber);
-            document.getElementById('client-points').textContent = client.points || 0;
-
-            // إضافة عدد الأيام المتبقية
-            const daysRemaining = getDaysRemaining(client);
-            const statsDiv = document.querySelector('.stats');
-            let daysBox = document.getElementById('days-remaining-box');
-            if (!daysBox) {
-                daysBox = document.createElement('div');
-                daysBox.id = 'days-remaining-box';
-                daysBox.className = 'stat-box';
-                statsDiv.appendChild(daysBox);
-            }
-            daysBox.innerHTML = `
-                <h3>أيام الاشتراك المتبقية</h3>
-                <p id="client-days-remaining">${daysRemaining}</p>
-            `;
-
-            // تحميل إحصائيات الأداء
-            loadPerformanceStats(client);
-
-            checkAutomaticNotifications(client, consumedCalories);
-
-            const mealsContainer = document.getElementById('client-meals');
-            mealsContainer.innerHTML = '';
-            client.meals.forEach((meal, index) => {
-                const mealDiv = document.createElement('div');
-                mealDiv.className = 'meal-box';
-                mealDiv.innerHTML = `
-                    <h3>الوجبة ${index + 1} <span class="checkmark ${meal.completed ? '' : 'hidden'}">✔</span></h3>
-                    <div id="client-meal-${index}-items"></div>
-                    <p>السعرات: ${meal.totalCalories} | الكارب: ${meal.totalCarbs} | البروتين: ${meal.totalProtein} | الدهون: ${meal.totalFats} | الألياف: ${meal.totalFiber}</p>
-                    <p>الوقت: ${meal.time || 'غير محدد'}</p>
-                    <button onclick="markMealAsEaten(${client.id}, ${index})"><i class="fas fa-check"></i> أكلت الوجبة</button>
-                `;
-                const itemsContainer = mealDiv.querySelector(`#client-meal-${index}-items`);
-                meal.items.forEach((item) => {
-                    const itemDiv = document.createElement('div');
-                    itemDiv.className = 'food-item';
-                    itemDiv.innerHTML = `
-                        <span>${item.name} (${item.unit} - ${item.size})</span>
-                        <span>السعرات: ${item.calories} | الماكروز: ${item.carbs}ك, ${item.protein}ب, ${item.fat}د, ${item.fiber}أ | الفيتامينات: ${item.vitamins}</span>
-                        <span class="checkmark ${item.completed ? '' : 'hidden'}">✔</span>
-                    `;
-                    itemsContainer.appendChild(itemDiv);
-                });
-                mealsContainer.appendChild(mealDiv);
-            });
-
-            loadClientNotifications(client);
-            suggestMealTiming(client);
-            drawMacrosChart(client);
-        }
-
-        // تحديث عرض الإحصائيات مع الألوان التفاعلية
-        function updateStatDisplay(elementId, remaining, target) {
-            const element = document.getElementById(elementId);
-            element.textContent = remaining;
-            element.classList.remove('negative', 'near-target');
-            if (remaining < 0) {
-                element.classList.add('negative');
-            } else if (remaining > 0 && remaining <= target * 0.1) {
-                element.classList.add('near-target');
-            }
-        }
-
-        // تحميل إحصائيات الأداء
-        function loadPerformanceStats(client) {
-            const completedMeals = client.meals.filter(meal => meal.completed).length;
-            const totalPoints = client.points || 0;
-            const days = client.days || {};
-            let totalCalories = 0, daysCount = 0;
-            for (let day in days) {
-                totalCalories += days[day].calories || 0;
-                daysCount++;
-            }
-            const avgCalories = daysCount > 0 ? Math.round(totalCalories / daysCount) : 0;
-
-            document.getElementById('completed-meals').textContent = completedMeals;
-            document.getElementById('total-points').textContent = totalPoints;
-            document.getElementById('avg-calories').textContent = avgCalories;
-        }
-
-        // تحميل الإشعارات للعميل
-        function loadClientNotifications(client) {
-            const notificationsList = document.getElementById('notifications-list');
-            notificationsList.innerHTML = '';
-            if (client.notifications && client.notifications.length > 0) {
-                client.notifications.forEach((notif) => {
-                    const notifDiv = document.createElement('div');
-                    notifDiv.className = 'food-item';
-                    notifDiv.innerHTML = `
-                        <h3>${notif.title}</h3>
-                        <p>${notif.message}</p>
-                        <small>${new Date(notif.date).toLocaleString('ar-EG')}</small>
-                    `;
-                    notificationsList.appendChild(notifDiv);
-                });
-            } else {
-                notificationsList.innerHTML = '<p>لا توجد إشعارات حاليًا</p>';
-            }
-        }
-
-        // تسجيل إن العميل أكل الوجبة مع الوقت التلقائي
-        function markMealAsEaten(clientId, mealIndex) {
-            const client = ownerData.clients.find(c => c.id === clientId);
-            const meal = client.meals[mealIndex];
-            if (meal.completed) {
-                alert('تم تسجيل هذه الوجبة بالفعل!');
-                return;
-            }
-            meal.completed = true;
-            meal.items.forEach(item => item.completed = true);
-            meal.time = new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' }); // تسجيل الوقت الحالي
-
-            const today = new Date().toISOString().split('T')[0];
-            if (!client.days) client.days = {};
-            if (!client.days[today]) {
-                client.days[today] = { calories: 0, carbs: 0, protein: 0, fats: 0, fiber: 0 };
-            }
-            client.days[today].calories += meal.totalCalories;
-            client.days[today].carbs += meal.totalCarbs;
-            client.days[today].protein += meal.totalProtein;
-            client.days[today].fats += meal.totalFats;
-            client.days[today].fiber += meal.totalFiber;
-
-            client.points = (client.points || 0) + 10; // 10 نقاط لكل وجبة
-            localStorage.setItem('ownerData', JSON.stringify(ownerData));
-            loadClientData(client);
-        }
-
-        // تحديث توقيت الوجبة
-        function updateMealTime(clientId, mealIndex, time) {
-            const client = ownerData.clients.find(c => c.id === clientId);
-            client.meals[mealIndex].time = time;
-            localStorage.setItem('ownerData', JSON.stringify(ownerData));
-            suggestMealTiming(client);
-        }
-
-        // التحقق من الإشعارات التلقائية
-        function checkAutomaticNotifications(client, consumedCalories) {
-            if (!client.notifications) client.notifications = [];
-            const today = new Date();
-            const startDate = new Date(client.startDate);
-            const daysPassed = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
-            const daysLeft = client.usageDays - daysPassed;
-
-            if (consumedCalories > client.targetCalories && !client.notifications.some(n => n.title === 'تجاوز حد السعرات')) {
-                client.notifications.push({
-                    title: 'تجاوز حد السعرات',
-                    message: `لقد تجاوزت السعرات المستهدفة اليوم (${client.targetCalories} سعرة)!`,
-                    date: new Date().toISOString()
-                });
-            }
-
-            if (daysLeft <= 5 && daysLeft > 0 && !client.notifications.some(n => n.title === 'تذكير بأيام الاستخدام')) {
-                client.notifications.push({
-                    title: 'تذكير بأيام الاستخدام',
-                    message: `تبقى ${daysLeft} أيام فقط على انتهاء فترة الاستخدام!`,
-                    date: new Date().toISOString()
-                });
-            }
-
-            localStorage.setItem('ownerData', JSON.stringify(ownerData));
-        }
-
-        // رسم بياني للماكروز
-        function drawMacrosChart(client) {
-            const days = client.days || {};
-            const ctx = document.getElementById('macrosChart').getContext('2d');
-            document.getElementById('chart-container').style.display = 'block';
-
-            const labels = Object.keys(days).slice(-7);
-            const caloriesData = labels.map(day => days[day].calories || 0);
-            const carbsData = labels.map(day => days[day].carbs || 0);
-            const proteinData = labels.map(day => days[day].protein || 0);
-            const fatsData = labels.map(day => days[day].fats || 0);
-
-            if (chartInstance) chartInstance.destroy();
-
-            chartInstance = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [
-                        { label: 'السعرات', data: caloriesData, borderColor: '#0288d1', fill: false },
-                        { label: 'الكارب', data: carbsData, borderColor: '#4fc3f7', fill: false },
-                        { label: 'البروتين', data: proteinData, borderColor: '#0277bd', fill: false },
-                        { label: 'الدهون', data: fatsData, borderColor: '#01579b', fill: false }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        x: { title: { display: true, text: 'التاريخ' } },
-                        y: { title: { display: true, text: 'القيمة' } }
-                    }
-                }
-            });
-        }
-
-        // اقتراح توقيت الوجبات
-        function suggestMealTiming(client) {
-            const suggestionsDiv = document.getElementById('meal-timing-suggestions');
-            suggestionsDiv.innerHTML = '';
-
-            const lifestyle = client.lifestyle || 'mixed';
-            const mealCount = client.meals.length;
-            let suggestions = [];
-
-            if (lifestyle === 'sedentary') {
-                suggestions = [
-                    'الإفطار: 8:00 صباحًا - تعزيز الطاقة لليوم',
-                    'الغداء: 1:00 ظهرًا - الحفاظ على التركيز أثناء العمل',
-                    'العشاء: 6:00 مساءً - تجنب الأكل المتأخر لنوم أفضل'
-                ];
-            } else if (lifestyle === 'active') {
-                suggestions = [
-                    'قبل التمرين: 6:00 صباحًا - تغذية التمرين',
-                    'بعد التمرين: 9:00 صباحًا - التعافي وبناء العضلات',
-                    'الغداء: 2:00 ظهرًا - طاقة مستدامة',
-                    'العشاء: 7:00 مساءً - تعويض ما بعد النشاط'
-                ];
-            } else {
-                suggestions = [
-                    'الإفطار: 7:30 صباحًا - بداية قوية لليوم',
-                    'وجبة خفيفة صباحية: 10:30 صباحًا - استقرار الطاقة',
-                    'الغداء: 1:30 ظهرًا - وجبة متوازنة للإنتاجية',
-                    'العشاء: 6:30 مساءً - الاسترخاء والتعافي'
-                ];
-            }
-
-            suggestions.slice(0, mealCount).forEach(suggestion => {
-                const p = document.createElement('p');
-                p.textContent = suggestion;
-                suggestionsDiv.appendChild(p);
-            });
-
-            client.meals.forEach((meal, index) => {
-                if (meal.time) {
-                    const hour = parseInt(meal.time.split(':')[0]);
-                    let analysis = '';
-                    if (hour < 8) analysis = 'الأكل المبكر قد يعزز الطاقة.';
-                    else if (hour >= 8 && hour < 12) analysis = 'جيد لإنتاجية الصباح.';
-                    else if (hour >= 12 && hour < 17) analysis = 'يدعم الأداء بعد الظهر.';
-                    else if (hour >= 17 && hour < 20) analysis = 'يساعد على التعافي والنوم.';
-                    else analysis = 'الأكل المتأخر قد يؤثر على جودة النوم.';
-                    const p = document.createElement('p');
-                    p.textContent = `الوجبة ${index + 1} في ${meal.time}: ${analysis}`;
-                    suggestionsDiv.appendChild(p);
-                }
-            });
-        }
-
-        // تسجيل الخروج
-        function logout() {
-            isOwnerLoggedIn = false;
-            currentUserType = null;
-            currentClientId = null;
-            document.getElementById('owner-interface').classList.add('hidden');
-            document.getElementById('client-interface').classList.add('hidden');
-            document.getElementById('navbar').classList.add('hidden');
-            document.getElementById('breadcrumbs').classList.add('hidden');
-            document.getElementById('food-modal').classList.add('hidden');
-            document.getElementById('custom-food-modal').classList.add('hidden');
-            document.getElementById('notification-modal').classList.add('hidden');
-            document.getElementById('login-screen').classList.remove('hidden');
-            document.getElementById('username').value = '';
-            document.getElementById('password').value = '';
-            document.getElementById('client-details').innerHTML = '';
-            document.getElementById('client-macros').innerHTML = '';
-            document.getElementById('meals-container').innerHTML = '';
-            document.getElementById('chart-container').style.display = 'none';
-            if (chartInstance) chartInstance.destroy();
-        }
-
-        // حذف قاعدة البيانات
-        function clearDatabase() {
-            if (confirm('هل أنت متأكد من حذف قاعدة البيانات؟ سيتم حذف كل العملاء والأطعمة المخصصة!')) {
-                localStorage.removeItem('ownerData');
-                localStorage.removeItem('foodDatabase');
-                foodDatabase = {
-                    carbs: [
-                        { name: "Rice", calories: 240, carbs: 54, protein: 6, fat: 1, fiber: 1, vitamins: "B1, B3", baseGrams: 100, units: { spoon: 15, cup: 200, count: 100 } },
-                        { name: "Oats", calories: 240, carbs: 42, protein: 9, fat: 5, fiber: 6, vitamins: "B1, B5", baseGrams: 100, units: { spoon: 10, cup: 150, count: 100 } }
-                    ],
-                    protein: [
-                        { name: "Chicken Breast", calories: 200, carbs: 0, protein: 42, fat: 2, fiber: 0, vitamins: "B3, B6", baseGrams: 100, units: { spoon: 20, cup: 150, count: 100 } },
-                        { name: "Fish", calories: 230, carbs: 0, protein: 36, fat: 8, fiber: 0, vitamins: "D, B12", baseGrams: 100, units: { spoon: 20, cup: 150, count: 100 } }
-                    ],
-                    fats: [
-                        { name: "Peanut Butter", calories: 180, carbs: 6, protein: 8, fat: 15, fiber: 2, vitamins: "E, B3", baseGrams: 100, units: { spoon: 15, cup: 200, count: 100 } },
-                        { name: "Nuts", calories: 200, carbs: 7, protein: 6, fat: 18, fiber: 3, vitamins: "E, B6", baseGrams: 100, units: { spoon: 10, cup: 150, count: 100 } }
-                    ],
-                    custom: []
-                };
-                ownerData = { clients: [] };
-                localStorage.setItem('foodDatabase', JSON.stringify(foodDatabase));
-                localStorage.setItem('ownerData', JSON.stringify(ownerData));
-                loadClientSelector();
-                document.getElementById('client-details').innerHTML = '';
-                document.getElementById('client-macros').innerHTML = '';
-                document.getElementById('meals-container').innerHTML = '';
-                alert('تم حذف قاعدة البيانات وإعادة إنشائها بنجاح!');
-            }
-        }
-
-        // تبديل الثيم
-        function toggleTheme() {
-            if (!currentUserType) {
-                alert('يرجى تسجيل الدخول أولاً!');
-                return;
-            }
-            document.body.classList.toggle('dark-mode');
-            document.querySelector('.container').classList.toggle('dark-mode');
-        }
-
-        // إظهار قسم معين في واجهة المالك
-        function showSection(sectionId) {
-            if (!isOwnerLoggedIn) {
-                alert('يرجى تسجيل الدخول كمالك أولاً!');
-                return;
-            }
-            document.querySelectorAll('#owner-interface > div').forEach(div => {
-                div.classList.remove('active');
-                div.classList.add('hidden');
-            });
-            const section = document.getElementById(sectionId);
-            if (section) {
-                section.classList.remove('hidden');
-                section.classList.add('active');
-                document.getElementById('breadcrumbs').textContent = sectionId === 'owner-meals' ? 'الرئيسية > إدارة العملاء' : 'الرئيسية > إضافة عميل';
-            }
-        }
-
-        // حساب BMR
-        function calculateBMR(weight, height, age, gender) {
-            return gender === 'male' ?
-                10 * weight + 6.25 * height - 5 * age + 5 :
-                10 * weight + 6.25 * height - 5 * age - 161;
-        }
-
-        // إضافة عميل
-        function addClient() {
-            if (!isOwnerLoggedIn) {
-                alert('يرجى تسجيل الدخول كمالك أولاً!');
-                return;
-            }
-            const username = document.getElementById('client-username').value;
-            const password = document.getElementById('client-password').value;
-            if (!username || !password) {
-                alert('يرجى إدخال اسم المستخدم وكلمة المرور للعميل!');
-                return;
-            }
-            const weight = parseFloat(document.getElementById('client-weight').value) || 70;
-            const height = parseFloat(document.getElementById('client-height').value) || 170;
-            const age = parseFloat(document.getElementById('client-age').value) || 30;
-            const gender = document.getElementById('client-gender').value;
-            const activity = parseFloat(document.getElementById('client-activity').value);
-            const bmr = calculateBMR(weight, height, age, gender);
-            const maintainCalories = Math.round(bmr * activity);
-
-            const client = {
-                id: Date.now(),
-                username: username,
-                password: simpleSHA256(password),
-                age,
-                height,
-                weight,
-                gender,
-                activity,
-                maintainCalories,
-                goal: document.getElementById('client-goal').value,
-                targetCalories: parseFloat(document.getElementById('target-calories').value) || (document.getElementById('client-goal').value === 'loss' ? maintainCalories - 500 : document.getElementById('client-goal').value === 'gain' ? maintainCalories + 500 : maintainCalories),
-                protein: parseFloat(document.getElementById('protein-grams').value) || 0,
-                carbs: parseFloat(document.getElementById('carbs-grams').value) || 0,
-                fats: parseFloat(document.getElementById('fats-grams').value) || 0,
-                fiber: parseFloat(document.getElementById('fiber-grams').value) || 0,
-                usageDays: parseFloat(document.getElementById('usage-days').value) || 30,
-                startDate: new Date().toISOString().split('T')[0],
-                lifestyle: document.getElementById('client-lifestyle').value,
-                meals: [],
-                days: {},
-                notifications: [],
-                points: 0
-            };
-
-            if (ownerData.clients.some(c => c.username === client.username)) {
-                alert('اسم المستخدم موجود بالفعل! اختر اسم مستخدم آخر.');
-                return;
-            }
-
-            ownerData.clients.push(client);
-            localStorage.setItem('ownerData', JSON.stringify(ownerData));
-            alert(`تم إضافة العميل ${client.username} بنجاح!`);
-            showSection('owner-meals');
-            loadClientSelector();
-        }
-
-        // تحميل قائمة العملاء في selector
-        function loadClientSelector() {
-            if (!isOwnerLoggedIn) return;
-            const selector = document.getElementById('client-selector');
-            selector.innerHTML = '<option value="">اختر عميل</option>';
-            ownerData.clients.forEach(client => {
-                selector.innerHTML += `<option value="${client.id}">${client.username}</option>`;
-            });
-        }
-
-        // تحميل بيانات العميل في واجهة المالك
-        function loadOwnerClientData() {
-            if (!isOwnerLoggedIn) {
-                alert('يرجى تسجيل الدخول كمالك أولاً!');
-                return;
-            }
-            const clientId = parseInt(document.getElementById('client-selector').value);
-            if (!clientId) {
-                document.getElementById('client-details').innerHTML = '';
-                document.getElementById('client-macros').innerHTML = '';
-                document.getElementById('meals-container').innerHTML = '';
-                document.getElementById('breadcrumbs').textContent = 'الرئيسية > إدارة العملاء';
-                return;
-            }
-            const client = ownerData.clients.find(c => c.id === clientId);
-            document.getElementById('breadcrumbs').textContent = `الرئيسية > إدارة العملاء > ${client.username}`;
-            document.getElementById('client-details').innerHTML = `
-                <h3>بيانات العميل: ${client.username}</h3>
-                <p>العمر: ${client.age} سنة</p>
-                <p>الطول: ${client.height} سم</p>
-                <p>الوزن: ${client.weight} كجم</p>
-                <p>الجنس: ${client.gender === 'male' ? 'ذكر' : 'أنثى'}</p>
-                <p>مستوى النشاط: ${client.activity}</p>
-                <p>السعرات للحفاظ على الوزن: ${client.maintainCalories}</p>
-                <p>الهدف: ${client.goal === 'loss' ? 'فقدان الوزن' : client.goal === 'gain' ? 'زيادة الوزن' : 'الحفاظ على الوزن'}</p>
-                <p>نمط الحياة: ${client.lifestyle}</p>
-                <p>النقاط: ${client.points || 0}</p>
-                <p>أيام الاشتراك المتبقية: ${getDaysRemaining(client)}</p>
-            `;
-
-            const days = client.days || {};
-            let consumedCalories = 0, consumedCarbs = 0, consumedProtein = 0, consumedFats = 0, consumedFiber = 0;
-            for (let day in days) {
-                consumedCalories += days[day].calories || 0;
-                consumedCarbs += days[day].carbs || 0;
-                consumedProtein += days[day].protein || 0;
-                consumedFats += days[day].fats || 0;
-                consumedFiber += days[day].fiber || 0;
-            }
-            document.getElementById('client-macros').innerHTML = `
-                <h3>الماكروز</h3>
-                <p>السعرات المستهدفة: ${client.targetCalories} | المتبقي: ${Math.round(client.targetCalories - consumedCalories)}</p>
-                <p>الكارب المستهدف: ${client.carbs} جم | المتبقي: ${Math.round(client.carbs - consumedCarbs)}</p>
-                <p>البروتين المستهدف: ${client.protein} جم | المتبقي: ${Math.round(client.protein - consumedProtein)}</p>
-                <p>الدهون المستهدفة: ${client.fats} جم | المتبقي: ${Math.round(client.fats - consumedFats)}</p>
-                <p>الألياف المستهدفة: ${client.fiber} جم | المتبقي: ${Math.round(client.fiber - consumedFiber)}</p>
-                <p>أيام الاستخدام: ${client.usageDays} يوم</p>
-            `;
-            loadOwnerMeals(clientId);
-        }
-
-        // تحميل وجبات العميل في واجهة المالك
-        function loadOwnerMeals(clientId) {
-            const client = ownerData.clients.find(c => c.id === clientId);
-            const container = document.getElementById('meals-container');
-            container.innerHTML = '';
-            client.meals.forEach((meal, index) => {
-                const mealDiv = createMealDiv(meal, index, clientId);
-                container.appendChild(mealDiv);
-            });
-        }
-
-        // إضافة وجبة جديدة
-        function addMeal() {
-            if (!isOwnerLoggedIn) {
-                alert('يرجى تسجيل الدخول كمالك أولاً!');
-                return;
-            }
-            const clientId = parseInt(document.getElementById('client-selector').value);
-            if (!clientId) {
-                alert('يرجى اختيار عميل أولاً!');
-                return;
-            }
-            const client = ownerData.clients.find(c => c.id === clientId);
-            const meal = { items: [], completed: false, totalCalories: 0, totalCarbs: 0, totalProtein: 0, totalFats: 0, totalFiber: 0, time: '' };
-            client.meals.push(meal);
-            localStorage.setItem('ownerData', JSON.stringify(ownerData));
-            loadOwnerMeals(clientId);
-        }
-
-        // إظهار نموذج إضافة طعام مخصص
-        function showCustomFoodForm() {
-            if (!isOwnerLoggedIn) {
-                alert('يرجى تسجيل الدخول كمالك أولاً!');
-                return;
-            }
-            document.getElementById('custom-food-modal').classList.remove('hidden');
-        }
-
-        // إضافة طعام مخصص من المودال
-        function addCustomFoodFromModal() {
-            if (!isOwnerLoggedIn) {
-                alert('يرجى تسجيل الدخول كمالك أولاً!');
-                return;
-            }
-            const name = document.getElementById('custom-food-name').value.trim();
-            const calories = parseFloat(document.getElementById('custom-food-calories').value) || 0;
-            const carbs = parseFloat(document.getElementById('custom-food-carbs').value) || 0;
-            const protein = parseFloat(document.getElementById('custom-food-protein').value) || 0;
-            const fat = parseFloat(document.getElementById('custom-food-fats').value) || 0;
-            const fiber = parseFloat(document.getElementById('custom-food-fiber').value) || 0;
-            const baseGrams = parseFloat(document.getElementById('custom-food-base-grams').value) || 100;
-            const vitamins = document.getElementById('custom-food-vitamins').value.trim() || "غير محدد";
-
-            if (!name) {
-                alert('يرجى إدخال اسم الطعام!');
-                return;
-            }
-
-            const newFood = {
-                name,
-                calories,
-                carbs,
-                protein,
-                fat,
-                fiber,
-                vitamins,
-                baseGrams,
-                units: { spoon: 15, cup: 200, count: 100 } // قيم افتراضية لوحدات القياس
-            };
-            foodDatabase.custom.push(newFood);
-            localStorage.setItem('foodDatabase', JSON.stringify(foodDatabase));
-            alert(`تمت إضافة ${name} إلى قاعدة البيانات!`);
-
-            document.getElementById('custom-food-name').value = '';
-            document.getElementById('custom-food-calories').value = '';
-            document.getElementById('custom-food-carbs').value = '';
-            document.getElementById('custom-food-protein').value = '';
-            document.getElementById('custom-food-fats').value = '';
-            document.getElementById('custom-food-fiber').value = '';
-            document.getElementById('custom-food-base-grams').value = '';
-            document.getElementById('custom-food-vitamins').value = '';
-
-            closeModal('custom-food-modal');
-        }
-
-        // إنشاء div للوجبة
-        function createMealDiv(meal, mealIndex, clientId) {
-            const div = document.createElement('div');
-            div.className = 'meal-box';
-            div.innerHTML = `
-                <h3>الوجبة ${mealIndex + 1} <span class="checkmark ${meal.completed ? '' : 'hidden'}">✔</span></h3>
-                <button onclick="showAddFoodForm(${mealIndex}, ${clientId})"><i class="fas fa-plus"></i> إضافة طعام</button>
-                <div id="meal-${mealIndex}-items"></div>
-                <p>السعرات: ${meal.totalCalories} | الكارب: ${meal.totalCarbs} | البروتين: ${meal.totalProtein} | الدهون: ${meal.totalFats} | الألياف: ${meal.totalFiber}</p>
-                <p>الوقت: ${meal.time || 'غير محدد'}</p>
-            `;
-            const itemsContainer = div.querySelector(`#meal-${mealIndex}-items`);
-            meal.items.forEach((item, itemIndex) => {
-                const itemDiv = document.createElement('div');
-                itemDiv.className = 'food-item';
-                itemDiv.innerHTML = `
-                    <span>${item.name} (${item.unit} - ${item.size})</span>
-                    <span>السعرات: ${item.calories} | الماكروز: ${item.carbs}ك, ${item.protein}ب, ${item.fat}د, ${item.fiber}أ | الفيتامينات: ${item.vitamins}</span>
-                    <span class="checkmark ${item.completed ? '' : 'hidden'}">✔</span>
-                    <select onchange="replaceFood(${mealIndex}, ${itemIndex}, this.value, ${clientId})">
-                        <option value="">بدائل</option>
-                        ${Object.values(foodDatabase).flat().map(food => `<option value="${food.name}">${food.name}</option>`).join('')}
-                    </select>
-                `;
-                itemsContainer.appendChild(itemDiv);
-            });
-            return div;
-        }
-
-        // إظهار نموذج إضافة طعام
-        function showAddFoodForm(mealIndex, clientId) {
-            if (!isOwnerLoggedIn) {
-                alert('يرجى تسجيل الدخول كمالك أولاً!');
-                return;
-            }
-            const selectedClientId = parseInt(document.getElementById('client-selector').value);
-            if (!selectedClientId) {
-                alert('يرجى اختيار عميل أولاً!');
-                return;
-            }
-            currentMealIndex = mealIndex;
-            currentClientIdForModal = clientId;
-            document.getElementById('food-modal').classList.remove('hidden');
-            updateModalFoodOptions();
-        }
-
-        // إغلاق المودال
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.add('hidden');
-        }
-
-        // تحديث خيارات الطعام في المودال
-        function updateModalFoodOptions() {
-            const type = document.getElementById('modal-food-type').value;
-            const foodSelect = document.getElementById('modal-food-name');
-            foodSelect.innerHTML = '<option value="">اختر الطعام</option>';
-            if (type && foodDatabase[type]) {
-                foodDatabase[type].forEach(food => {
-                    foodSelect.innerHTML += `<option value="${food.name}">${food.name}</option>`;
-                });
-            }
-        }
-
-        // إضافة طعام من المودال مع حساب السعرات والماكروز بناءً على الكمية
-        function addFoodFromModal() {
-    if (!isOwnerLoggedIn) {
-        alert('يرجى تسجيل الدخول كمالك أولاً!');
-        return;
-    }
-    const type = document.getElementById('modal-food-type').value;
-    const foodName = document.getElementById('modal-food-name').value;
-    const unit = document.getElementById('modal-unit').value;
-    const size = document.getElementById('modal-size').value;
-    const quantity = parseFloat(document.getElementById('modal-quantity').value) || 1;
-
-    if (!type || !foodName || !unit || !size) {
-        alert('يرجى اختيار نوع الطعام، الطعام، الوحدة، والحجم!');
-        return;
-    }
-
-    const food = Object.values(foodDatabase).flat().find(f => f.name === foodName);
-    if (!food) {
-        alert('الطعام المختار غير موجود في قاعدة البيانات!');
-        return;
-    }
-
-    // التحقق من وجود food.units والوحدة المختارة
-    if (!food.units || typeof food.units[unit] === 'undefined') {
-        alert(`الوحدة "${unit}" غير مدعومة لهذا الطعام (${food.name})!`);
-        return;
-    }
-
-    const sizeMultiplier = size === 'small' ? 0.75 : size === 'medium' ? 1 : 1.25;
-    const grams = food.units[unit] * quantity * sizeMultiplier;
-    const multiplier = grams / food.baseGrams;
-
-    const newItem = {
-        name: food.name,
-        type,
-        calories: Math.round(food.calories * multiplier),
-        carbs: Math.round(food.carbs * multiplier),
-        protein: Math.round(food.protein * multiplier),
-        fat: Math.round(food.fat * multiplier),
-        fiber: Math.round(food.fiber * multiplier),
-        vitamins: food.vitamins,
-        unit,
-        size,
-        quantity,
-        completed: false
-    };
-
-    const client = ownerData.clients.find(c => c.id === currentClientIdForModal);
-    const meal = client.meals[currentMealIndex];
-    meal.items.push(newItem);
-    updateMealTotals(meal);
-    localStorage.setItem('ownerData', JSON.stringify(ownerData));
-    loadOwnerMeals(currentClientIdForModal);
-    closeModal('food-modal');
-}
-
-        // استبدال طعام
-        function replaceFood(mealIndex, itemIndex, newFoodName, clientId) {
-            const client = ownerData.clients.find(c => c.id === clientId);
-            const meal = client.meals[mealIndex];
-            const oldItem = meal.items[itemIndex];
-            const newFood = Object.values(foodDatabase).flat().find(f => f.name === newFoodName);
-            if (newFood) {
-                const sizeMultiplier = oldItem.size === 'small' ? 0.75 : oldItem.size === 'medium' ? 1 : 1.25;
-                const grams = newFood.units[oldItem.unit] * oldItem.quantity * sizeMultiplier;
-                const multiplier = grams / newFood.baseGrams;
-
-                meal.items[itemIndex] = {
-                    name: newFood.name,
-                    type: oldItem.type,
-                    calories: Math.round(newFood.calories * multiplier),
-                    carbs: Math.round(newFood.carbs * multiplier),
-                    protein: Math.round(newFood.protein * multiplier),
-                    fat: Math.round(newFood.fat * multiplier),
-                    fiber: Math.round(newFood.fiber * multiplier),
-                    vitamins: newFood.vitamins,
-                    unit: oldItem.unit,
-                    size: oldItem.size,
-                    quantity: oldItem.quantity,
-                    completed: false
-                };
-                updateMealTotals(meal);
-                localStorage.setItem('ownerData', JSON.stringify(ownerData));
-                loadOwnerMeals(clientId);
-            }
-        }
-
-        // تحديث إجمالي الماكروز للوجبة
-        function updateMealTotals(meal) {
-            meal.totalCalories = meal.items.reduce((sum, item) => sum + (item.calories || 0), 0);
-            meal.totalCarbs = meal.items.reduce((sum, item) => sum + (item.carbs || 0), 0);
-            meal.totalProtein = meal.items.reduce((sum, item) => sum + (item.protein || 0), 0);
-            meal.totalFats = meal.items.reduce((sum, item) => sum + (item.fat || 0), 0);
-            meal.totalFiber = meal.items.reduce((sum, item) => sum + (item.fiber || 0), 0);
-            meal.completed = meal.items.every(item => item.completed);
-        }
-        // دالة Levenshtein Distance لحساب التشابه بين النصوص
-function levenshteinDistance(a, b) {
-    const matrix = Array(b.length + 1).fill(null).map(() => Array(a.length + 1).fill(null));
-    for (let i = 0; i <= a.length; i++) matrix[0][i] = i;
-    for (let j = 0; j <= b.length; j++) matrix[j][0] = j;
-    for (let j = 1; j <= b.length; j++) {
-        for (let i = 1; i <= a.length; i++) {
-            const indicator = a[i - 1] === b[j - 1] ? 0 : 1;
-            matrix[j][i] = Math.min(
-                matrix[j][i - 1] + 1,
-                matrix[j - 1][i] + 1,
-                matrix[j - 1][i - 1] + indicator
-            );
-        }
-    }
-    return matrix[b.length][a.length];
-}
-
-// دالة البحث التقريبي
-// دالة البحث التقريبي المحسنة
-// دالة البحث التقريبي المحسنة مع ترتيب حسب نسبة التطابق العالية
-function searchFood() {
-    const query = document.getElementById('modal-food-search').value.trim().toLowerCase();
-    const type = document.getElementById('modal-food-type').value;
-    const foodSelect = document.getElementById('modal-food-name');
-
-    // إعادة تعيين القائمة إلى الحالة الافتراضية إذا كان الحقل فارغًا
-    if (!query) {
-        updateModalFoodOptions();
-        return;
-    }
-
-    // التحقق من اختيار نوع الطعام
-    if (!type || !foodDatabase[type]) {
-        foodSelect.innerHTML = '<option value="">يرجى اختيار نوع الطعام أولاً</option>';
-        return;
-    }
-
-    const foods = foodDatabase[type];
-
-    // حساب التشابه مع نسبة التطابق
-    const matches = foods.map(food => {
-        const distance = levenshteinDistance(query, food.name.toLowerCase());
-        const maxLength = Math.max(query.length, food.name.length);
-        const similarity = 1 - (distance / maxLength); // نسبة التشابه (0 إلى 1)
-        return {
-            name: food.name,
-            distance: distance,
-            similarity: similarity * 100 // تحويل إلى نسبة مئوية
-        };
-    })
-    .filter(match => match.distance <= 5) // تصفية النتائج القريبة فقط
-    .sort((a, b) => b.similarity - a.similarity); // ترتيب تنازلي حسب نسبة التطابق
-
-    // تحديث قائمة الخيارات
-    foodSelect.innerHTML = '<option value="">اختر الطعام</option>';
-    if (matches.length > 0) {
-        matches.slice(0, 10).forEach(match => {
-            foodSelect.innerHTML += `<option value="${match.name}">${match.name} (تطابق: ${Math.round(match.similarity)}%)</option>`;
-        });
-    } else {
-        foodSelect.innerHTML += '<option value="">لا توجد نتائج مطابقة</option>';
-    }
-}
-
-// تعديل دالة createMealDiv لدعم الحذف
-function createMealDiv(meal, mealIndex, clientId) {
-    const div = document.createElement('div');
-    div.className = 'meal-box';
-    div.innerHTML = `
-        <h3>الوجبة ${mealIndex + 1} <span class="checkmark ${meal.completed ? '' : 'hidden'}">✔</span></h3>
-        <button onclick="showAddFoodForm(${mealIndex}, ${clientId})"><i class="fas fa-plus"></i> إضافة طعام</button>
-        <div id="meal-${mealIndex}-items"></div>
-        <p>السعرات: ${meal.totalCalories} | الكارب: ${meal.totalCarbs} | البروتين: ${meal.totalProtein} | الدهون: ${meal.totalFats} | الألياف: ${meal.totalFiber}</p>
-        <p>الوقت: ${meal.time || 'غير محدد'}</p>
-    `;
-    const itemsContainer = div.querySelector(`#meal-${mealIndex}-items`);
-    meal.items.forEach((item, itemIndex) => {
-        const itemDiv = document.createElement('div');
-        itemDiv.className = 'food-item';
-        itemDiv.innerHTML = `
-            <span>${item.name} (${item.unit} - ${item.size})</span>
-            <span>السعرات: ${item.calories} | الماكروز: ${item.carbs}ك, ${item.protein}ب, ${item.fat}د, ${item.fiber}أ | الفيتامينات: ${item.vitamins}</span>
-            <span class="checkmark ${item.completed ? '' : 'hidden'}">✔</span>
-            <select onchange="replaceFood(${mealIndex}, ${itemIndex}, this.value, ${clientId})">
-                <option value="">بدائل</option>
-                ${Object.values(foodDatabase).flat().map(food => `<option value="${food.name}">${food.name}</option>`).join('')}
-            </select>
-            <button onclick="deleteFood(${mealIndex}, ${itemIndex}, ${clientId})"><i class="fas fa-trash"></i> حذف</button>
-        `;
-        itemsContainer.appendChild(itemDiv);
-    });
-    return div;
-}
-
-// دالة حذف الطعام
-function deleteFood(mealIndex, itemIndex, clientId) {
-    if (!isOwnerLoggedIn) {
-        alert('يرجى تسجيل الدخول كمالك أولاً!');
-        return;
-    }
-    if (confirm('هل أنت متأكد من حذف هذا الطعام؟')) {
-        const client = ownerData.clients.find(c => c.id === clientId);
-        const meal = client.meals[mealIndex];
-        meal.items.splice(itemIndex, 1);
-        updateMealTotals(meal);
-        localStorage.setItem('ownerData', JSON.stringify(ownerData));
-        loadOwnerMeals(clientId);
-    }
-}
-        // مشاركة رابط العميل
-        function shareClientLink() {
-            if (!isOwnerLoggedIn) {
-                alert('يرجى تسجيل الدخول كمالك أولاً!');
-                return;
-            }
-            const clientId = parseInt(document.getElementById('client-selector').value);
-            const client = ownerData.clients.find(c => c.id === clientId);
-            const link = `${window.location.href}?client=${client.id}&username=${client.username}`;
-            alert(`رابط العميل: ${link}`);
-        }
-
-        // إظهار نموذج الإشعار
-        function showNotificationForm() {
-            if (!isOwnerLoggedIn) {
-                alert('يرجى تسجيل الدخول كمالك أولاً!');
-                return;
-            }
-            document.getElementById('notification-modal').classList.remove('hidden');
-        }
-
-        // إرسال إشعار للعميل
-        function sendNotification() {
-            const clientId = parseInt(document.getElementById('client-selector').value);
-            if (!clientId) {
-                alert('يرجى اختيار عميل أولاً!');
-                return;
-            }
-            const title = document.getElementById('notification-title').value.trim();
-            const message = document.getElementById('notification-message').value.trim();
-            if (!title || !message) {
-                alert('يرجى إدخال عنوان ورسالة الإشعار!');
-                return;
-            }
-            const client = ownerData.clients.find(c => c.id === clientId);
-            if (!client.notifications) client.notifications = [];
-            client.notifications.push({
-                title,
-                message,
-                date: new Date().toISOString()
-            });
-            localStorage.setItem('ownerData', JSON.stringify(ownerData));
-            alert(`تم إرسال الإشعار إلى ${client.username}!`);
-            document.getElementById('notification-title').value = '';
-            document.getElementById('notification-message').value = '';
-            closeModal('notification-modal');
-        }
-
-        // تصدير تقرير العميل كـ PDF من واجهة العميل
-        function exportClientReport(period) {
-            if (!currentClientId) {
-                alert('يرجى تسجيل الدخول كعميل أولاً!');
-                return;
-            }
-            const client = ownerData.clients.find(c => c.id === currentClientId);
-            generatePDF(client, period, `تقرير_${client.username}_${period}`);
-        }
-
-        // تصدير تقرير العميل كـ PDF من واجهة المالك
-        function exportOwnerClientReport(period) {
-            if (!isOwnerLoggedIn) {
-                alert('يرجى تسجيل الدخول كمالك أولاً!');
-                return;
-            }
-            const clientId = parseInt(document.getElementById('client-selector').value);
-            if (!clientId) {
-                alert('يرجى اختيار عميل أولاً!');
-                return;
-            }
-            const client = ownerData.clients.find(c => c.id === clientId);
-            generatePDF(client, period, `تقرير_${client.username}_${period}_بواسطة_المالك`);
-        }
-
-        // دالة لتوليد ملف PDF
-      // دالة لتوليد ملف PDF
-function generatePDF(client, period, filename) {
-    const doc = new jsPDF();
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(16);
-
-    doc.text(`${period === 'daily' ? 'التقرير اليومي' : period === 'weekly' ? 'التقرير الأسبوعي' : 'التقرير الشهري'} لـ ${client.username}`, 105, 10, { align: 'center' });
-
-    doc.setFontSize(12);
-    doc.text(`العمر: ${client.age} سنة`, 190, 20, { align: 'right' });
-    doc.text(`الطول: ${client.height} سم`, 190, 30, { align: 'right' });
-    doc.text(`الوزن: ${client.weight} كجم`, 190, 40, { align: 'right' });
-    doc.text(`الهدف: ${client.goal === 'loss' ? 'فقدان الوزن' : client.goal === 'gain' ? 'زيادة الوزن' : 'الحفاظ على الوزن'}`, 190, 50, { align: 'right' });
-    doc.text(`النقاط: ${client.points || 0}`, 190, 60, { align: 'right' });
-    doc.text(`أيام الاشتراك المتبقية: ${getDaysRemaining(client)}`, 190, 70, { align: 'right' });
-
-    const days = client.days || {};
-    let reportData = {};
-    const today = new Date().toISOString().split('T')[0];
-    if (period === 'daily') {
-        reportData = days[today] || { calories: 0, carbs: 0, protein: 0, fats: 0, fiber: 0 };
-    } else if (period === 'weekly') {
-        reportData = { calories: 0, carbs: 0, protein: 0, fats: 0, fiber: 0 };
-        const weekAgo = new Date();
-        weekAgo.setDate(weekAgo.getDate() - 7);
-        for (let day in days) {
-            if (new Date(day) >= weekAgo) {
-                reportData.calories += days[day].calories || 0;
-                reportData.carbs += days[day].carbs || 0;
-                reportData.protein += days[day].protein || 0;
-                reportData.fats += days[day].fats || 0;
-                reportData.fiber += days[day].fiber || 0;
-            }
-        }
-    } else if (period === 'monthly') {
-        reportData = { calories: 0, carbs: 0, protein: 0, fats: 0, fiber: 0 };
-        const monthAgo = new Date();
-        monthAgo.setMonth(monthAgo.getMonth() - 1);
-        for (let day in days) {
-            if (new Date(day) >= monthAgo) {
-                reportData.calories += days[day].calories || 0;
-                reportData.carbs += days[day].carbs || 0;
-                reportData.protein += days[day].protein || 0;
-                reportData.fats += days[day].fats || 0;
-                reportData.fiber += days[day].fiber || 0;
-            }
-        }
-    }
-
-    doc.text('الإحصائيات:', 190, 80, { align: 'right' });
-    doc.text(`السعرات: ${reportData.calories} / ${client.targetCalories}`, 190, 90, { align: 'right' });
-    doc.text(`الكارب: ${reportData.carbs} / ${client.carbs} جم`, 190, 100, { align: 'right' });
-    doc.text(`البروتين: ${reportData.protein} / ${client.protein} جم`, 190, 110, { align: 'right' });
-    doc.text(`الدهون: ${reportData.fats} / ${client.fats} جم`, 190, 120, { align: 'right' });
-    doc.text(`الألياف: ${reportData.fiber} / ${client.fiber} جم`, 190, 130, { align: 'right' });
-
-    let yPos = 140;
-    doc.text('الوجبات:', 190, yPos, { align: 'right' });
-    yPos += 10;
-    client.meals.forEach((meal, index) => {
-        doc.text(`الوجبة ${index + 1} (${meal.completed ? 'مكتملة' : 'غير مكتملة'}) - ${meal.time || 'غير محدد'}`, 190, yPos, { align: 'right' });
-        yPos += 10;
-        meal.items.forEach(item => {
-            doc.text(`${item.name}: ${item.calories} سعرة`, 180, yPos, { align: 'right' });
-            yPos += 10;
-            if (yPos > 280) {
-                doc.addPage();
-                yPos = 10;
-            }
-        });
-    });
-
-    doc.save(`${filename}.pdf`);
-}
-
-// تهيئة النظام عند تحميل الصفحة
-document.addEventListener('DOMContentLoaded', () => {
-    loadClientSelector();
-    if (window.location.search) {
-        const params = new URLSearchParams(window.location.search);
-        const clientId = parseInt(params.get('client'));
-        const username = params.get('username');
-        if (clientId && username) {
-            const client = ownerData.clients.find(c => c.id === clientId && c.username === username);
-            if (client) {
-                currentClientId = clientId;
-                currentUserType = 'client';
-                document.getElementById('login-screen').classList.add('hidden');
-                document.getElementById('client-interface').classList.remove('hidden');
-                document.getElementById('client-interface').classList.add('active');
-                loadClientData(client);
-            }
-        }
-    }
-});
-
-</script>
 </body>
 </html>
