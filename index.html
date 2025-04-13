@@ -3,636 +3,620 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام إدارة الوحدات السكنية والأقساط</title>
+    <title>نظام إدارة الوحدات السكنية</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap');
+        
         body {
-            font-family: 'Cairo', sans-serif;
-            background-color: #f8fafc;
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f8f9fa;
         }
-        .container {
-            max-width: 1200px;
+        
+        .section {
+            display: none;
         }
-        .card {
+        
+        .active-section {
+            display: block;
+        }
+        
+        .login-bg {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0284c7 100%);
+        }
+        
+        .input-error {
+            border-color: #ef4444 !important;
+        }
+        
+        .shake {
+            animation: shake 0.5s;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        
+        .remember-checkbox:checked {
+            background-color: #1e40af;
+        }
+        
+        .content-section {
+            display: none;
+        }
+        
+        .content-section.active-section {
+            display: block;
+        }
+        
+        .tab-active {
+            background-color: #1e40af;
+            color: white;
+        }
+        
+        .sidebar-link {
             transition: all 0.3s ease;
         }
-        .card:hover {
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        }
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-        th, td {
-            padding: 12px;
-            text-align: right;
-        }
-        .border-b {
-            border-bottom: 1px solid #e2e8f0;
-        }
-        .payment-row {
-            transition: background-color 0.2s;
-        }
-        .payment-row:hover {
-            background-color: #edf2f7;
-        }
-        .property-card {
-            cursor: pointer;
-        }
-        @media print {
-            button.no-print {
-                display: none;
-            }
-            .page-break {
-                page-break-after: always;
-            }
+        
+        .sidebar-link:hover {
+            background-color: #1e4bba;
         }
     </style>
 </head>
 <body class="bg-gray-100">
-    <div class="container mx-auto px-4 py-6">
-        <!-- العنوان الرئيسي -->
-        <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-gray-800 mb-2">نظام إدارة الوحدات السكنية والأقساط</h1>
-            <p class="text-gray-600">حاسبة أقساط الوحدات السكنية وتتبع المدفوعات</p>
+    <!-- Login Section -->
+    <div id="login-section" class="section active-section min-h-screen flex items-center justify-center login-bg">
+        <div class="bg-white p-8 rounded-lg shadow-xl w-full max-w-md mx-4">
+            <div class="text-center mb-6">
+                <img src="https://via.placeholder.com/80" alt="Logo" class="mx-auto h-20 w-auto">
+                <h2 class="mt-4 text-2xl font-bold text-gray-800">تسجيل الدخول للنظام</h2>
+                <p class="mt-2 text-gray-600">الرجاء إدخال بيانات الدخول للوصول إلى لوحة التحكم</p>
+            </div>
+            
+            <form id="login-form" class="space-y-5">
+                <div>
+                    <label for="username" class="block text-sm font-medium text-gray-700 mb-1">اسم المستخدم</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <input type="text" id="username" name="username" 
+                               class="w-full pr-10 pl-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                               placeholder="أدخل اسم المستخدم" required>
+                    </div>
+                    <p id="username-error" class="mt-1 text-sm text-red-600 hidden">يجب إدخال اسم المستخدم</p>
+                </div>
+                
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700 mb-1">كلمة المرور</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <input type="password" id="password" name="password" 
+                               class="w-full pr-10 pl-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                               placeholder="أدخل كلمة المرور" required>
+                    </div>
+                    <p id="password-error" class="mt-1 text-sm text-red-600 hidden">يجب إدخال كلمة المرور</p>
+                </div>
+                
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <input id="remember-me" name="remember-me" type="checkbox" 
+                               class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded remember-checkbox">
+                        <label for="remember-me" class="mr-2 block text-sm text-gray-700">تذكرني</label>
+                    </div>
+                    <div class="text-sm">
+                        <a href="#" class="font-medium text-blue-600 hover:text-blue-500">نسيت كلمة المرور؟</a>
+                    </div>
+                </div>
+                
+                <div id="login-error" class="text-red-500 text-sm text-center hidden">
+                    <i class="fas fa-exclamation-circle ml-1"></i> اسم المستخدم أو كلمة المرور غير صحيحة
+                </div>
+                
+                <div>
+                    <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-300">
+                        تسجيل الدخول
+                    </button>
+                </div>
+            </form>
         </div>
+    </div>
 
-        <!-- القسم الرئيسي -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            
-            <!-- بطاقات الوحدات السكنية -->
-            <div class="md:col-span-3">
-                <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-                    <i class="fas fa-building ml-2"></i> الوحدات السكنية المتاحة
-                </h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                    <div class="card bg-white rounded-lg shadow p-4 property-card" onclick="selectProperty(0)">
-                        <div class="bg-blue-50 rounded-lg p-3 mb-3 text-blue-600">
-                            <i class="fas fa-home text-2xl"></i>
-                        </div>
-                        <h3 class="font-bold text-lg mb-2">شقة فاخرة - الزمالك</h3>
-                        <p class="text-gray-600 mb-2"><i class="fas fa-ruler-combined ml-1"></i> المساحة: 150 متر مربع</p>
-                        <p class="text-gray-600 mb-2"><i class="fas fa-door-open ml-1"></i> الغرف: 3</p>
-                        <p class="text-gray-600 mb-2"><i class="fas fa-bath ml-1"></i> الحمامات: 2</p>
-                        <div class="flex justify-between items-center mt-3">
-                            <span class="font-bold text-blue-600">2,500,000 ج.م</span>
-                            <button class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg text-sm transition">التفاصيل</button>
-                        </div>
-                    </div>
-                    
-                    <div class="card bg-white rounded-lg shadow p-4 property-card" onclick="selectProperty(1)">
-                        <div class="bg-green-50 rounded-lg p-3 mb-3 text-green-600">
-                            <i class="fas fa-home text-2xl"></i>
-                        </div>
-                        <h3 class="font-bold text-lg mb-2">فيلا مستقلة - المعادي</h3>
-                        <p class="text-gray-600 mb-2"><i class="fas fa-ruler-combined ml-1"></i> المساحة: 350 متر مربع</p>
-                        <p class="text-gray-600 mb-2"><i class="fas fa-door-open ml-1"></i> الغرف: 5</p>
-                        <p class="text-gray-600 mb-2"><i class="fas fa-bath ml-1"></i> الحمامات: 4</p>
-                        <div class="flex justify-between items-center mt-3">
-                            <span class="font-bold text-green-600">6,000,000 ج.م</span>
-                            <button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg text-sm transition">التفاصيل</button>
-                        </div>
-                    </div>
-                    
-                    <div class="card bg-white rounded-lg shadow p-4 property-card" onclick="selectProperty(2)">
-                        <div class="bg-purple-50 rounded-lg p-3 mb-3 text-purple-600">
-                            <i class="fas fa-home text-2xl"></i>
-                        </div>
-                        <h3 class="font-bold text-lg mb-2">دوبلكس - التجمع الخامس</h3>
-                        <p class="text-gray-600 mb-2"><i class="fas fa-ruler-combined ml-1"></i> المساحة: 250 متر مربع</p>
-                        <p class="text-gray-600 mb-2"><i class="fas fa-door-open ml-1"></i> الغرف: 4</p>
-                        <p class="text-gray-600 mb-2"><i class="fas fa-bath ml-1"></i> الحمامات: 3</p>
-                        <div class="flex justify-between items-center mt-3">
-                            <span class="font-bold text-purple-600">4,200,000 ج.م</span>
-                            <button class="bg-purple-500 hover:bg-purple-600 text-white px-3 py-1 rounded-lg text-sm transition">التفاصيل</button>
+    <!-- Main Application -->
+    <div id="app-container" class="section min-h-screen flex flex-col">
+        <!-- Header -->
+        <header class="bg-white shadow-md py-4 px-6">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                    <img src="https://via.placeholder.com/40" alt="Logo" class="h-10 w-auto">
+                    <h1 class="text-xl font-bold text-gray-800 mr-3">نظام إدارة الوحدات السكنية</h1>
+                </div>
+                <div class="flex items-center">
+                    <span id="user-display" class="text-gray-700 ml-4"></span>
+                    <div class="relative ml-3">
+                        <button id="user-menu-button" class="flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            <img class="h-8 w-8 rounded-full" src="https://via.placeholder.com/32" alt="صورة المستخدم">
+                        </button>
+                        <div id="user-dropdown" class="hidden origin-top-left absolute left-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                <i class="fas fa-user-circle ml-2"></i>الملف الشخصي
+                            </a>
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                <i class="fas fa-cog ml-2"></i>الإعدادات
+                            </a>
+                            <hr class="my-1">
+                            <a href="#" id="logout-btn" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
+                                <i class="fas fa-sign-out-alt ml-2"></i>تسجيل الخروج
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
+        </header>
 
-            <!-- قسم التفاصيل والحاسبة -->
-            <div class="md:col-span-3">
-                <div class="bg-white rounded-lg shadow p-5 mb-6">
-                    <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-                        <i class="fas fa-calculator ml-2"></i> حاسبة الأقساط
-                    </h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <h3 class="font-bold text-lg mb-3" id="selectedPropertyTitle">الرجاء اختيار وحدة سكنية</h3>
-                            <div class="mb-4" id="propertyDetails">
-                                <p class="text-gray-600">اختر وحدة من القائمة أعلاه لعرض التفاصيل وحساب الأقساط</p>
+        <!-- Main Content -->
+        <div class="flex flex-1 overflow-hidden">
+            <!-- Sidebar -->
+            <div class="bg-blue-800 text-white w-64 flex-shrink-0">
+                <nav class="mt-5 px-2">
+                    <a href="#" class="nav-link sidebar-link block px-4 py-2 rounded mb-1 text-white hover:text-white flex items-center tab-active" data-target="dashboard-section">
+                        <i class="fas fa-home ml-2"></i>
+                        <span>الرئيسية</span>
+                    </a>
+                    <a href="#" class="nav-link sidebar-link block px-4 py-2 rounded mb-1 text-white hover:text-white flex items-center" data-target="units-section">
+                        <i class="fas fa-building ml-2"></i>
+                        <span>الوحدات السكنية</span>
+                    </a>
+                    <a href="#" class="nav-link sidebar-link block px-4 py-2 rounded mb-1 text-white hover:text-white flex items-center" data-target="contracts-section">
+                        <i class="fas fa-file-contract ml-2"></i>
+                        <span>العقود</span>
+                    </a>
+                    <a href="#" class="nav-link sidebar-link block px-4 py-2 rounded mb-1 text-white hover:text-white flex items-center" data-target="tenants-section">
+                        <i class="fas fa-users ml-2"></i>
+                        <span>المستأجرين</span>
+                    </a>
+                    <a href="#" class="nav-link sidebar-link block px-4 py-2 rounded mb-1 text-white hover:text-white flex items-center" data-target="payments-section">
+                        <i class="fas fa-money-bill-wave ml-2"></i>
+                        <span>المدفوعات</span>
+                    </a>
+                    <a href="#" class="nav-link sidebar-link block px-4 py-2 rounded mb-1 text-white hover:text-white flex items-center" data-target="reports-section">
+                        <i class="fas fa-chart-bar ml-2"></i>
+                        <span>التقارير</span>
+                    </a>
+                    <a href="#" class="nav-link sidebar-link block px-4 py-2 rounded mb-1 text-white hover:text-white flex items-center" data-target="settings-section">
+                        <i class="fas fa-cog ml-2"></i>
+                        <span>الإعدادات</span>
+                    </a>
+                </nav>
+            </div>
+
+            <!-- Content Area -->
+            <div class="flex-1 overflow-auto p-6">
+                <!-- Dashboard Section -->
+                <div id="dashboard-section" class="content-section active-section">
+                    <h2 class="text-2xl font-bold mb-6">لوحة التحكم</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        <div class="bg-white rounded-lg shadow-md p-6 flex items-center">
+                            <div class="rounded-full bg-blue-100 p-3 ml-4">
+                                <i class="fas fa-building text-blue-600 text-xl"></i>
                             </div>
-                            
-                            <div class="mb-4">
-                                <label for="downPayment" class="block text-gray-700 mb-2">دفعة مقدمة (%)</label>
-                                <div class="flex items-center">
-                                    <input type="range" id="downPayment" min="0" max="70" value="10" class="w-full ml-4" oninput="updateInstallments()">
-                                    <span id="downPaymentValue" class="text-gray-800 font-semibold">10%</span>
-                                </div>
-                            </div>
-                            
-                            <div class="mb-4">
-                                <label for="installmentYears" class="block text-gray-700 mb-2">مدة السداد (بالسنوات)</label>
-                                <select id="installmentYears" class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" onchange="updateInstallments()">
-                                    <option value="1">سنة واحدة</option>
-                                    <option value="3">3 سنوات</option>
-                                    <option value="5" selected>5 سنوات</option>
-                                    <option value="7">7 سنوات</option>
-                                    <option value="10">10 سنوات</option>
-                                </select>
-                            </div>
-                            
-                            <div class="mb-4">
-                                <label for="interestRate" class="block text-gray-700 mb-2">نسبة الفائدة السنوية (%)</label>
-                                <input type="number" id="interestRate" min="0" max="30" value="14" class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" onchange="updateInstallments()">
+                            <div>
+                                <div class="text-sm text-gray-500">إجمالي الوحدات</div>
+                                <div class="text-xl font-bold">١٢٤ وحدة</div>
                             </div>
                         </div>
                         
-                        <div class="bg-gray-50 p-4 rounded-lg">
-                            <h3 class="font-bold text-lg mb-3">ملخص التمويل</h3>
-                            <div class="space-y-3" id="financeSummary">
-                                <p class="text-gray-600">اختر وحدة لعرض ملخص التمويل</p>
+                        <div class="bg-white rounded-lg shadow-md p-6 flex items-center">
+                            <div class="rounded-full bg-green-100 p-3 ml-4">
+                                <i class="fas fa-check-circle text-green-600 text-xl"></i>
                             </div>
-                            
-                            <div class="mt-5">
-                                <button onclick="calculateInstallments()" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg w-full transition focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 no-print">
-                                    <i class="fas fa-calculator ml-1"></i> حساب الأقساط
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- جدول الأقساط -->
-            <div class="md:col-span-3">
-                <div class="bg-white rounded-lg shadow p-5 mb-6" id="installmentTableSection" style="display: none;">
-                    <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-                        <i class="fas fa-table ml-2"></i> جدول الأقساط
-                    </h2>
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full">
-                            <thead>
-                                <tr class="bg-gray-50">
-                                    <th class="py-3 px-4 border-b text-gray-800">رقم القسط</th>
-                                    <th class="py-3 px-4 border-b text-gray-800">تاريخ الاستحقاق</th>
-                                    <th class="py-3 px-4 border-b text-gray-800">قيمة القسط</th>
-                                    <th class="py-3 px-4 border-b text-gray-800">أصل المبلغ</th>
-                                    <th class="py-3 px-4 border-b text-gray-800">الفائدة</th>
-                                    <th class="py-3 px-4 border-b text-gray-800">المتبقي</th>
-                                    <th class="py-3 px-4 border-b text-gray-800">الحالة</th>
-                                </tr>
-                            </thead>
-                            <tbody id="installmentTableBody">
-                                <!-- سيتم ملء هذا الجزء بواسطة JavaScript -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- نظام تسجيل المدفوعات -->
-            <div class="md:col-span-3">
-                <div class="bg-white rounded-lg shadow p-5 mb-6" id="paymentsSection" style="display: none;">
-                    <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-                        <i class="fas fa-money-bill-wave ml-2"></i> تسجيل المدفوعات
-                    </h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <div class="mb-4">
-                                <label for="paymentAmount" class="block text-gray-700 mb-2">المبلغ المدفوع</label>
-                                <input type="number" id="paymentAmount" class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
-                            </div>
-                            
-                            <div class="mb-4">
-                                <label for="paymentDate" class="block text-gray-700 mb-2">تاريخ الدفع</label>
-                                <input type="date" id="paymentDate" class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
-                            </div>
-                            
-                            <div class="mb-4">
-                                <label for="paymentMethod" class="block text-gray-700 mb-2">طريقة الدفع</label>
-                                <select id="paymentMethod" class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
-                                    <option value="cash">نقدًا</option>
-                                    <option value="bank">تحويل بنكي</option>
-                                    <option value="check">شيك</option>
-                                    <option value="card">بطاقة ائتمان</option>
-                                </select>
-                            </div>
-                            
-                            <div class="mb-4">
-                                <label for="paymentNotes" class="block text-gray-700 mb-2">ملاحظات</label>
-                                <textarea id="paymentNotes" class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" rows="3"></textarea>
-                            </div>
-                            
-                            <div class="mt-4">
-                                <button onclick="recordPayment()" class="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg transition focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 no-print">
-                                    <i class="fas fa-save ml-1"></i> تسجيل الدفعة
-                                </button>
+                            <div>
+                                <div class="text-sm text-gray-500">الوحدات المؤجرة</div>
+                                <div class="text-xl font-bold">٧٨ وحدة</div>
                             </div>
                         </div>
                         
-                        <div>
-                            <h3 class="font-bold text-lg mb-3">سجل المدفوعات</h3>
-                            <div class="bg-gray-50 p-4 rounded-lg max-h-96 overflow-y-auto">
-                                <table class="min-w-full">
+                        <div class="bg-white rounded-lg shadow-md p-6 flex items-center">
+                            <div class="rounded-full bg-yellow-100 p-3 ml-4">
+                                <i class="fas fa-key text-yellow-600 text-xl"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm text-gray-500">الوحدات الشاغرة</div>
+                                <div class="text-xl font-bold">٤٦ وحدة</div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg shadow-md p-6 flex items-center">
+                            <div class="rounded-full bg-red-100 p-3 ml-4">
+                                <i class="fas fa-exclamation-circle text-red-600 text-xl"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm text-gray-500">مدفوعات متأخرة</div>
+                                <div class="text-xl font-bold">١٢ وحدة</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="bg-white rounded-lg shadow-md p-6">
+                            <h3 class="text-lg font-bold mb-4 flex items-center">
+                                <i class="fas fa-calendar-check ml-2 text-blue-600"></i>
+                                العقود القادمة للانتهاء
+                            </h3>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200">
                                     <thead>
                                         <tr>
-                                            <th class="py-2 px-3 text-right text-gray-800">التاريخ</th>
-                                            <th class="py-2 px-3 text-right text-gray-800">المبلغ</th>
-                                            <th class="py-2 px-3 text-right text-gray-800">الطريقة</th>
+                                            <th class="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">رقم الوحدة</th>
+                                            <th class="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">المستأجر</th>
+                                            <th class="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">تاريخ الانتهاء</th>
+                                            <th class="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">المتبقي</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="paymentsHistory">
+                                    <tbody class="bg-white divide-y divide-gray-200">
                                         <tr>
-                                            <td colspan="3" class="py-4 text-center text-gray-500">لا توجد مدفوعات مسجلة</td>
+                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">A-101</td>
+                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">أحمد محمد</td>
+                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">٢٠/٠٧/٢٠٢٣</td>
+                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">٥ أيام</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">B-205</td>
+                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">خالد عبدالله</td>
+                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">٢٣/٠٧/٢٠٢٣</td>
+                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">٨ أيام</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">C-310</td>
+                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">عمر فهد</td>
+                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">٠١/٠٨/٢٠٢٣</td>
+                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">١٧ يوم</td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
-                            
-                            <div class="mt-4 p-4 bg-blue-50 rounded-lg">
-                                <h4 class="font-bold text-gray-800 mb-2">ملخص المدفوعات</h4>
-                                <div class="flex justify-between mb-2">
-                                    <span class="text-gray-700">إجمالي المدفوعات:</span>
-                                    <span class="font-bold text-gray-800" id="totalPaid">0 ج.م</span>
-                                </div>
-                                <div class="flex justify-between mb-2">
-                                    <span class="text-gray-700">المبلغ المتبقي:</span>
-                                    <span class="font-bold text-gray-800" id="totalRemaining">0 ج.م</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-gray-700">نسبة السداد:</span>
-                                    <span class="font-bold text-gray-800" id="paymentProgress">0%</span>
-                                </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg shadow-md p-6">
+                            <h3 class="text-lg font-bold mb-4 flex items-center">
+                                <i class="fas fa-money-check-alt ml-2 text-green-600"></i>
+                                آخر المدفوعات
+                            </h3>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead>
+                                        <tr>
+                                            <th class="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">رقم الوحدة</th>
+                                            <th class="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">المستأجر</th>
+                                            <th class="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">المبلغ</th>
+                                            <th class="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">التاريخ</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200">
+                                        <tr>
+                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">D-412</td>
+                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">محمد أحمد</td>
+                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">٥,٥٠٠ ر.س</td>
+                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">١٠/٠٧/٢٠٢٣</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">A-105</td>
+                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">سارة محمد</td>
+                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">٦,٠٠٠ ر.س</td>
+                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">٠٩/٠٧/٢٠٢٣</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">B-203</td>
+                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">عبدالرحمن خالد</td>
+                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">٤,٢٠٠ ر.س</td>
+                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">٠٨/٠٧/٢٠٢٣</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <!-- Sections for other tabs (hidden by default) -->
+                <div id="units-section" class="content-section">
+                    <h2 class="text-2xl font-bold mb-6">إدارة الوحدات السكنية</h2>
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <div class="relative w-64">
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
+                                    <i class="fas fa-search"></i>
+                                </div>
+                                <input type="text" class="w-full pr-10 pl-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="بحث عن وحدة...">
+                            </div>
+                            <button class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300">
+                                <i class="fas fa-plus ml-2"></i>إضافة وحدة جديدة
+                            </button>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">رقم الوحدة</th>
+                                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">النوع</th>
+                                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">المساحة</th>
+                                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">الإيجار الشهري</th>
+                                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">الحالة</th>
+                                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">الإجراءات</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">A-101</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">شقة</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">١٢٠ متر مربع</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">٥,٠٠٠ ر.س</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">مؤجرة</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
+                                            <a href="#" class="text-blue-600 hover:text-blue-900 ml-3"><i class="fas fa-eye"></i></a>
+                                            <a href="#" class="text-indigo-600 hover:text-indigo-900 ml-3"><i class="fas fa-edit"></i></a>
+                                            <a href="#" class="text-red-600 hover:text-red-900"><i class="fas fa-trash"></i></a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">A-102</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">شقة</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">١١٠ متر مربع</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">٤,٨٠٠ ر.س</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">شاغرة</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
+                                            <a href="#" class="text-blue-600 hover:text-blue-900 ml-3"><i class="fas fa-eye"></i></a>
+                                            <a href="#" class="text-indigo-600 hover:text-indigo-900 ml-3"><i class="fas fa-edit"></i></a>
+                                            <a href="#" class="text-red-600 hover:text-red-900"><i class="fas fa-trash"></i></a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="contracts-section" class="content-section">
+                    <h2 class="text-2xl font-bold mb-6">إدارة العقود</h2>
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <p>محتوى قسم العقود...</p>
+                    </div>
+                </div>
+
+                <div id="tenants-section" class="content-section">
+                    <h2 class="text-2xl font-bold mb-6">إدارة المستأجرين</h2>
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <p>محتوى قسم المستأجرين...</p>
+                    </div>
+                </div>
+
+                <div id="payments-section" class="content-section">
+                    <h2 class="text-2xl font-bold mb-6">إدارة المدفوعات</h2>
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <p>محتوى قسم المدفوعات...</p>
+                    </div>
+                </div>
+
+                <div id="reports-section" class="content-section">
+                    <h2 class="text-2xl font-bold mb-6">التقارير</h2>
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <p>محتوى قسم التقارير...</p>
+                    </div>
+                </div>
+
+                <div id="settings-section" class="content-section">
+                    <h2 class="text-2xl font-bold mb-6">الإعدادات</h2>
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <p>محتوى قسم الإعدادات...</p>
+                    </div>
+                </div>
             </div>
-        </div>
-        
-        <!-- Footer -->
-        <div class="text-center text-gray-600 mt-8 pt-8 border-t border-gray-200">
-            <p>© 2023 نظام إدارة الوحدات السكنية والأقساط - جميع الحقوق محفوظة</p>
         </div>
     </div>
 
     <script>
-        // بيانات الوحدات السكنية
-        const properties = [
-            { 
-                id: 1, 
-                title: "شقة فاخرة - الزمالك", 
-                price: 2500000, 
-                area: 150, 
-                rooms: 3, 
-                bathrooms: 2,
-                location: "الزمالك - القاهرة",
-                description: "شقة فاخرة في قلب الزمالك، بمساحة رائعة وإطلالة مميزة على النيل. تشطيب فاخر ومطبخ كامل التجهيزات."
-            },
-            { 
-                id: 2, 
-                title: "فيلا مستقلة - المعادي", 
-                price: 6000000, 
-                area: 350, 
-                rooms: 5, 
-                bathrooms: 4,
-                location: "المعادي - القاهرة",
-                description: "فيلا مستقلة في المعادي بحديقة خاصة وحمام سباحة. تشمل غرفة خادمة ومرآب للسيارات."
-            },
-            { 
-                id: 3, 
-                title: "دوبلكس - التجمع الخامس", 
-                price: 4200000, 
-                area: 250, 
-                rooms: 4, 
-                bathrooms: 3,
-                location: "التجمع الخامس - القاهرة الجديدة",
-                description: "دوبلكس فاخر في التجمع الخامس بتشطيب سوبر لوكس، قريب من الخدمات وطريق السويس."
-            }
-        ];
-
-        let selectedProperty = null;
-        let installmentPlan = null;
-        let payments = [];
-
-        // تحديد الوحدة السكنية
-        function selectProperty(index) {
-            selectedProperty = properties[index];
-            document.getElementById('selectedPropertyTitle').textContent = selectedProperty.title;
-            
-            // عرض تفاصيل الوحدة
-            const detailsHTML = `
-                <p class="text-gray-700 mb-2"><i class="fas fa-map-marker-alt ml-1"></i> الموقع: ${selectedProperty.location}</p>
-                <p class="text-gray-700 mb-2"><i class="fas fa-ruler-combined ml-1"></i> المساحة: ${selectedProperty.area} متر مربع</p>
-                <p class="text-gray-700 mb-2"><i class="fas fa-door-open ml-1"></i> عدد الغرف: ${selectedProperty.rooms}</p>
-                <p class="text-gray-700 mb-2"><i class="fas fa-bath ml-1"></i> عدد الحمامات: ${selectedProperty.bathrooms}</p>
-                <p class="text-gray-700 mb-2"><i class="fas fa-info-circle ml-1"></i> الوصف: ${selectedProperty.description}</p>
-                <p class="text-lg font-bold text-blue-600 mt-3">السعر: ${formatCurrency(selectedProperty.price)}</p>
-            `;
-            document.getElementById('propertyDetails').innerHTML = detailsHTML;
-            
-            // تحديث ملخص التمويل
-            updateInstallments();
-        }
-
-        // تحديث ملخص التمويل
-        function updateInstallments() {
-            if (!selectedProperty) return;
-            
-            const downPaymentPercent = parseInt(document.getElementById('downPayment').value);
-            document.getElementById('downPaymentValue').textContent = `${downPaymentPercent}%`;
-            
-            const years = parseInt(document.getElementById('installmentYears').value);
-            const interestRate = parseFloat(document.getElementById('interestRate').value);
-            
-            const price = selectedProperty.price;
-            const downPayment = price * (downPaymentPercent / 100);
-            const loanAmount = price - downPayment;
-            const monthlyRate = interestRate / 100 / 12;
-            const totalMonths = years * 12;
-            
-            // حساب القسط الشهري باستخدام صيغة القرض (PMT)
-            const x = Math.pow(1 + monthlyRate, totalMonths);
-            const monthlyPayment = (loanAmount * x * monthlyRate) / (x - 1);
-            
-            const totalPayment = monthlyPayment * totalMonths;
-            const totalInterest = totalPayment - loanAmount;
-            
-            const summaryHTML = `
-                <div class="flex justify-between mb-2">
-                    <span class="text-gray-700">سعر الوحدة:</span>
-                    <span class="font-bold text-gray-800">${formatCurrency(price)}</span>
-                </div>
-                <div class="flex justify-between mb-2">
-                    <span class="text-gray-700">الدفعة المقدمة (${downPaymentPercent}%):</span>
-                    <span class="font-bold text-gray-800">${formatCurrency(downPayment)}</span>
-                </div>
-                <div class="flex justify-between mb-2">
-                    <span class="text-gray-700">مبلغ التمويل:</span>
-                    <span class="font-bold text-gray-800">${formatCurrency(loanAmount)}</span>
-                </div>
-                <div class="flex justify-between mb-2">
-                    <span class="text-gray-700">مدة السداد:</span>
-                    <span class="font-bold text-gray-800">${years} سنوات (${totalMonths} شهر)</span>
-                </div>
-                <div class="flex justify-between mb-2">
-                    <span class="text-gray-700">نسبة الفائدة:</span>
-                    <span class="font-bold text-gray-800">${interestRate}%</span>
-                </div>
-                <div class="flex justify-between mb-2 border-t border-gray-200 pt-2 mt-2">
-                    <span class="text-gray-700">القسط الشهري:</span>
-                    <span class="font-bold text-blue-600">${formatCurrency(monthlyPayment)}</span>
-                </div>
-                <div class="flex justify-between mb-2">
-                    <span class="text-gray-700">إجمالي الفوائد:</span>
-                    <span class="font-bold text-gray-800">${formatCurrency(totalInterest)}</span>
-                </div>
-                <div class="flex justify-between mb-2">
-                    <span class="text-gray-700">إجمالي المدفوعات:</span>
-                    <span class="font-bold text-gray-800">${formatCurrency(totalPayment + downPayment)}</span>
-                </div>
-            `;
-            document.getElementById('financeSummary').innerHTML = summaryHTML;
-        }
-
-        // حساب جدول الأقساط
-        function calculateInstallments() {
-            if (!selectedProperty) {
-                alert("الرجاء اختيار وحدة سكنية أولاً");
-                return;
-            }
-            
-            const downPaymentPercent = parseInt(document.getElementById('downPayment').value);
-            const years = parseInt(document.getElementById('installmentYears').value);
-            const interestRate = parseFloat(document.getElementById('interestRate').value);
-            
-            const price = selectedProperty.price;
-            const downPayment = price * (downPaymentPercent / 100);
-            const loanAmount = price - downPayment;
-            const monthlyRate = interestRate / 100 / 12;
-            const totalMonths = years * 12;
-            
-            // حساب القسط الشهري باستخدام صيغة القرض (PMT)
-            const x = Math.pow(1 + monthlyRate, totalMonths);
-            const monthlyPayment = (loanAmount * x * monthlyRate) / (x - 1);
-            
-            // إنشاء جدول الأقساط
-            let tableHTML = '';
-            let remainingBalance = loanAmount;
-            let today = new Date();
-            
-            installmentPlan = [];
-            
-            for (let i = 1; i <= totalMonths; i++) {
-                const interestPayment = remainingBalance * monthlyRate;
-                const principalPayment = monthlyPayment - interestPayment;
-                remainingBalance -= principalPayment;
-                
-                // تاريخ الاستحقاق
-                let dueDate = new Date(today);
-                dueDate.setMonth(today.getMonth() + i);
-                
-                const installment = {
-                    number: i,
-                    dueDate: dueDate,
-                    payment: monthlyPayment,
-                    principal: principalPayment,
-                    interest: interestPayment,
-                    balance: remainingBalance < 0 ? 0 : remainingBalance,
-                    status: 'غير مدفوع'
-                };
-                
-                installmentPlan.push(installment);
-                
-                tableHTML += `
-                    <tr class="payment-row">
-                        <td class="py-3 px-4 border-b">${i}</td>
-                        <td class="py-3 px-4 border-b">${formatDate(dueDate)}</td>
-                        <td class="py-3 px-4 border-b">${formatCurrency(monthlyPayment)}</td>
-                        <td class="py-3 px-4 border-b">${formatCurrency(principalPayment)}</td>
-                        <td class="py-3 px-4 border-b">${formatCurrency(interestPayment)}</td>
-                        <td class="py-3 px-4 border-b">${formatCurrency(remainingBalance < 0 ? 0 : remainingBalance)}</td>
-                        <td class="py-3 px-4 border-b">
-                            <span class="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs">غير مدفوع</span>
-                        </td>
-                    </tr>
-                `;
-            }
-            
-            document.getElementById('installmentTableBody').innerHTML = tableHTML;
-            document.getElementById('installmentTableSection').style.display = 'block';
-            document.getElementById('paymentsSection').style.display = 'block';
-            
-            // إعادة تعيين المدفوعات
-            payments = [];
-            updatePaymentsSummary();
-            document.getElementById('paymentsHistory').innerHTML = '<tr><td colspan="3" class="py-4 text-center text-gray-500">لا توجد مدفوعات مسجلة</td></tr>';
-        }
-
-        // تسجيل دفعة جديدة
-        function recordPayment() {
-            if (!installmentPlan) {
-                alert("الرجاء حساب جدول الأقساط أولاً");
-                return;
-            }
-            
-            const amount = parseFloat(document.getElementById('paymentAmount').value);
-            if (isNaN(amount) || amount <= 0) {
-                alert("الرجاء إدخال مبلغ صحيح");
-                return;
-            }
-            
-            const date = document.getElementById('paymentDate').value;
-            if (!date) {
-                alert("الرجاء تحديد تاريخ الدفع");
-                return;
-            }
-            
-            const method = document.getElementById('paymentMethod').value;
-            const notes = document.getElementById('paymentNotes').value;
-            
-            const payment = {
-                date: new Date(date),
-                amount: amount,
-                method: method,
-                notes: notes
-            };
-            
-            payments.push(payment);
-            
-            // تحديث سجل المدفوعات
-            updatePaymentsHistory();
-            
-            // تحديث ملخص المدفوعات
-            updatePaymentsSummary();
-            
-            // تحديث حالة الأقساط
-            updateInstallmentStatus();
-            
-            // إعادة تعيين حقول الإدخال
-            document.getElementById('paymentAmount').value = '';
-            document.getElementById('paymentNotes').value = '';
-        }
-
-        // تحديث سجل المدفوعات
-        function updatePaymentsHistory() {
-            if (payments.length === 0) {
-                document.getElementById('paymentsHistory').innerHTML = '<tr><td colspan="3" class="py-4 text-center text-gray-500">لا توجد مدفوعات مسجلة</td></tr>';
-                return;
-            }
-            
-            let historyHTML = '';
-            
-            payments.forEach((payment, index) => {
-                const methodText = getPaymentMethodText(payment.method);
-                
-                historyHTML += `
-                    <tr class="payment-row">
-                        <td class="py-2 px-3 border-b">${formatDate(payment.date)}</td>
-                        <td class="py-2 px-3 border-b">${formatCurrency(payment.amount)}</td>
-                        <td class="py-2 px-3 border-b">${methodText}</td>
-                    </tr>
-                `;
-            });
-            
-            document.getElementById('paymentsHistory').innerHTML = historyHTML;
-        }
-
-        // تحديث ملخص المدفوعات
-        function updatePaymentsSummary() {
-            if (!installmentPlan) return;
-            
-            const totalAmount = selectedProperty.price * (1 - parseInt(document.getElementById('downPayment').value) / 100);
-            let totalPaid = 0;
-            
-            payments.forEach(payment => {
-                totalPaid += payment.amount;
-            });
-            
-            const remaining = totalAmount - totalPaid;
-            const progress = (totalPaid / totalAmount) * 100;
-            
-            document.getElementById('totalPaid').textContent = formatCurrency(totalPaid);
-            document.getElementById('totalRemaining').textContent = formatCurrency(remaining);
-            document.getElementById('paymentProgress').textContent = `${progress.toFixed(1)}%`;
-        }
-
-        // تحديث حالة الأقساط
-        function updateInstallmentStatus() {
-            if (!installmentPlan || !payments.length) return;
-            
-            let remainingPayment = 0;
-            payments.forEach(payment => {
-                remainingPayment += payment.amount;
-            });
-            
-            for (let i = 0; i < installmentPlan.length; i++) {
-                const installment = installmentPlan[i];
-                
-                if (remainingPayment >= installment.payment) {
-                    installment.status = 'مدفوع';
-                    remainingPayment -= installment.payment;
-                } else if (remainingPayment > 0) {
-                    installment.status = 'مدفوع جزئيًا';
-                    remainingPayment = 0;
-                } else {
-                    installment.status = 'غير مدفوع';
-                }
-                
-                // تحديث الجدول
-                const rows = document.getElementById('installmentTableBody').querySelectorAll('tr');
-                if (rows[i]) {
-                    const statusCell = rows[i].querySelector('td:last-child');
-                    if (statusCell) {
-                        let statusHTML = '';
-                        if (installment.status === 'مدفوع') {
-                            statusHTML = '<span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">مدفوع</span>';
-                        } else if (installment.status === 'مدفوع جزئيًا') {
-                            statusHTML = '<span class="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs">مدفوع جزئيًا</span>';
-                        } else {
-                            statusHTML = '<span class="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs">غير مدفوع</span>';
-                        }
-                        statusCell.innerHTML = statusHTML;
-                    }
-                }
-            }
-        }
-
-        // دوال مساعدة
-        function formatCurrency(amount) {
-            return amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + ' ج.م';
-        }
-
-        function formatDate(date) {
-            return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
-        }
-
-        function getPaymentMethodText(method) {
-            switch(method) {
-                case 'cash': return 'نقدًا';
-                case 'bank': return 'تحويل بنكي';
-                case 'check': return 'شيك';
-                case 'card': return 'بطاقة ائتمان';
-                default: return method;
-            }
-        }
-
-        // تعيين تاريخ اليوم كقيمة افتراضية لحقل تاريخ الدفع
         document.addEventListener('DOMContentLoaded', function() {
-            const today = new Date();
-            const yyyy = today.getFullYear();
-            let mm = today.getMonth() + 1;
-            let dd = today.getDate();
-            
-            if (dd < 10) dd = '0' + dd;
-            if (mm < 10) mm = '0' + mm;
-            
-            const formattedDate = yyyy + '-' + mm + '-' + dd;
-            document.getElementById('paymentDate').value = formattedDate;
+            // بيانات المستخدمين المسموح لهم بالدخول (في تطبيق حقيقي يجب استبدال هذا بقاعدة بيانات)
+            const users = [
+                { username: 'admin', password: 'admin123', name: 'المدير', role: 'admin' },
+                { username: 'user1', password: 'user1123', name: 'موظف المبيعات', role: 'sales' }
+            ];
+
+            // عناصر DOM
+            const loginForm = document.getElementById('login-form');
+            const loginSection = document.getElementById('login-section');
+            const appContainer = document.getElementById('app-container');
+            const loginError = document.getElementById('login-error');
+            const usernameError = document.getElementById('username-error');
+            const passwordError = document.getElementById('password-error');
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+            const logoutBtn = document.getElementById('logout-btn');
+            const userDisplay = document.getElementById('user-display');
+            const userMenuButton = document.getElementById('user-menu-button');
+            const userDropdown = document.getElementById('user-dropdown');
+
+            // معالجة تسجيل الدخول
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // إعادة تعيين رسائل الخطأ
+                loginError.classList.add('hidden');
+                usernameError.classList.add('hidden');
+                passwordError.classList.add('hidden');
+                usernameInput.classList.remove('input-error', 'shake');
+                passwordInput.classList.remove('input-error', 'shake');
+                
+                // التحقق من الحقول المطلوبة
+                let isValid = true;
+                
+                if (!usernameInput.value.trim()) {
+                    usernameInput.classList.add('input-error', 'shake');
+                    usernameError.classList.remove('hidden');
+                    isValid = false;
+                }
+                
+                if (!passwordInput.value.trim()) {
+                    passwordInput.classList.add('input-error', 'shake');
+                    passwordError.classList.remove('hidden');
+                    isValid = false;
+                }
+                
+                if (!isValid) return;
+                
+                // التحقق من بيانات المستخدم
+                const user = users.find(u => 
+                    u.username === usernameInput.value.trim() && 
+                    u.password === passwordInput.value.trim()
+                );
+                
+                if (user) {
+                    // تسجيل الدخول ناجح
+                    loginError.classList.add('hidden');
+                    
+                    // حفظ حالة تسجيل الدخول (في تطبيق حقيقي استخدم جلسة آمنة)
+                    sessionStorage.setItem('isLoggedIn', 'true');
+                    sessionStorage.setItem('user', JSON.stringify(user));
+                    
+                    // إظهار التطبيق الرئيسي
+                    loginSection.classList.remove('active-section');
+                    loginSection.classList.add('hidden');
+                    appContainer.classList.remove('hidden');
+                    appContainer.classList.add('active-section');
+                    
+                    // عرض اسم المستخدم
+                    userDisplay.textContent = `مرحباً، ${user.name}`;
+                    
+                    // تحميل بيانات المستخدم والصلاحيات
+                    loadUserData(user);
+                    
+                } else {
+                    // تسجيل الدخول فاشل
+                    loginError.classList.remove('hidden');
+                    usernameInput.classList.add('shake');
+                    passwordInput.classList.add('shake');
+                }
+            });
+
+            // تبديل قائمة المستخدم
+            if (userMenuButton) {
+                userMenuButton.addEventListener('click', function() {
+                    userDropdown.classList.toggle('hidden');
+                });
+
+                // إغلاق القائمة عند النقر خارجها
+                document.addEventListener('click', function(e) {
+                    if (!userMenuButton.contains(e.target) && !userDropdown.contains(e.target)) {
+                        userDropdown.classList.add('hidden');
+                    }
+                });
+            }
+
+            // تحميل بيانات المستخدم عند الدخول
+            function loadUserData(user) {
+                // هنا يمكنك تحميل الصلاحيات والإعدادات الخاصة بالمستخدم
+                console.log(`تم تسجيل دخول المستخدم: ${user.name} (${user.role})`);
+                
+                // يمكنك إضافة منطق إضافي هنا مثل:
+                // - تحميل الصلاحيات
+                // - تعديل واجهة المستخدم حسب الدور
+                // - جلب بيانات المستخدم من الخادم
+            }
+
+            // التحقق من حالة تسجيل الدخول عند تحميل الصفحة
+            function checkLoginStatus() {
+                const isLoggedIn = sessionStorage.getItem('isLoggedIn');
+                const user = JSON.parse(sessionStorage.getItem('user'));
+                
+                if (isLoggedIn === 'true' && user) {
+                    loginSection.classList.remove('active-section');
+                    loginSection.classList.add('hidden');
+                    appContainer.classList.remove('hidden');
+                    appContainer.classList.add('active-section');
+                    userDisplay.textContent = `مرحباً، ${user.name}`;
+                    loadUserData(user);
+                }
+            }
+
+            // تسجيل الخروج
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function() {
+                    // مسح بيانات الجلسة
+                    sessionStorage.removeItem('isLoggedIn');
+                    sessionStorage.removeItem('user');
+                    
+                    // إعادة التوجيه إلى صفحة تسجيل الدخول
+                    appContainer.classList.remove('active-section');
+                    appContainer.classList.add('hidden');
+                    loginSection.classList.add('active-section');
+                    loginSection.classList.remove('hidden');
+                    loginForm.reset();
+                });
+            }
+
+            // تبديل بين أقسام التطبيق
+            const navLinks = document.querySelectorAll('.nav-link');
+            const contentSections = document.querySelectorAll('.content-section');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    const target = this.getAttribute('data-target');
+                    
+                    // إزالة التنشيط من جميع الروابط
+                    navLinks.forEach(navLink => {
+                        navLink.classList.remove('tab-active');
+                    });
+                    
+                    // إضافة التنشيط للرابط الحالي
+                    this.classList.add('tab-active');
+                    
+                    // إخفاء جميع الأقسام
+                    contentSections.forEach(section => {
+                        section.classList.remove('active-section');
+                    });
+                    
+                    // إظهار القسم المطلوب
+                    document.getElementById(target).classList.add('active-section');
+                });
+            });
+
+            // إغلاق جميع النوافذ المنبثقة
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('close-modal') || e.target.classList.contains('cancel-modal')) {
+                    const modals = document.querySelectorAll('[id$="-modal"]');
+                    modals.forEach(modal => {
+                        modal.classList.add('hidden');
+                    });
+                }
+            });
+
+            // التحقق من حالة تسجيل الدخول عند تحميل الصفحة
+            checkLoginStatus();
         });
+
+        // دالة لحساب الأقساط (يمكن نقلها لملف JS منفصل)
+        function calculateInstallments(principal, annualRate, years, frequency) {
+            const rate = annualRate / 100 / frequency;
+            const payments = years * frequency;
+            const x = Math.pow(1 + rate, payments);
+            const monthly = (principal * x * rate) / (x - 1);
+            
+            return {
+                monthlyPayment: monthly,
+                totalPayment: monthly * payments,
+                totalInterest: (monthly * payments) - principal
+            };
+        }
     </script>
 </body>
 </html>
