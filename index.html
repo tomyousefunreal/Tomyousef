@@ -1,244 +1,638 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yousef Mohamed Salah - CV</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css">
+    <title>نظام إدارة الوحدات السكنية والأقساط</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
         body {
-            font-family: 'Arial', sans-serif;
-            color: #333;
-            line-height: 1.6;
+            font-family: 'Cairo', sans-serif;
+            background-color: #f8fafc;
         }
         .container {
-            max-width: 850px;
-            margin: 0 auto;
-            padding: 20px;
+            max-width: 1200px;
         }
-        .section {
-            margin-bottom: 25px;
+        .card {
+            transition: all 0.3s ease;
         }
-        .section-title {
-            border-bottom: 2px solid #3182ce;
-            padding-bottom: 5px;
-            margin-bottom: 15px;
-            color: #2c5282;
+        .card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
-        .contact-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 5px;
+        table {
+            border-collapse: collapse;
+            width: 100%;
         }
-        .contact-item i {
-            width: 20px;
-            margin-right: 10px;
-            color: #4299e1;
+        th, td {
+            padding: 12px;
+            text-align: right;
         }
-        .timeline-item {
-            margin-bottom: 15px;
-            position: relative;
+        .border-b {
+            border-bottom: 1px solid #e2e8f0;
         }
-        .timeline-title {
-            font-weight: bold;
+        .payment-row {
+            transition: background-color 0.2s;
         }
-        .timeline-period {
-            color: #718096;
-            font-style: italic;
+        .payment-row:hover {
+            background-color: #edf2f7;
         }
-        .skill-tag {
-            background-color: #ebf8ff;
-            border-radius: 15px;
-            padding: 5px 10px;
-            margin-right: 8px;
-            margin-bottom: 8px;
-            display: inline-block;
-            color: #2b6cb0;
-            font-size: 0.9rem;
+        .property-card {
+            cursor: pointer;
         }
         @media print {
-            body {
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
+            button.no-print {
+                display: none;
+            }
+            .page-break {
+                page-break-after: always;
             }
         }
     </style>
 </head>
-<body class="bg-gray-50">
-    <div class="container bg-white shadow-md rounded-lg">
-        <!-- Header Section -->
-        <header class="section pb-4">
-            <div class="flex flex-wrap justify-between items-center">
-                <div>
-                    <h1 class="text-3xl font-bold text-gray-800">Yousef Mohamed Salah</h1>
-                    <p class="text-xl text-blue-600">AI Enthusiast | Former Game Developer</p>
-                    <p class="text-gray-600">📍 Egypt</p>
-                </div>
-                <div class="mt-4 md:mt-0">
-                    <div class="contact-item">
-                        <i class="fas fa-envelope"></i>
-                        <a href="mailto:yousefunreal2024@gmail.com" class="text-blue-600 hover:underline">yousefunreal2024@gmail.com</a>
-                    </div>
-                    <div class="contact-item">
-                        <i class="fas fa-phone"></i>
-                        <a href="tel:01019646537" class="text-blue-600 hover:underline">01019646537</a>
-                    </div>
-                    <div class="contact-item">
-                        <i class="fab fa-linkedin"></i>
-                        <a href="https://www.linkedin.com/in/yousef-mohamed-3522b2313/" target="_blank" class="text-blue-600 hover:underline">LinkedIn</a>
-                    </div>
-                    <div class="contact-item">
-                        <i class="fab fa-facebook"></i>
-                        <a href="https://www.facebook.com/profile.php?id=100084425587109" target="_blank" class="text-blue-600 hover:underline">Facebook</a>
-                    </div>
-                    <div class="contact-item">
-                        <i class="fas fa-gamepad"></i>
-                        <a href="https://tomyousef.itch.io/" target="_blank" class="text-blue-600 hover:underline">Game Portfolio</a>
-                    </div>
-                </div>
-            </div>
-        </header>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-6">
+        <!-- العنوان الرئيسي -->
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">نظام إدارة الوحدات السكنية والأقساط</h1>
+            <p class="text-gray-600">حاسبة أقساط الوحدات السكنية وتتبع المدفوعات</p>
+        </div>
 
-        <!-- Professional Summary -->
-        <section class="section">
-            <h2 class="section-title text-xl font-semibold">Professional Summary</h2>
-            <p>
-                Self-taught AI engineer with a strong background in game development. Transitioned from designing interactive 3D games to the field of artificial intelligence in early 2025. Currently developing practical skills in deep learning, computer vision, and natural language processing using Python libraries. Member of the National Center for Digital Transformation, with a passion for continuous learning and innovation.
-            </p>
-        </section>
-
-        <!-- Technical Skills -->
-        <section class="section">
-            <h2 class="section-title text-xl font-semibold">Technical Skills</h2>
+        <!-- القسم الرئيسي -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             
-            <div class="mb-3">
-                <h3 class="font-semibold">Programming Languages:</h3>
-                <div class="flex flex-wrap">
-                    <span class="skill-tag">Python (Advanced)</span>
-                    <span class="skill-tag">C++ (Basics)</span>
-                    <span class="skill-tag">C# (Basics)</span>
+            <!-- بطاقات الوحدات السكنية -->
+            <div class="md:col-span-3">
+                <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                    <i class="fas fa-building ml-2"></i> الوحدات السكنية المتاحة
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div class="card bg-white rounded-lg shadow p-4 property-card" onclick="selectProperty(0)">
+                        <div class="bg-blue-50 rounded-lg p-3 mb-3 text-blue-600">
+                            <i class="fas fa-home text-2xl"></i>
+                        </div>
+                        <h3 class="font-bold text-lg mb-2">شقة فاخرة - الزمالك</h3>
+                        <p class="text-gray-600 mb-2"><i class="fas fa-ruler-combined ml-1"></i> المساحة: 150 متر مربع</p>
+                        <p class="text-gray-600 mb-2"><i class="fas fa-door-open ml-1"></i> الغرف: 3</p>
+                        <p class="text-gray-600 mb-2"><i class="fas fa-bath ml-1"></i> الحمامات: 2</p>
+                        <div class="flex justify-between items-center mt-3">
+                            <span class="font-bold text-blue-600">2,500,000 ج.م</span>
+                            <button class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg text-sm transition">التفاصيل</button>
+                        </div>
+                    </div>
+                    
+                    <div class="card bg-white rounded-lg shadow p-4 property-card" onclick="selectProperty(1)">
+                        <div class="bg-green-50 rounded-lg p-3 mb-3 text-green-600">
+                            <i class="fas fa-home text-2xl"></i>
+                        </div>
+                        <h3 class="font-bold text-lg mb-2">فيلا مستقلة - المعادي</h3>
+                        <p class="text-gray-600 mb-2"><i class="fas fa-ruler-combined ml-1"></i> المساحة: 350 متر مربع</p>
+                        <p class="text-gray-600 mb-2"><i class="fas fa-door-open ml-1"></i> الغرف: 5</p>
+                        <p class="text-gray-600 mb-2"><i class="fas fa-bath ml-1"></i> الحمامات: 4</p>
+                        <div class="flex justify-between items-center mt-3">
+                            <span class="font-bold text-green-600">6,000,000 ج.م</span>
+                            <button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg text-sm transition">التفاصيل</button>
+                        </div>
+                    </div>
+                    
+                    <div class="card bg-white rounded-lg shadow p-4 property-card" onclick="selectProperty(2)">
+                        <div class="bg-purple-50 rounded-lg p-3 mb-3 text-purple-600">
+                            <i class="fas fa-home text-2xl"></i>
+                        </div>
+                        <h3 class="font-bold text-lg mb-2">دوبلكس - التجمع الخامس</h3>
+                        <p class="text-gray-600 mb-2"><i class="fas fa-ruler-combined ml-1"></i> المساحة: 250 متر مربع</p>
+                        <p class="text-gray-600 mb-2"><i class="fas fa-door-open ml-1"></i> الغرف: 4</p>
+                        <p class="text-gray-600 mb-2"><i class="fas fa-bath ml-1"></i> الحمامات: 3</p>
+                        <div class="flex justify-between items-center mt-3">
+                            <span class="font-bold text-purple-600">4,200,000 ج.م</span>
+                            <button class="bg-purple-500 hover:bg-purple-600 text-white px-3 py-1 rounded-lg text-sm transition">التفاصيل</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- قسم التفاصيل والحاسبة -->
+            <div class="md:col-span-3">
+                <div class="bg-white rounded-lg shadow p-5 mb-6">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <i class="fas fa-calculator ml-2"></i> حاسبة الأقساط
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h3 class="font-bold text-lg mb-3" id="selectedPropertyTitle">الرجاء اختيار وحدة سكنية</h3>
+                            <div class="mb-4" id="propertyDetails">
+                                <p class="text-gray-600">اختر وحدة من القائمة أعلاه لعرض التفاصيل وحساب الأقساط</p>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="downPayment" class="block text-gray-700 mb-2">دفعة مقدمة (%)</label>
+                                <div class="flex items-center">
+                                    <input type="range" id="downPayment" min="0" max="70" value="10" class="w-full ml-4" oninput="updateInstallments()">
+                                    <span id="downPaymentValue" class="text-gray-800 font-semibold">10%</span>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="installmentYears" class="block text-gray-700 mb-2">مدة السداد (بالسنوات)</label>
+                                <select id="installmentYears" class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" onchange="updateInstallments()">
+                                    <option value="1">سنة واحدة</option>
+                                    <option value="3">3 سنوات</option>
+                                    <option value="5" selected>5 سنوات</option>
+                                    <option value="7">7 سنوات</option>
+                                    <option value="10">10 سنوات</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="interestRate" class="block text-gray-700 mb-2">نسبة الفائدة السنوية (%)</label>
+                                <input type="number" id="interestRate" min="0" max="30" value="14" class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" onchange="updateInstallments()">
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h3 class="font-bold text-lg mb-3">ملخص التمويل</h3>
+                            <div class="space-y-3" id="financeSummary">
+                                <p class="text-gray-600">اختر وحدة لعرض ملخص التمويل</p>
+                            </div>
+                            
+                            <div class="mt-5">
+                                <button onclick="calculateInstallments()" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg w-full transition focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 no-print">
+                                    <i class="fas fa-calculator ml-1"></i> حساب الأقساط
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             
-            <div class="mb-3">
-                <h3 class="font-semibold">AI/ML Tools:</h3>
-                <div class="flex flex-wrap">
-                    <span class="skill-tag">TensorFlow</span>
-                    <span class="skill-tag">PyTorch</span>
-                    <span class="skill-tag">Keras</span>
-                    <span class="skill-tag">Pandas</span>
-                    <span class="skill-tag">NumPy</span>
-                    <span class="skill-tag">Matplotlib</span>
+            <!-- جدول الأقساط -->
+            <div class="md:col-span-3">
+                <div class="bg-white rounded-lg shadow p-5 mb-6" id="installmentTableSection" style="display: none;">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <i class="fas fa-table ml-2"></i> جدول الأقساط
+                    </h2>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full">
+                            <thead>
+                                <tr class="bg-gray-50">
+                                    <th class="py-3 px-4 border-b text-gray-800">رقم القسط</th>
+                                    <th class="py-3 px-4 border-b text-gray-800">تاريخ الاستحقاق</th>
+                                    <th class="py-3 px-4 border-b text-gray-800">قيمة القسط</th>
+                                    <th class="py-3 px-4 border-b text-gray-800">أصل المبلغ</th>
+                                    <th class="py-3 px-4 border-b text-gray-800">الفائدة</th>
+                                    <th class="py-3 px-4 border-b text-gray-800">المتبقي</th>
+                                    <th class="py-3 px-4 border-b text-gray-800">الحالة</th>
+                                </tr>
+                            </thead>
+                            <tbody id="installmentTableBody">
+                                <!-- سيتم ملء هذا الجزء بواسطة JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
             
-            <div class="mb-3">
-                <h3 class="font-semibold">Deep Learning Models:</h3>
-                <div class="flex flex-wrap">
-                    <span class="skill-tag">Artificial Neural Networks (ANN)</span>
-                    <span class="skill-tag">Convolutional Neural Networks (CNN)</span>
-                    <span class="skill-tag">Recurrent Neural Networks (RNN)</span>
+            <!-- نظام تسجيل المدفوعات -->
+            <div class="md:col-span-3">
+                <div class="bg-white rounded-lg shadow p-5 mb-6" id="paymentsSection" style="display: none;">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <i class="fas fa-money-bill-wave ml-2"></i> تسجيل المدفوعات
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <div class="mb-4">
+                                <label for="paymentAmount" class="block text-gray-700 mb-2">المبلغ المدفوع</label>
+                                <input type="number" id="paymentAmount" class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="paymentDate" class="block text-gray-700 mb-2">تاريخ الدفع</label>
+                                <input type="date" id="paymentDate" class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="paymentMethod" class="block text-gray-700 mb-2">طريقة الدفع</label>
+                                <select id="paymentMethod" class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                                    <option value="cash">نقدًا</option>
+                                    <option value="bank">تحويل بنكي</option>
+                                    <option value="check">شيك</option>
+                                    <option value="card">بطاقة ائتمان</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="paymentNotes" class="block text-gray-700 mb-2">ملاحظات</label>
+                                <textarea id="paymentNotes" class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" rows="3"></textarea>
+                            </div>
+                            
+                            <div class="mt-4">
+                                <button onclick="recordPayment()" class="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg transition focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 no-print">
+                                    <i class="fas fa-save ml-1"></i> تسجيل الدفعة
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 class="font-bold text-lg mb-3">سجل المدفوعات</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg max-h-96 overflow-y-auto">
+                                <table class="min-w-full">
+                                    <thead>
+                                        <tr>
+                                            <th class="py-2 px-3 text-right text-gray-800">التاريخ</th>
+                                            <th class="py-2 px-3 text-right text-gray-800">المبلغ</th>
+                                            <th class="py-2 px-3 text-right text-gray-800">الطريقة</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="paymentsHistory">
+                                        <tr>
+                                            <td colspan="3" class="py-4 text-center text-gray-500">لا توجد مدفوعات مسجلة</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="mt-4 p-4 bg-blue-50 rounded-lg">
+                                <h4 class="font-bold text-gray-800 mb-2">ملخص المدفوعات</h4>
+                                <div class="flex justify-between mb-2">
+                                    <span class="text-gray-700">إجمالي المدفوعات:</span>
+                                    <span class="font-bold text-gray-800" id="totalPaid">0 ج.م</span>
+                                </div>
+                                <div class="flex justify-between mb-2">
+                                    <span class="text-gray-700">المبلغ المتبقي:</span>
+                                    <span class="font-bold text-gray-800" id="totalRemaining">0 ج.م</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-700">نسبة السداد:</span>
+                                    <span class="font-bold text-gray-800" id="paymentProgress">0%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            
-            <div class="mb-3">
-                <h3 class="font-semibold">Specialization Areas:</h3>
-                <div class="flex flex-wrap">
-                    <span class="skill-tag">Natural Language Processing (NLP)</span>
-                    <span class="skill-tag">Computer Vision</span>
-                </div>
-            </div>
-            
-            <div class="mb-3">
-                <h3 class="font-semibold">Game Development:</h3>
-                <div class="flex flex-wrap">
-                    <span class="skill-tag">Unreal Engine 5</span>
-                    <span class="skill-tag">Unity</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- AI Experience -->
-        <section class="section">
-            <h2 class="section-title text-xl font-semibold">AI Experience</h2>
-            <div class="timeline-item">
-                <div class="timeline-title">AI Developer (Self-taught)</div>
-                <div class="timeline-period">January 2025 - Present</div>
-                <ul class="list-disc pl-5 mt-2">
-                    <li>Building and training deep learning models using TensorFlow and PyTorch</li>
-                    <li>Implementing practical projects in areas like image classification and text summarization</li>
-                    <li>Studying and applying different neural network architectures like ANN, CNN, and RNN</li>
-                </ul>
-            </div>
-        </section>
-
-        <!-- Previous Experience -->
-        <section class="section">
-            <h2 class="section-title text-xl font-semibold">Previous Experience</h2>
-            <div class="timeline-item">
-                <div class="timeline-title">Game Developer</div>
-                <div class="timeline-period">2021 - 2024</div>
-                <ul class="list-disc pl-5 mt-2">
-                    <li>Developed indie games using Unity and C# with a focus on gameplay mechanics</li>
-                    <li>Full year working on Unreal Engine 5 for 3D environment design</li>
-                    <li>Implemented game logic, physics simulation, and visual design</li>
-                </ul>
-            </div>
-        </section>
-
-        <!-- Education and Memberships -->
-        <section class="section">
-            <h2 class="section-title text-xl font-semibold">Education and Memberships</h2>
-            <div class="timeline-item">
-                <div>Self-taught through YouTube tutorials and personal projects</div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-title">Member of the National Center for Digital Transformation</div>
-                <div><a href="https://www.facebook.com/NationalCenterdigital" target="_blank" class="text-blue-600 hover:underline">Organization Profile</a></div>
-            </div>
-        </section>
-
-        <!-- Certifications -->
-        <section class="section">
-            <h2 class="section-title text-xl font-semibold">Certifications</h2>
-            <div class="timeline-item">
-                <div class="timeline-title">Introduction to Game Development - GOMYCODE</div>
-                <div class="timeline-period">June 26, 2022 - July 26, 2022</div>
-            </div>
-        </section>
-
-        <!-- Projects -->
-        <section class="section">
-            <h2 class="section-title text-xl font-semibold">Projects</h2>
-            <div class="timeline-item">
-                <div class="timeline-title">Arabic Text Summarization using NLP</div>
-                <p>A project focused on natural language processing techniques for automatic summarization of Arabic text.</p>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-title">2D Platformer Game using Unreal Engine 5</div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-title">Games Published on itch.io</div>
-                <div><a href="https://tomyousef.itch.io/" target="_blank" class="text-blue-600 hover:underline">tomyousef.itch.io</a></div>
-                <div class="mt-1">
-                    <span class="text-gray-700">📈 36.5K views - 15.8K downloads</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- Languages -->
-        <section class="section">
-            <h2 class="section-title text-xl font-semibold">Languages</h2>
-            <div class="flex flex-wrap">
-                <div class="w-full md:w-1/2 mb-2">
-                    <span class="font-semibold">Arabic:</span> Native
-                </div>
-                <div class="w-full md:w-1/2 mb-2">
-                    <span class="font-semibold">English:</span> Good (Reading and Writing)
-                </div>
-            </div>
-        </section>
+        </div>
+        
+        <!-- Footer -->
+        <div class="text-center text-gray-600 mt-8 pt-8 border-t border-gray-200">
+            <p>© 2023 نظام إدارة الوحدات السكنية والأقساط - جميع الحقوق محفوظة</p>
+        </div>
     </div>
+
+    <script>
+        // بيانات الوحدات السكنية
+        const properties = [
+            { 
+                id: 1, 
+                title: "شقة فاخرة - الزمالك", 
+                price: 2500000, 
+                area: 150, 
+                rooms: 3, 
+                bathrooms: 2,
+                location: "الزمالك - القاهرة",
+                description: "شقة فاخرة في قلب الزمالك، بمساحة رائعة وإطلالة مميزة على النيل. تشطيب فاخر ومطبخ كامل التجهيزات."
+            },
+            { 
+                id: 2, 
+                title: "فيلا مستقلة - المعادي", 
+                price: 6000000, 
+                area: 350, 
+                rooms: 5, 
+                bathrooms: 4,
+                location: "المعادي - القاهرة",
+                description: "فيلا مستقلة في المعادي بحديقة خاصة وحمام سباحة. تشمل غرفة خادمة ومرآب للسيارات."
+            },
+            { 
+                id: 3, 
+                title: "دوبلكس - التجمع الخامس", 
+                price: 4200000, 
+                area: 250, 
+                rooms: 4, 
+                bathrooms: 3,
+                location: "التجمع الخامس - القاهرة الجديدة",
+                description: "دوبلكس فاخر في التجمع الخامس بتشطيب سوبر لوكس، قريب من الخدمات وطريق السويس."
+            }
+        ];
+
+        let selectedProperty = null;
+        let installmentPlan = null;
+        let payments = [];
+
+        // تحديد الوحدة السكنية
+        function selectProperty(index) {
+            selectedProperty = properties[index];
+            document.getElementById('selectedPropertyTitle').textContent = selectedProperty.title;
+            
+            // عرض تفاصيل الوحدة
+            const detailsHTML = `
+                <p class="text-gray-700 mb-2"><i class="fas fa-map-marker-alt ml-1"></i> الموقع: ${selectedProperty.location}</p>
+                <p class="text-gray-700 mb-2"><i class="fas fa-ruler-combined ml-1"></i> المساحة: ${selectedProperty.area} متر مربع</p>
+                <p class="text-gray-700 mb-2"><i class="fas fa-door-open ml-1"></i> عدد الغرف: ${selectedProperty.rooms}</p>
+                <p class="text-gray-700 mb-2"><i class="fas fa-bath ml-1"></i> عدد الحمامات: ${selectedProperty.bathrooms}</p>
+                <p class="text-gray-700 mb-2"><i class="fas fa-info-circle ml-1"></i> الوصف: ${selectedProperty.description}</p>
+                <p class="text-lg font-bold text-blue-600 mt-3">السعر: ${formatCurrency(selectedProperty.price)}</p>
+            `;
+            document.getElementById('propertyDetails').innerHTML = detailsHTML;
+            
+            // تحديث ملخص التمويل
+            updateInstallments();
+        }
+
+        // تحديث ملخص التمويل
+        function updateInstallments() {
+            if (!selectedProperty) return;
+            
+            const downPaymentPercent = parseInt(document.getElementById('downPayment').value);
+            document.getElementById('downPaymentValue').textContent = `${downPaymentPercent}%`;
+            
+            const years = parseInt(document.getElementById('installmentYears').value);
+            const interestRate = parseFloat(document.getElementById('interestRate').value);
+            
+            const price = selectedProperty.price;
+            const downPayment = price * (downPaymentPercent / 100);
+            const loanAmount = price - downPayment;
+            const monthlyRate = interestRate / 100 / 12;
+            const totalMonths = years * 12;
+            
+            // حساب القسط الشهري باستخدام صيغة القرض (PMT)
+            const x = Math.pow(1 + monthlyRate, totalMonths);
+            const monthlyPayment = (loanAmount * x * monthlyRate) / (x - 1);
+            
+            const totalPayment = monthlyPayment * totalMonths;
+            const totalInterest = totalPayment - loanAmount;
+            
+            const summaryHTML = `
+                <div class="flex justify-between mb-2">
+                    <span class="text-gray-700">سعر الوحدة:</span>
+                    <span class="font-bold text-gray-800">${formatCurrency(price)}</span>
+                </div>
+                <div class="flex justify-between mb-2">
+                    <span class="text-gray-700">الدفعة المقدمة (${downPaymentPercent}%):</span>
+                    <span class="font-bold text-gray-800">${formatCurrency(downPayment)}</span>
+                </div>
+                <div class="flex justify-between mb-2">
+                    <span class="text-gray-700">مبلغ التمويل:</span>
+                    <span class="font-bold text-gray-800">${formatCurrency(loanAmount)}</span>
+                </div>
+                <div class="flex justify-between mb-2">
+                    <span class="text-gray-700">مدة السداد:</span>
+                    <span class="font-bold text-gray-800">${years} سنوات (${totalMonths} شهر)</span>
+                </div>
+                <div class="flex justify-between mb-2">
+                    <span class="text-gray-700">نسبة الفائدة:</span>
+                    <span class="font-bold text-gray-800">${interestRate}%</span>
+                </div>
+                <div class="flex justify-between mb-2 border-t border-gray-200 pt-2 mt-2">
+                    <span class="text-gray-700">القسط الشهري:</span>
+                    <span class="font-bold text-blue-600">${formatCurrency(monthlyPayment)}</span>
+                </div>
+                <div class="flex justify-between mb-2">
+                    <span class="text-gray-700">إجمالي الفوائد:</span>
+                    <span class="font-bold text-gray-800">${formatCurrency(totalInterest)}</span>
+                </div>
+                <div class="flex justify-between mb-2">
+                    <span class="text-gray-700">إجمالي المدفوعات:</span>
+                    <span class="font-bold text-gray-800">${formatCurrency(totalPayment + downPayment)}</span>
+                </div>
+            `;
+            document.getElementById('financeSummary').innerHTML = summaryHTML;
+        }
+
+        // حساب جدول الأقساط
+        function calculateInstallments() {
+            if (!selectedProperty) {
+                alert("الرجاء اختيار وحدة سكنية أولاً");
+                return;
+            }
+            
+            const downPaymentPercent = parseInt(document.getElementById('downPayment').value);
+            const years = parseInt(document.getElementById('installmentYears').value);
+            const interestRate = parseFloat(document.getElementById('interestRate').value);
+            
+            const price = selectedProperty.price;
+            const downPayment = price * (downPaymentPercent / 100);
+            const loanAmount = price - downPayment;
+            const monthlyRate = interestRate / 100 / 12;
+            const totalMonths = years * 12;
+            
+            // حساب القسط الشهري باستخدام صيغة القرض (PMT)
+            const x = Math.pow(1 + monthlyRate, totalMonths);
+            const monthlyPayment = (loanAmount * x * monthlyRate) / (x - 1);
+            
+            // إنشاء جدول الأقساط
+            let tableHTML = '';
+            let remainingBalance = loanAmount;
+            let today = new Date();
+            
+            installmentPlan = [];
+            
+            for (let i = 1; i <= totalMonths; i++) {
+                const interestPayment = remainingBalance * monthlyRate;
+                const principalPayment = monthlyPayment - interestPayment;
+                remainingBalance -= principalPayment;
+                
+                // تاريخ الاستحقاق
+                let dueDate = new Date(today);
+                dueDate.setMonth(today.getMonth() + i);
+                
+                const installment = {
+                    number: i,
+                    dueDate: dueDate,
+                    payment: monthlyPayment,
+                    principal: principalPayment,
+                    interest: interestPayment,
+                    balance: remainingBalance < 0 ? 0 : remainingBalance,
+                    status: 'غير مدفوع'
+                };
+                
+                installmentPlan.push(installment);
+                
+                tableHTML += `
+                    <tr class="payment-row">
+                        <td class="py-3 px-4 border-b">${i}</td>
+                        <td class="py-3 px-4 border-b">${formatDate(dueDate)}</td>
+                        <td class="py-3 px-4 border-b">${formatCurrency(monthlyPayment)}</td>
+                        <td class="py-3 px-4 border-b">${formatCurrency(principalPayment)}</td>
+                        <td class="py-3 px-4 border-b">${formatCurrency(interestPayment)}</td>
+                        <td class="py-3 px-4 border-b">${formatCurrency(remainingBalance < 0 ? 0 : remainingBalance)}</td>
+                        <td class="py-3 px-4 border-b">
+                            <span class="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs">غير مدفوع</span>
+                        </td>
+                    </tr>
+                `;
+            }
+            
+            document.getElementById('installmentTableBody').innerHTML = tableHTML;
+            document.getElementById('installmentTableSection').style.display = 'block';
+            document.getElementById('paymentsSection').style.display = 'block';
+            
+            // إعادة تعيين المدفوعات
+            payments = [];
+            updatePaymentsSummary();
+            document.getElementById('paymentsHistory').innerHTML = '<tr><td colspan="3" class="py-4 text-center text-gray-500">لا توجد مدفوعات مسجلة</td></tr>';
+        }
+
+        // تسجيل دفعة جديدة
+        function recordPayment() {
+            if (!installmentPlan) {
+                alert("الرجاء حساب جدول الأقساط أولاً");
+                return;
+            }
+            
+            const amount = parseFloat(document.getElementById('paymentAmount').value);
+            if (isNaN(amount) || amount <= 0) {
+                alert("الرجاء إدخال مبلغ صحيح");
+                return;
+            }
+            
+            const date = document.getElementById('paymentDate').value;
+            if (!date) {
+                alert("الرجاء تحديد تاريخ الدفع");
+                return;
+            }
+            
+            const method = document.getElementById('paymentMethod').value;
+            const notes = document.getElementById('paymentNotes').value;
+            
+            const payment = {
+                date: new Date(date),
+                amount: amount,
+                method: method,
+                notes: notes
+            };
+            
+            payments.push(payment);
+            
+            // تحديث سجل المدفوعات
+            updatePaymentsHistory();
+            
+            // تحديث ملخص المدفوعات
+            updatePaymentsSummary();
+            
+            // تحديث حالة الأقساط
+            updateInstallmentStatus();
+            
+            // إعادة تعيين حقول الإدخال
+            document.getElementById('paymentAmount').value = '';
+            document.getElementById('paymentNotes').value = '';
+        }
+
+        // تحديث سجل المدفوعات
+        function updatePaymentsHistory() {
+            if (payments.length === 0) {
+                document.getElementById('paymentsHistory').innerHTML = '<tr><td colspan="3" class="py-4 text-center text-gray-500">لا توجد مدفوعات مسجلة</td></tr>';
+                return;
+            }
+            
+            let historyHTML = '';
+            
+            payments.forEach((payment, index) => {
+                const methodText = getPaymentMethodText(payment.method);
+                
+                historyHTML += `
+                    <tr class="payment-row">
+                        <td class="py-2 px-3 border-b">${formatDate(payment.date)}</td>
+                        <td class="py-2 px-3 border-b">${formatCurrency(payment.amount)}</td>
+                        <td class="py-2 px-3 border-b">${methodText}</td>
+                    </tr>
+                `;
+            });
+            
+            document.getElementById('paymentsHistory').innerHTML = historyHTML;
+        }
+
+        // تحديث ملخص المدفوعات
+        function updatePaymentsSummary() {
+            if (!installmentPlan) return;
+            
+            const totalAmount = selectedProperty.price * (1 - parseInt(document.getElementById('downPayment').value) / 100);
+            let totalPaid = 0;
+            
+            payments.forEach(payment => {
+                totalPaid += payment.amount;
+            });
+            
+            const remaining = totalAmount - totalPaid;
+            const progress = (totalPaid / totalAmount) * 100;
+            
+            document.getElementById('totalPaid').textContent = formatCurrency(totalPaid);
+            document.getElementById('totalRemaining').textContent = formatCurrency(remaining);
+            document.getElementById('paymentProgress').textContent = `${progress.toFixed(1)}%`;
+        }
+
+        // تحديث حالة الأقساط
+        function updateInstallmentStatus() {
+            if (!installmentPlan || !payments.length) return;
+            
+            let remainingPayment = 0;
+            payments.forEach(payment => {
+                remainingPayment += payment.amount;
+            });
+            
+            for (let i = 0; i < installmentPlan.length; i++) {
+                const installment = installmentPlan[i];
+                
+                if (remainingPayment >= installment.payment) {
+                    installment.status = 'مدفوع';
+                    remainingPayment -= installment.payment;
+                } else if (remainingPayment > 0) {
+                    installment.status = 'مدفوع جزئيًا';
+                    remainingPayment = 0;
+                } else {
+                    installment.status = 'غير مدفوع';
+                }
+                
+                // تحديث الجدول
+                const rows = document.getElementById('installmentTableBody').querySelectorAll('tr');
+                if (rows[i]) {
+                    const statusCell = rows[i].querySelector('td:last-child');
+                    if (statusCell) {
+                        let statusHTML = '';
+                        if (installment.status === 'مدفوع') {
+                            statusHTML = '<span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">مدفوع</span>';
+                        } else if (installment.status === 'مدفوع جزئيًا') {
+                            statusHTML = '<span class="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs">مدفوع جزئيًا</span>';
+                        } else {
+                            statusHTML = '<span class="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs">غير مدفوع</span>';
+                        }
+                        statusCell.innerHTML = statusHTML;
+                    }
+                }
+            }
+        }
+
+        // دوال مساعدة
+        function formatCurrency(amount) {
+            return amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + ' ج.م';
+        }
+
+        function formatDate(date) {
+            return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+        }
+
+        function getPaymentMethodText(method) {
+            switch(method) {
+                case 'cash': return 'نقدًا';
+                case 'bank': return 'تحويل بنكي';
+                case 'check': return 'شيك';
+                case 'card': return 'بطاقة ائتمان';
+                default: return method;
+            }
+        }
+
+        // تعيين تاريخ اليوم كقيمة افتراضية لحقل تاريخ الدفع
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            let mm = today.getMonth() + 1;
+            let dd = today.getDate();
+            
+            if (dd < 10) dd = '0' + dd;
+            if (mm < 10) mm = '0' + mm;
+            
+            const formattedDate = yyyy + '-' + mm + '-' + dd;
+            document.getElementById('paymentDate').value = formattedDate;
+        });
+    </script>
 </body>
 </html>
