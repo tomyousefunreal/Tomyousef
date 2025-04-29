@@ -3,620 +3,2010 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام إدارة الوحدات السكنية</title>
+    <title>tomyousef+ تطبيق المراسلة المتطور</title>
+    <!-- Fix: Changed from script to proper Tailwind CSS CDN link -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/all.min.css" rel="stylesheet">
+    <!-- Fix: Changed from link to proper script tag -->
+    <script src="https://cdn.jsdelivr.net/npm/emoji-picker-element@1.18.3/index.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap');
-        
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #3b82f6;
+            --text-color: #1f2937;
+            --bg-color: #f3f4f6;
+            --chat-bg: #ffffff;
+            --sidebar-bg: #f9fafb;
+            --message-sent: #dbeafe;
+            --message-received: #e5e7eb;
+            --border-color: #e5e7eb;
+            --status-online: #10b981;
+            --status-offline: #6b7280;
+            --story-border: linear-gradient(45deg, #f97316, #ec4899, #8b5cf6);
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode {
+            --primary-color: #3b82f6;
+            --secondary-color: #60a5fa;
+            --text-color: #f9fafb;
+            --bg-color: #111827;
+            --chat-bg: #1f2937;
+            --sidebar-bg: #111827;
+            --message-sent: #2563eb;
+            --message-received: #374151;
+            --border-color: #374151;
+            --shadow-color: rgba(0, 0, 0, 0.5);
+        }
+
         body {
-            font-family: 'Tajawal', sans-serif;
-            background-color: #f8f9fa;
-        }
-        
-        .section {
-            display: none;
-        }
-        
-        .active-section {
-            display: block;
-        }
-        
-        .login-bg {
-            background: linear-gradient(135deg, #1e3a8a 0%, #0284c7 100%);
-        }
-        
-        .input-error {
-            border-color: #ef4444 !important;
-        }
-        
-        .shake {
-            animation: shake 0.5s;
-        }
-        
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-            20%, 40%, 60%, 80% { transform: translateX(5px); }
-        }
-        
-        .remember-checkbox:checked {
-            background-color: #1e40af;
-        }
-        
-        .content-section {
-            display: none;
-        }
-        
-        .content-section.active-section {
-            display: block;
-        }
-        
-        .tab-active {
-            background-color: #1e40af;
-            color: white;
-        }
-        
-        .sidebar-link {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             transition: all 0.3s ease;
         }
+
+        .message {
+            max-width: 80%;
+            margin: 8px 0;
+            padding: 10px 16px;
+            border-radius: 18px;
+            position: relative;
+            word-break: break-word;
+        }
+
+        .message-sent {
+            background-color: var(--message-sent);
+            margin-left: auto;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message-received {
+            background-color: var(--message-received);
+            margin-right: auto;
+            border-bottom-left-radius: 4px;
+        }
+
+        .story-avatar {
+            border: 2px solid transparent;
+            background-image: var(--story-border);
+            background-origin: border-box;
+            background-clip: content-box, border-box;
+        }
+
+        .online-status {
+            width: 12px;
+            height: 12px;
+            background-color: var(--status-online);
+            border-radius: 50%;
+            border: 2px solid var(--sidebar-bg);
+            position: absolute;
+            bottom: 0;
+            right: 0;
+        }
+
+        .offline-status {
+            background-color: var(--status-offline);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        .emoji-selector {
+            position: absolute;
+            bottom: 60px;
+            right: 10px;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            box-shadow: 0 4px 12px var(--shadow-color);
+            display: none;
+            z-index: 100;
+            max-height: 250px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .emoji-btn {
+            cursor: pointer;
+            font-size: 1.5rem;
+            padding: 5px;
+            border-radius: 5px;
+            transition: all 0.2s;
+        }
+
+        .emoji-btn:hover {
+            background-color: var(--border-color);
+        }
+
+        .hide {
+            display: none;
+        }
+
+        .message-options {
+            position: absolute;
+            top: 0;
+            right: -40px;
+            display: none;
+        }
+
+        .message:hover .message-options {
+            display: block;
+        }
         
-        .sidebar-link:hover {
-            background-color: #1e4bba;
+        .message-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message-group-sent {
+            align-items: flex-end;
+        }
+
+        .message-group-received {
+            align-items: flex-start;
+        }
+
+        .message-time {
+            font-size: 10px;
+            color: #6b7280;
+            margin: 2px 10px;
+        }
+
+        .message-status {
+            font-size: 10px;
+            color: #6b7280;
+        }
+
+        .conversations-scroll {
+            max-height: calc(100vh - 180px);
+            overflow-y: auto;
+        }
+
+        .chat-area {
+            max-height: calc(100vh - 150px);
+            overflow-y: auto;
+            padding-bottom: 10px;
+        }
+
+        /* Animaciones */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-radius: 18px;
+            background-color: var(--message-received);
+            width: fit-content;
+            margin-right: auto;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #6b7280;
+            border-radius: 50%;
+            margin: 0 2px;
+            animation: typing 1.3s infinite ease-in-out both;
+        }
+
+        .typing-dot:nth-child(1) { animation-delay: 0s; }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.5); }
+        }
+
+        .stories-container {
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
+            padding: 10px 0;
+        }
+
+        .story-item {
+            display: inline-block;
+            margin-right: 15px;
+        }
+
+        .profile-edit {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Optimizaciones para la exportación a PDF */
+        @media print {
+            body {
+                width: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            
+            .chat-area {
+                max-height: none;
+                height: auto;
+                overflow: visible;
+            }
+            
+            .conversations-scroll {
+                max-height: none;
+                height: auto;
+                overflow: visible;
+            }
+
+            .hide-on-print {
+                display: none !important;
+            }
         }
     </style>
 </head>
-<body class="bg-gray-100">
-    <!-- Login Section -->
-    <div id="login-section" class="section active-section min-h-screen flex items-center justify-center login-bg">
-        <div class="bg-white p-8 rounded-lg shadow-xl w-full max-w-md mx-4">
-            <div class="text-center mb-6">
-                <img src="https://via.placeholder.com/80" alt="Logo" class="mx-auto h-20 w-auto">
-                <h2 class="mt-4 text-2xl font-bold text-gray-800">تسجيل الدخول للنظام</h2>
-                <p class="mt-2 text-gray-600">الرجاء إدخال بيانات الدخول للوصول إلى لوحة التحكم</p>
+<body class="min-h-screen">
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="fixed inset-0 z-50 flex items-center justify-center bg-white dark:bg-gray-900">
+        <div class="text-center">
+            <div class="text-4xl mb-4 text-blue-500">
+                <i class="fas fa-comments"></i>
             </div>
-            
-            <form id="login-form" class="space-y-5">
-                <div>
-                    <label for="username" class="block text-sm font-medium text-gray-700 mb-1">اسم المستخدم</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
-                            <i class="fas fa-user"></i>
-                        </div>
-                        <input type="text" id="username" name="username" 
-                               class="w-full pr-10 pl-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                               placeholder="أدخل اسم المستخدم" required>
-                    </div>
-                    <p id="username-error" class="mt-1 text-sm text-red-600 hidden">يجب إدخال اسم المستخدم</p>
-                </div>
-                
-                <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700 mb-1">كلمة المرور</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
-                            <i class="fas fa-lock"></i>
-                        </div>
-                        <input type="password" id="password" name="password" 
-                               class="w-full pr-10 pl-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                               placeholder="أدخل كلمة المرور" required>
-                    </div>
-                    <p id="password-error" class="mt-1 text-sm text-red-600 hidden">يجب إدخال كلمة المرور</p>
-                </div>
-                
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center">
-                        <input id="remember-me" name="remember-me" type="checkbox" 
-                               class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded remember-checkbox">
-                        <label for="remember-me" class="mr-2 block text-sm text-gray-700">تذكرني</label>
-                    </div>
-                    <div class="text-sm">
-                        <a href="#" class="font-medium text-blue-600 hover:text-blue-500">نسيت كلمة المرور؟</a>
-                    </div>
-                </div>
-                
-                <div id="login-error" class="text-red-500 text-sm text-center hidden">
-                    <i class="fas fa-exclamation-circle ml-1"></i> اسم المستخدم أو كلمة المرور غير صحيحة
-                </div>
-                
-                <div>
-                    <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-300">
-                        تسجيل الدخول
-                    </button>
-                </div>
-            </form>
+            <h1 class="text-3xl font-bold text-gray-800 dark:text-white mb-2">tomyousef+</h1>
+            <p class="text-gray-600 dark:text-gray-300">جاري التحميل...</p>
+            <div class="mt-4">
+                <div class="w-12 h-12 rounded-full border-4 border-blue-500 border-t-transparent animate-spin mx-auto"></div>
+            </div>
         </div>
     </div>
 
-    <!-- Main Application -->
-    <div id="app-container" class="section min-h-screen flex flex-col">
-        <!-- Header -->
-        <header class="bg-white shadow-md py-4 px-6">
-            <div class="flex justify-between items-center">
-                <div class="flex items-center">
-                    <img src="https://via.placeholder.com/40" alt="Logo" class="h-10 w-auto">
-                    <h1 class="text-xl font-bold text-gray-800 mr-3">نظام إدارة الوحدات السكنية</h1>
+    <!-- Auth Screens (Login/Register) -->
+    <div id="authScreens" class="container mx-auto p-4 max-w-md hidden">
+        <!-- Login Form -->
+        <div id="loginForm" class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8 mb-4">
+            <div class="text-center mb-8">
+                <div class="text-5xl mb-4 text-blue-500">
+                    <i class="fas fa-comments"></i>
                 </div>
-                <div class="flex items-center">
-                    <span id="user-display" class="text-gray-700 ml-4"></span>
-                    <div class="relative ml-3">
-                        <button id="user-menu-button" class="flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                            <img class="h-8 w-8 rounded-full" src="https://via.placeholder.com/32" alt="صورة المستخدم">
-                        </button>
-                        <div id="user-dropdown" class="hidden origin-top-left absolute left-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                <i class="fas fa-user-circle ml-2"></i>الملف الشخصي
-                            </a>
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                <i class="fas fa-cog ml-2"></i>الإعدادات
-                            </a>
-                            <hr class="my-1">
-                            <a href="#" id="logout-btn" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
-                                <i class="fas fa-sign-out-alt ml-2"></i>تسجيل الخروج
-                            </a>
-                        </div>
-                    </div>
-                </div>
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white">مرحباً بك في tomyousef+</h2>
+                <p class="text-gray-600 dark:text-gray-300">سجل دخولك للمتابعة</p>
             </div>
-        </header>
+            <div class="mb-4">
+                <label class="block text-gray-700 dark:text-gray-200 mb-2" for="loginUsername">اسم المستخدم</label>
+                <input id="loginUsername" type="text" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="أدخل اسم المستخدم">
+            </div>
+            <div class="mb-6">
+                <label class="block text-gray-700 dark:text-gray-200 mb-2" for="loginPassword">كلمة المرور</label>
+                <input id="loginPassword" type="password" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="أدخل كلمة المرور">
+            </div>
+            <button id="loginBtn" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg transition duration-200">تسجيل الدخول</button>
+            <p class="mt-4 text-center text-gray-600 dark:text-gray-300">ليس لديك حساب؟ <a id="showRegisterBtn" href="#" class="text-blue-500 hover:underline">إنشاء حساب جديد</a></p>
+        </div>
+        
+        <!-- Register Form -->
+        <div id="registerForm" class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8 hidden">
+            <div class="text-center mb-8">
+                <div class="text-5xl mb-4 text-blue-500">
+                    <i class="fas fa-user-plus"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white">إنشاء حساب جديد</h2>
+                <p class="text-gray-600 dark:text-gray-300">أنشئ حسابًا للوصول إلى tomyousef+</p>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 dark:text-gray-200 mb-2" for="registerName">الاسم الكامل</label>
+                <input id="registerName" type="text" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="أدخل اسمك الكامل">
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 dark:text-gray-200 mb-2" for="registerUsername">اسم المستخدم</label>
+                <input id="registerUsername" type="text" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="أدخل اسم المستخدم المطلوب">
+            </div>
+            <div class="mb-6">
+                <label class="block text-gray-700 dark:text-gray-200 mb-2" for="registerPassword">كلمة المرور</label>
+                <input id="registerPassword" type="password" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="أدخل كلمة المرور">
+            </div>
+            <div class="mb-6">
+                <label class="block text-gray-700 dark:text-gray-200 mb-2" for="profilePicInput">الصورة الشخصية (اختياري)</label>
+                <input id="profilePicUrl" type="text" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="أدخل رابط الصورة (اختياري)">
+            </div>
+            <button id="registerBtn" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg transition duration-200">إنشاء حساب</button>
+            <p class="mt-4 text-center text-gray-600 dark:text-gray-300">لديك حساب بالفعل؟ <a id="showLoginBtn" href="#" class="text-blue-500 hover:underline">تسجيل الدخول</a></p>
+        </div>
+    </div>
 
-        <!-- Main Content -->
-        <div class="flex flex-1 overflow-hidden">
+    <!-- Main App -->
+    <div id="mainApp" class="hidden">
+        <div class="flex flex-col lg:flex-row h-screen">
             <!-- Sidebar -->
-            <div class="bg-blue-800 text-white w-64 flex-shrink-0">
-                <nav class="mt-5 px-2">
-                    <a href="#" class="nav-link sidebar-link block px-4 py-2 rounded mb-1 text-white hover:text-white flex items-center tab-active" data-target="dashboard-section">
-                        <i class="fas fa-home ml-2"></i>
-                        <span>الرئيسية</span>
-                    </a>
-                    <a href="#" class="nav-link sidebar-link block px-4 py-2 rounded mb-1 text-white hover:text-white flex items-center" data-target="units-section">
-                        <i class="fas fa-building ml-2"></i>
-                        <span>الوحدات السكنية</span>
-                    </a>
-                    <a href="#" class="nav-link sidebar-link block px-4 py-2 rounded mb-1 text-white hover:text-white flex items-center" data-target="contracts-section">
-                        <i class="fas fa-file-contract ml-2"></i>
-                        <span>العقود</span>
-                    </a>
-                    <a href="#" class="nav-link sidebar-link block px-4 py-2 rounded mb-1 text-white hover:text-white flex items-center" data-target="tenants-section">
-                        <i class="fas fa-users ml-2"></i>
-                        <span>المستأجرين</span>
-                    </a>
-                    <a href="#" class="nav-link sidebar-link block px-4 py-2 rounded mb-1 text-white hover:text-white flex items-center" data-target="payments-section">
-                        <i class="fas fa-money-bill-wave ml-2"></i>
-                        <span>المدفوعات</span>
-                    </a>
-                    <a href="#" class="nav-link sidebar-link block px-4 py-2 rounded mb-1 text-white hover:text-white flex items-center" data-target="reports-section">
-                        <i class="fas fa-chart-bar ml-2"></i>
-                        <span>التقارير</span>
-                    </a>
-                    <a href="#" class="nav-link sidebar-link block px-4 py-2 rounded mb-1 text-white hover:text-white flex items-center" data-target="settings-section">
-                        <i class="fas fa-cog ml-2"></i>
-                        <span>الإعدادات</span>
-                    </a>
-                </nav>
-            </div>
-
-            <!-- Content Area -->
-            <div class="flex-1 overflow-auto p-6">
-                <!-- Dashboard Section -->
-                <div id="dashboard-section" class="content-section active-section">
-                    <h2 class="text-2xl font-bold mb-6">لوحة التحكم</h2>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                        <div class="bg-white rounded-lg shadow-md p-6 flex items-center">
-                            <div class="rounded-full bg-blue-100 p-3 ml-4">
-                                <i class="fas fa-building text-blue-600 text-xl"></i>
-                            </div>
-                            <div>
-                                <div class="text-sm text-gray-500">إجمالي الوحدات</div>
-                                <div class="text-xl font-bold">١٢٤ وحدة</div>
-                            </div>
+            <div class="lg:w-1/3 bg-white dark:bg-gray-800 shadow-lg lg:border-l border-gray-200 dark:border-gray-700 flex flex-col">
+                <!-- User Profile Header -->
+                <div class="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="relative cursor-pointer" id="profilePicContainer">
+                            <img id="userProfilePic" class="w-12 h-12 rounded-full object-cover" src="https://cdn.jsdelivr.net/gh/alohe/avatars/png/avatar_1.png" alt="Profile">
+                            <span class="online-status"></span>
                         </div>
-                        
-                        <div class="bg-white rounded-lg shadow-md p-6 flex items-center">
-                            <div class="rounded-full bg-green-100 p-3 ml-4">
-                                <i class="fas fa-check-circle text-green-600 text-xl"></i>
-                            </div>
-                            <div>
-                                <div class="text-sm text-gray-500">الوحدات المؤجرة</div>
-                                <div class="text-xl font-bold">٧٨ وحدة</div>
-                            </div>
-                        </div>
-                        
-                        <div class="bg-white rounded-lg shadow-md p-6 flex items-center">
-                            <div class="rounded-full bg-yellow-100 p-3 ml-4">
-                                <i class="fas fa-key text-yellow-600 text-xl"></i>
-                            </div>
-                            <div>
-                                <div class="text-sm text-gray-500">الوحدات الشاغرة</div>
-                                <div class="text-xl font-bold">٤٦ وحدة</div>
-                            </div>
-                        </div>
-                        
-                        <div class="bg-white rounded-lg shadow-md p-6 flex items-center">
-                            <div class="rounded-full bg-red-100 p-3 ml-4">
-                                <i class="fas fa-exclamation-circle text-red-600 text-xl"></i>
-                            </div>
-                            <div>
-                                <div class="text-sm text-gray-500">مدفوعات متأخرة</div>
-                                <div class="text-xl font-bold">١٢ وحدة</div>
-                            </div>
+                        <div class="mr-3">
+                            <h2 id="userFullName" class="font-bold text-lg dark:text-white">اسم المستخدم</h2>
+                            <p class="text-gray-500 dark:text-gray-400 text-sm">متصل الآن</p>
                         </div>
                     </div>
-                    
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div class="bg-white rounded-lg shadow-md p-6">
-                            <h3 class="text-lg font-bold mb-4 flex items-center">
-                                <i class="fas fa-calendar-check ml-2 text-blue-600"></i>
-                                العقود القادمة للانتهاء
-                            </h3>
-                            <div class="overflow-x-auto">
-                                <table class="min-w-full divide-y divide-gray-200">
-                                    <thead>
-                                        <tr>
-                                            <th class="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">رقم الوحدة</th>
-                                            <th class="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">المستأجر</th>
-                                            <th class="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">تاريخ الانتهاء</th>
-                                            <th class="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">المتبقي</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="bg-white divide-y divide-gray-200">
-                                        <tr>
-                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">A-101</td>
-                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">أحمد محمد</td>
-                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">٢٠/٠٧/٢٠٢٣</td>
-                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">٥ أيام</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">B-205</td>
-                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">خالد عبدالله</td>
-                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">٢٣/٠٧/٢٠٢٣</td>
-                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">٨ أيام</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">C-310</td>
-                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">عمر فهد</td>
-                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">٠١/٠٨/٢٠٢٣</td>
-                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">١٧ يوم</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        
-                        <div class="bg-white rounded-lg shadow-md p-6">
-                            <h3 class="text-lg font-bold mb-4 flex items-center">
-                                <i class="fas fa-money-check-alt ml-2 text-green-600"></i>
-                                آخر المدفوعات
-                            </h3>
-                            <div class="overflow-x-auto">
-                                <table class="min-w-full divide-y divide-gray-200">
-                                    <thead>
-                                        <tr>
-                                            <th class="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">رقم الوحدة</th>
-                                            <th class="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">المستأجر</th>
-                                            <th class="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">المبلغ</th>
-                                            <th class="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">التاريخ</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="bg-white divide-y divide-gray-200">
-                                        <tr>
-                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">D-412</td>
-                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">محمد أحمد</td>
-                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">٥,٥٠٠ ر.س</td>
-                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">١٠/٠٧/٢٠٢٣</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">A-105</td>
-                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">سارة محمد</td>
-                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">٦,٠٠٠ ر.س</td>
-                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">٠٩/٠٧/٢٠٢٣</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">B-203</td>
-                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">عبدالرحمن خالد</td>
-                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">٤,٢٠٠ ر.س</td>
-                                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-500">٠٨/٠٧/٢٠٢٣</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Sections for other tabs (hidden by default) -->
-                <div id="units-section" class="content-section">
-                    <h2 class="text-2xl font-bold mb-6">إدارة الوحدات السكنية</h2>
-                    <div class="bg-white rounded-lg shadow-md p-6">
-                        <div class="flex justify-between items-center mb-6">
-                            <div class="relative w-64">
-                                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
-                                    <i class="fas fa-search"></i>
-                                </div>
-                                <input type="text" class="w-full pr-10 pl-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="بحث عن وحدة...">
-                            </div>
-                            <button class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300">
-                                <i class="fas fa-plus ml-2"></i>إضافة وحدة جديدة
+                    <div class="flex items-center">
+                        <button id="createGroupBtn" class="text-gray-500 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400 mx-2">
+                            <i class="fas fa-users"></i>
+                        </button>
+                        <button id="darkModeToggle" class="text-gray-500 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400 mx-2">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                        <div class="relative mx-2">
+                            <button id="notificationsBtn" class="text-gray-500 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400">
+                                <i class="fas fa-bell"></i>
+                                <span id="notificationBadge" class="notification-badge hidden">0</span>
                             </button>
                         </div>
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">رقم الوحدة</th>
-                                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">النوع</th>
-                                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">المساحة</th>
-                                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">الإيجار الشهري</th>
-                                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">الحالة</th>
-                                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">الإجراءات</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">A-101</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">شقة</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">١٢٠ متر مربع</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">٥,٠٠٠ ر.س</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">مؤجرة</span>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
-                                            <a href="#" class="text-blue-600 hover:text-blue-900 ml-3"><i class="fas fa-eye"></i></a>
-                                            <a href="#" class="text-indigo-600 hover:text-indigo-900 ml-3"><i class="fas fa-edit"></i></a>
-                                            <a href="#" class="text-red-600 hover:text-red-900"><i class="fas fa-trash"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">A-102</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">شقة</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">١١٠ متر مربع</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">٤,٨٠٠ ر.س</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">شاغرة</span>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
-                                            <a href="#" class="text-blue-600 hover:text-blue-900 ml-3"><i class="fas fa-eye"></i></a>
-                                            <a href="#" class="text-indigo-600 hover:text-indigo-900 ml-3"><i class="fas fa-edit"></i></a>
-                                            <a href="#" class="text-red-600 hover:text-red-900"><i class="fas fa-trash"></i></a>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div class="dropdown relative mx-2">
+                            <button id="menuBtn" class="text-gray-500 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                            <div id="menuDropdown" class="absolute left-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white dark:bg-gray-700 ring-1 ring-black ring-opacity-5 hidden z-10">
+                                <a href="#" id="editProfileBtn" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600">تعديل الملف الشخصي</a>
+                                <a href="#" id="addFriendBtn" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600">إضافة صديق</a>
+                                <a href="#" id="createStoryBtn" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600">إضافة حالة</a>
+                                <a href="#" id="logoutBtn" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600">تسجيل الخروج</a>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <div id="contracts-section" class="content-section">
-                    <h2 class="text-2xl font-bold mb-6">إدارة العقود</h2>
-                    <div class="bg-white rounded-lg shadow-md p-6">
-                        <p>محتوى قسم العقود...</p>
+                
+                <!-- Search Box -->
+                <div class="p-4 border-b border-gray-200 dark:border-gray-700">
+                    <div class="relative">
+                        <input id="searchInput" type="text" class="w-full bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full py-2 px-4 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="بحث...">
+                        <div class="absolute left-3 top-2 text-gray-400">
+                            <i class="fas fa-search"></i>
+                        </div>
                     </div>
                 </div>
-
-                <div id="tenants-section" class="content-section">
-                    <h2 class="text-2xl font-bold mb-6">إدارة المستأجرين</h2>
-                    <div class="bg-white rounded-lg shadow-md p-6">
-                        <p>محتوى قسم المستأجرين...</p>
+                
+                <!-- Stories -->
+                <div id="storiesContainer" class="p-4 border-b border-gray-200 dark:border-gray-700">
+                    <h3 class="font-semibold mb-3 text-gray-700 dark:text-gray-300">الحالات</h3>
+                    <div class="stories-container">
+                        <div class="story-item">
+                            <div class="relative cursor-pointer" id="addStoryBtn">
+                                <div class="w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+                                    <i class="fas fa-plus text-blue-500"></i>
+                                </div>
+                                <p class="text-xs text-center mt-1 text-gray-600 dark:text-gray-400">إضافة حالة</p>
+                            </div>
+                        </div>
+                        <div id="storiesList"></div>
                     </div>
                 </div>
-
-                <div id="payments-section" class="content-section">
-                    <h2 class="text-2xl font-bold mb-6">إدارة المدفوعات</h2>
-                    <div class="bg-white rounded-lg shadow-md p-6">
-                        <p>محتوى قسم المدفوعات...</p>
+                
+                <!-- Conversations List -->
+                <div class="flex-1 overflow-hidden">
+                    <h3 class="font-semibold p-4 text-gray-700 dark:text-gray-300">المحادثات</h3>
+                    <div id="conversationsList" class="conversations-scroll"></div>
+                </div>
+            </div>
+            
+            <!-- Chat Area -->
+            <div class="lg:w-2/3 flex flex-col bg-gray-50 dark:bg-gray-900">
+                <!-- Chat Header -->
+                <div id="chatHeader" class="bg-white dark:bg-gray-800 p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="relative">
+                            <img id="activeChatProfilePic" class="w-12 h-12 rounded-full object-cover" src="https://cdn.jsdelivr.net/gh/alohe/avatars/png/avatar_2.png" alt="Contact">
+                            <span id="activeChatStatus" class="online-status"></span>
+                        </div>
+                        <div class="mr-3">
+                            <h2 id="activeChatName" class="font-bold text-lg dark:text-white">اختر محادثة</h2>
+                            <p id="activeChatStatus" class="text-gray-500 dark:text-gray-400 text-sm"></p>
+                        </div>
+                    </div>
+                    <div class="flex">
+                        <button id="chatInfoBtn" class="text-gray-500 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400 mx-2">
+                            <i class="fas fa-info-circle"></i>
+                        </button>
+                        <button id="chatSearchBtn" class="text-gray-500 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400 mx-2">
+                            <i class="fas fa-search"></i>
+                        </button>
                     </div>
                 </div>
-
-                <div id="reports-section" class="content-section">
-                    <h2 class="text-2xl font-bold mb-6">التقارير</h2>
-                    <div class="bg-white rounded-lg shadow-md p-6">
-                        <p>محتوى قسم التقارير...</p>
+                
+                <!-- Messages Container -->
+                <div id="messagesContainer" class="flex-1 p-4 overflow-y-auto chat-area">
+                    <div class="flex flex-col items-center justify-center h-full text-gray-500 dark:text-gray-400">
+                        <div class="text-6xl mb-4">
+                            <i class="far fa-comments"></i>
+                        </div>
+                        <p>اختر محادثة للبدء</p>
                     </div>
                 </div>
-
-                <div id="settings-section" class="content-section">
-                    <h2 class="text-2xl font-bold mb-6">الإعدادات</h2>
-                    <div class="bg-white rounded-lg shadow-md p-6">
-                        <p>محتوى قسم الإعدادات...</p>
+                
+                <!-- Message Input -->
+                <div id="messageInputContainer" class="bg-white dark:bg-gray-800 p-4 border-t border-gray-200 dark:border-gray-700">
+                    <div class="flex items-center">
+                        <button id="imageUploadBtn" class="p-2 rounded-full text-gray-500 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400">
+                            <i class="far fa-image"></i>
+                        </button>
+                        <button id="emojiBtn" class="p-2 rounded-full text-gray-500 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400">
+                            <i class="far fa-smile"></i>
+                        </button>
+                        <div class="relative flex-1 mx-2">
+                            <input id="messageInput" type="text" class="w-full bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="اكتب رسالة...">
+                            <div id="emojiSelector" class="emoji-selector"></div>
+                        </div>
+                        <button id="sendMessageBtn" class="p-2 rounded-full bg-blue-500 text-white">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+    
+    <!-- Modals -->
+    <!-- Add Friend Modal -->
+    <div id="addFriendModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-11/12 max-w-md">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold dark:text-white">إضافة صديق</h3>
+                <button class="close-modal text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 dark:text-gray-300 mb-2">اسم المستخدم</label>
+                <input id="friendUsername" type="text" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="أدخل اسم المستخدم">
+            </div>
+            <div class="flex justify-end">
+                <button class="close-modal px-4 py-2 text-gray-600 dark:text-gray-400 mr-2">إلغاء</button>
+                <button id="confirmAddFriend" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded">إضافة</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Create Group Modal -->
+    <div id="createGroupModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-11/12 max-w-md">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold dark:text-white">إنشاء مجموعة جديدة</h3>
+                <button class="close-modal text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 dark:text-gray-300 mb-2">اسم المجموعة</label>
+                <input id="groupName" type="text" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="أدخل اسم المجموعة">
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 dark:text-gray-300 mb-2">الأعضاء</label>
+                <div id="friendsForGroup" class="max-h-40 overflow-y-auto border border-gray-300 dark:border-gray-600 rounded-lg p-2 dark:bg-gray-700">
+                    <!-- Friends will be populated here -->
+                </div>
+            </div>
+            <div class="flex justify-end">
+                <button class="close-modal px-4 py-2 text-gray-600 dark:text-gray-400 mr-2">إلغاء</button>
+                <button id="confirmCreateGroup" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded">إنشاء</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Create Story Modal -->
+    <div id="createStoryModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-11/12 max-w-md">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold dark:text-white">إنشاء حالة جديدة</h3>
+                <button class="close-modal text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 dark:text-gray-300 mb-2">النص</label>
+                <textarea id="storyText" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 h-24" placeholder="اكتب شيئًا..."></textarea>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 dark:text-gray-300 mb-2">أو أضف رابط صورة</label>
+                <input id="storyImageUrl" type="text" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="أدخل رابط الصورة (اختياري)">
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 dark:text-gray-300 mb-2">خلفية (للنص فقط)</label>
+                <div class="flex space-x-2 space-x-reverse">
+                    <div data-color="#3b82f6" class="w-8 h-8 rounded-full bg-blue-500 cursor-pointer story-bg-option"></div>
+                    <div data-color="#10b981" class="w-8 h-8 rounded-full bg-green-500 cursor-pointer story-bg-option"></div>
+                    <div data-color="#ef4444" class="w-8 h-8 rounded-full bg-red-500 cursor-pointer story-bg-option"></div>
+                    <div data-color="#8b5cf6" class="w-8 h-8 rounded-full bg-purple-500 cursor-pointer story-bg-option"></div>
+                    <div data-color="#f97316" class="w-8 h-8 rounded-full bg-orange-500 cursor-pointer story-bg-option"></div>
+                </div>
+            </div>
+            <div class="flex justify-end">
+                <button class="close-modal px-4 py-2 text-gray-600 dark:text-gray-400 mr-2">إلغاء</button>
+                <button id="confirmCreateStory" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded">نشر</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- View Story Modal -->
+    <div id="viewStoryModal" class="fixed inset-0 bg-gray-900 bg-opacity-90 flex items-center justify-center z-50 hidden">
+        <div class="relative w-11/12 max-w-md h-[80vh] rounded-lg overflow-hidden">
+            <div id="storyContent" class="w-full h-full flex items-center justify-center bg-blue-500 relative">
+                <div class="absolute top-0 left-0 w-full p-4 flex justify-between items-center">
+                    <div class="flex items-center">
+                        <img id="storyUserPic" class="w-10 h-10 rounded-full object-cover border-2 border-white" src="" alt="">
+                        <span id="storyUsername" class="text-white mr-2"></span>
+                    </div>
+                    <div class="text-white text-xs" id="storyTime"></div>
+                </div>
+                <!-- Story content will be inserted here -->
+            </div>
+            <div class="absolute top-2 right-2">
+                <button id="closeStoryBtn" class="w-8 h-8 bg-black bg-opacity-50 rounded-full text-white flex items-center justify-center">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Edit Profile Modal -->
+    <div id="editProfileModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-11/12 max-w-md">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold dark:text-white">تعديل الملف الشخصي</h3>
+                <button class="close-modal text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="mb-4 text-center">
+                <div class="relative w-24 h-24 mx-auto mb-3">
+                    <img id="editProfilePic" class="w-24 h-24 rounded-full object-cover mx-auto" src="" alt="Profile">
+                </div>
+                <input id="editProfilePicUrl" type="text" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2" placeholder="رابط الصورة الشخصية">
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 dark:text-gray-300 mb-2">الاسم الكامل</label>
+                <input id="editFullName" type="text" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="الاسم الكامل">
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 dark:text-gray-300 mb-2">كلمة المرور الجديدة (اختياري)</label>
+                <input id="editPassword" type="password" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="اتركه فارغاً إذا لم ترد التغيير">
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 dark:text-gray-300 mb-2">الحالة</label>
+                <input id="editStatus" type="text" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="اكتب حالتك...">
+            </div>
+            <div class="flex justify-end">
+                <button class="close-modal px-4 py-2 text-gray-600 dark:text-gray-400 mr-2">إلغاء</button>
+                <button id="confirmEditProfile" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded">حفظ</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Image Preview Modal -->
+    <div id="imagePreviewModal" class="fixed inset-0 bg-gray-900 bg-opacity-90 flex items-center justify-center z-50 hidden">
+        <div class="relative w-11/12 max-w-4xl">
+            <div class="absolute top-2 right-2">
+                <button id="closeImagePreviewBtn" class="w-8 h-8 bg-black bg-opacity-50 rounded-full text-white flex items-center justify-center">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <img id="previewImageContent" class="max-w-full max-h-[80vh] object-contain rounded-lg" src="" alt="Preview">
+        </div>
+    </div>
+    
+    <!-- Notifications Panel -->
+    <div id="notificationsPanel" class="fixed top-0 left-0 w-80 h-screen bg-white dark:bg-gray-800 shadow-xl z-40 transform translate-y-full transition-transform duration-300 ease-in-out">
+        <div class="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+            <h3 class="font-bold text-lg dark:text-white">الإشعارات</h3>
+            <button id="closeNotificationsBtn" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div id="notificationsList" class="p-4 overflow-y-auto" style="max-height: calc(100vh - 60px);">
+            <!-- Notifications will be populated here -->
         </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // بيانات المستخدمين المسموح لهم بالدخول (في تطبيق حقيقي يجب استبدال هذا بقاعدة بيانات)
-            const users = [
-                { username: 'admin', password: 'admin123', name: 'المدير', role: 'admin' },
-                { username: 'user1', password: 'user1123', name: 'موظف المبيعات', role: 'sales' }
-            ];
-
-            // عناصر DOM
-            const loginForm = document.getElementById('login-form');
-            const loginSection = document.getElementById('login-section');
-            const appContainer = document.getElementById('app-container');
-            const loginError = document.getElementById('login-error');
-            const usernameError = document.getElementById('username-error');
-            const passwordError = document.getElementById('password-error');
-            const usernameInput = document.getElementById('username');
-            const passwordInput = document.getElementById('password');
-            const logoutBtn = document.getElementById('logout-btn');
-            const userDisplay = document.getElementById('user-display');
-            const userMenuButton = document.getElementById('user-menu-button');
-            const userDropdown = document.getElementById('user-dropdown');
-
-            // معالجة تسجيل الدخول
-            loginForm.addEventListener('submit', function(e) {
-                e.preventDefault();
+        // Global Variables
+        let currentUser = null;
+        let currentChat = null;
+        let users = [];
+        let conversations = [];
+        let messages = {};
+        let stories = [];
+        let notifications = [];
+        let selectedStoryBgColor = "#3b82f6";
+        let lastNotificationId = 0;
+        let isDarkMode = false;
+        
+        // Emoji set for emoji picker
+        const emojis = ["😀", "😁", "😂", "🤣", "😃", "😄", "😅", "😆", "😉", "😊", "😋", "😎", "😍", "😘", "🥰", "😗", "😙", "😚", "🙂", "🤗", "🤩", "🤔", "🤨", "😐", "😑", "😶", "🙄", "😏", "😣", "😥", "😮", "🤐", "😯", "😪", "😫", "😴", "😌", "😛", "😜", "😝", "🤤", "😒", "😓", "😔", "😕", "🙃", "🤑", "😲", "☹️", "🙁", "😖", "😞", "😟", "😤", "😢", "😭", "😦", "😧", "😨", "😩", "🤯", "😬", "😰", "😱", "🥵", "🥶", "😳", "🤪", "😵", "😡", "😠", "🤬", "😷", "🤒"];
+        
+        // Utility Functions
+        function generateId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2);
+        }
+        
+        function formatDate(timestamp) {
+            const date = new Date(timestamp);
+            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+        
+        function formatFullDate(timestamp) {
+            const date = new Date(timestamp);
+            return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+        
+        function showNotification(title, body, isSystem = false) {
+            const notification = {
+                id: ++lastNotificationId,
+                title,
+                body,
+                timestamp: Date.now(),
+                read: false,
+                isSystem
+            };
+            
+            notifications.unshift(notification);
+            saveNotificationsToStorage();
+            updateNotificationBadge();
+            return notification.id;
+        }
+        
+        function updateNotificationBadge() {
+            const unreadCount = notifications.filter(n => !n.read).length;
+            const badge = document.getElementById('notificationBadge');
+            
+            if (unreadCount > 0) {
+                badge.innerText = unreadCount > 9 ? '9+' : unreadCount;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+        
+        // UI Update Functions
+        function updateConversationsList() {
+            const list = document.getElementById('conversationsList');
+            list.innerHTML = '';
+            
+            // Sort conversations by last message timestamp (newest first)
+            const sortedConversations = [...conversations].sort((a, b) => {
+                const aLastMsg = getLastMessage(a.id);
+                const bLastMsg = getLastMessage(b.id);
+                const aTime = aLastMsg ? aLastMsg.timestamp : a.createdAt;
+                const bTime = bLastMsg ? bLastMsg.timestamp : b.createdAt;
+                return bTime - aTime;
+            });
+            
+            sortedConversations.forEach(conversation => {
+                const lastMessage = getLastMessage(conversation.id);
+                const user = conversation.type === 'private' ? 
+                    users.find(u => u.username === conversation.participants[0]) :
+                    null;
                 
-                // إعادة تعيين رسائل الخطأ
-                loginError.classList.add('hidden');
-                usernameError.classList.add('hidden');
-                passwordError.classList.add('hidden');
-                usernameInput.classList.remove('input-error', 'shake');
-                passwordInput.classList.remove('input-error', 'shake');
+                const unreadCount = getUnreadMessagesCount(conversation.id);
+                const isActive = currentChat && currentChat.id === conversation.id;
                 
-                // التحقق من الحقول المطلوبة
-                let isValid = true;
+                const conversationElement = document.createElement('div');
+                conversationElement.className = `p-3 border-b border-gray-200 dark:border-gray-700 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${isActive ? 'bg-blue-50 dark:bg-blue-900/20' : ''}`;
+                conversationElement.dataset.id = conversation.id;
                 
-                if (!usernameInput.value.trim()) {
-                    usernameInput.classList.add('input-error', 'shake');
-                    usernameError.classList.remove('hidden');
-                    isValid = false;
+                // Profile picture or group icon
+                let profilePic = '';
+                if (conversation.type === 'private') {
+                    const isOnline = user && user.status === 'online';
+                    profilePic = `
+                        <div class="relative">
+                            <img class="w-12 h-12 rounded-full object-cover" src="${user?.profilePic || 'https://cdn.jsdelivr.net/gh/alohe/avatars/png/avatar_1.png'}" alt="${conversation.name}">
+                            <span class="online-status ${isOnline ? '' : 'offline-status'}"></span>
+                        </div>
+                    `;
+                } else {
+                    profilePic = `
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white text-lg font-bold">
+                            ${conversation.name.charAt(0).toUpperCase()}
+                        </div>
+                    `;
                 }
                 
-                if (!passwordInput.value.trim()) {
-                    passwordInput.classList.add('input-error', 'shake');
-                    passwordError.classList.remove('hidden');
-                    isValid = false;
+                let lastMessageText = 'لا توجد رسائل';
+                let lastMessageTime = '';
+                
+                if (lastMessage) {
+                    lastMessageText = lastMessage.type === 'image' ? '🖼️ صورة' : lastMessage.content;
+                    if (lastMessageText.length > 30) {
+                        lastMessageText = lastMessageText.substring(0, 30) + '...';
+                    }
+                    lastMessageTime = formatDate(lastMessage.timestamp);
                 }
                 
-                if (!isValid) return;
+                conversationElement.innerHTML = `
+                    <div class="mr-4 ml-4">
+                        ${profilePic}
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex justify-between items-center">
+                            <h4 class="font-semibold text-gray-800 dark:text-gray-200">${conversation.name}</h4>
+                            <span class="text-xs text-gray-500">${lastMessageTime}</span>
+                        </div>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 line-clamp-1">${lastMessageText}</p>
+                    </div>
+                    ${unreadCount > 0 ? `<div class="ml-2 bg-blue-500 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">${unreadCount}</div>` : ''}
+                `;
                 
-                // التحقق من بيانات المستخدم
-                const user = users.find(u => 
-                    u.username === usernameInput.value.trim() && 
-                    u.password === passwordInput.value.trim()
-                );
+                conversationElement.addEventListener('click', () => {
+                    openConversation(conversation);
+                });
+                
+                list.appendChild(conversationElement);
+            });
+        }
+        
+        function getLastMessage(conversationId) {
+            const convoMessages = messages[conversationId] || [];
+            return convoMessages[convoMessages.length - 1];
+        }
+        
+        function getUnreadMessagesCount(conversationId) {
+            return (messages[conversationId] || []).filter(
+                msg => msg.sender !== currentUser.username && !msg.read
+            ).length;
+        }
+        
+        function markConversationAsRead(conversationId) {
+            if (!messages[conversationId]) return;
+            
+            messages[conversationId].forEach(msg => {
+                if (msg.sender !== currentUser.username) {
+                    msg.read = true;
+                }
+            });
+            
+            saveMessagesToStorage();
+            updateConversationsList();
+        }
+        
+        function updateMessagesContainer() {
+            const container = document.getElementById('messagesContainer');
+            container.innerHTML = '';
+            
+            if (!currentChat) {
+                container.innerHTML = `
+                    <div class="flex flex-col items-center justify-center h-full text-gray-500 dark:text-gray-400">
+                        <div class="text-6xl mb-4">
+                            <i class="far fa-comments"></i>
+                        </div>
+                        <p>اختر محادثة للبدء</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const chatMessages = messages[currentChat.id] || [];
+            
+            if (chatMessages.length === 0) {
+                container.innerHTML = `
+                    <div class="flex flex-col items-center justify-center h-full text-gray-500 dark:text-gray-400">
+                        <div class="text-6xl mb-4">
+                            <i class="far fa-paper-plane"></i>
+                        </div>
+                        <p>لا توجد رسائل. ابدأ المحادثة الآن!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let currentSender = null;
+            let messageGroup = null;
+            
+            chatMessages.forEach((message, index) => {
+                const isSent = message.sender === currentUser.username;
+                const sender = isSent ? 'sent' : 'received';
+                
+                // Start new message group when sender changes
+                if (message.sender !== currentSender) {
+                    currentSender = message.sender;
+                    messageGroup = document.createElement('div');
+                    messageGroup.className = `message-group message-group-${sender} mb-4`;
+                    container.appendChild(messageGroup);
+                }
+                
+                const messageElement = document.createElement('div');
+                messageElement.className = `message message-${sender} animate-fade-in`;
+                messageElement.dataset.id = message.id;
+                
+                // Message content
+                if (message.type === 'image') {
+                    messageElement.innerHTML = `
+                        <img src="${message.content}" alt="Shared image" class="rounded max-w-full cursor-pointer image-preview" style="max-height: 200px;">
+                    `;
+                } else {
+                    messageElement.innerText = message.content;
+                }
+                
+                // Message options (for editing/deleting)
+                if (isSent) {
+                    const optionsDiv = document.createElement('div');
+                    optionsDiv.className = 'message-options';
+                    optionsDiv.innerHTML = `
+                        <button class="text-gray-500 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400 edit-message-btn">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="text-gray-500 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400 delete-message-btn">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    `;
+                    messageElement.appendChild(optionsDiv);
+                    
+                    // Add event listeners for edit and delete
+                    optionsDiv.querySelector('.edit-message-btn').addEventListener('click', () => {
+                        editMessage(message);
+                    });
+                    
+                    optionsDiv.querySelector('.delete-message-btn').addEventListener('click', () => {
+                        deleteMessage(message);
+                    });
+                }
+                
+                messageGroup.appendChild(messageElement);
+                
+                // Add timestamp after last message or when sender changes
+                const isLastMessage = index === chatMessages.length - 1;
+                const nextSenderChanges = chatMessages[index + 1] && chatMessages[index + 1].sender !== message.sender;
+                
+                if (isLastMessage || nextSenderChanges) {
+                    const timeElement = document.createElement('div');
+                    timeElement.className = 'message-time';
+                    timeElement.innerText = formatDate(message.timestamp);
+                    messageGroup.appendChild(timeElement);
+                }
+                
+                // Add click event for image preview
+                if (message.type === 'image') {
+                    messageElement.querySelector('.image-preview').addEventListener('click', () => {
+                        openImagePreview(message.content);
+                    });
+                }
+            });
+            
+            // Scroll to bottom after updating messages
+            setTimeout(() => {
+                container.scrollTop = container.scrollHeight;
+            }, 100);
+        }
+        
+        function updateChatHeader() {
+            if (!currentChat) return;
+            
+            const header = document.getElementById('chatHeader');
+            const nameEl = document.getElementById('activeChatName');
+            const statusEl = document.getElementById('activeChatStatus');
+            const profilePicEl = document.getElementById('activeChatProfilePic');
+            
+            if (currentChat.type === 'private') {
+                const username = currentChat.participants[0]; // The other user
+                const user = users.find(u => u.username === username);
                 
                 if (user) {
-                    // تسجيل الدخول ناجح
-                    loginError.classList.add('hidden');
+                    nameEl.innerText = user.name;
+                    statusEl.innerText = user.status === 'online' ? 'متصل الآن' : 'غير متصل';
+                    profilePicEl.src = user.profilePic || 'https://cdn.jsdelivr.net/gh/alohe/avatars/png/avatar_1.png';
                     
-                    // حفظ حالة تسجيل الدخول (في تطبيق حقيقي استخدم جلسة آمنة)
-                    sessionStorage.setItem('isLoggedIn', 'true');
-                    sessionStorage.setItem('user', JSON.stringify(user));
-                    
-                    // إظهار التطبيق الرئيسي
-                    loginSection.classList.remove('active-section');
-                    loginSection.classList.add('hidden');
-                    appContainer.classList.remove('hidden');
-                    appContainer.classList.add('active-section');
-                    
-                    // عرض اسم المستخدم
-                    userDisplay.textContent = `مرحباً، ${user.name}`;
-                    
-                    // تحميل بيانات المستخدم والصلاحيات
-                    loadUserData(user);
-                    
-                } else {
-                    // تسجيل الدخول فاشل
-                    loginError.classList.remove('hidden');
-                    usernameInput.classList.add('shake');
-                    passwordInput.classList.add('shake');
+                    const statusIndicator = document.getElementById('activeChatStatus');
+                    if (user.status === 'online') {
+                        statusIndicator.classList.remove('offline-status');
+                    } else {
+                        statusIndicator.classList.add('offline-status');
+                    }
                 }
+            } else {
+                nameEl.innerText = currentChat.name;
+                statusEl.innerText = `${currentChat.participants.length} أعضاء`;
+                profilePicEl.src = 'https://cdn.jsdelivr.net/gh/alohe/avatars/png/avatar_5.png';
+            }
+        }
+        
+        function updateStoriesList() {
+            const storiesList = document.getElementById('storiesList');
+            storiesList.innerHTML = '';
+            
+            // Filter stories from the last 24 hours
+            const recentStories = stories.filter(story => {
+                return (Date.now() - story.timestamp) < 24 * 60 * 60 * 1000;
             });
-
-            // تبديل قائمة المستخدم
-            if (userMenuButton) {
-                userMenuButton.addEventListener('click', function() {
-                    userDropdown.classList.toggle('hidden');
+            
+            // Group stories by user
+            const storiesByUser = {};
+            recentStories.forEach(story => {
+                if (!storiesByUser[story.username]) {
+                    storiesByUser[story.username] = [];
+                }
+                storiesByUser[story.username].push(story);
+            });
+            
+            // Create story items
+            Object.keys(storiesByUser).forEach(username => {
+                const user = users.find(u => u.username === username);
+                if (!user) return;
+                
+                const userStories = storiesByUser[username];
+                const viewedAll = userStories.every(story => story.viewers && story.viewers.includes(currentUser.username));
+                
+                const storyItem = document.createElement('div');
+                storyItem.className = 'story-item';
+                storyItem.innerHTML = `
+                    <div class="relative cursor-pointer">
+                        <div class="w-16 h-16 ${viewedAll ? '' : 'story-avatar'}">
+                            <img class="w-16 h-16 rounded-full object-cover" src="${user.profilePic || 'https://cdn.jsdelivr.net/gh/alohe/avatars/png/avatar_1.png'}" alt="${user.name}">
+                        </div>
+                        <p class="text-xs text-center mt-1 text-gray-600 dark:text-gray-400">${user.name.split(' ')[0]}</p>
+                    </div>
+                `;
+                
+                storyItem.addEventListener('click', () => {
+                    viewUserStories(username);
                 });
-
-                // إغلاق القائمة عند النقر خارجها
-                document.addEventListener('click', function(e) {
-                    if (!userMenuButton.contains(e.target) && !userDropdown.contains(e.target)) {
-                        userDropdown.classList.add('hidden');
+                
+                storiesList.appendChild(storyItem);
+            });
+        }
+        
+        function updateNotificationsList() {
+            const list = document.getElementById('notificationsList');
+            list.innerHTML = '';
+            
+            if (notifications.length === 0) {
+                list.innerHTML = `
+                    <div class="flex flex-col items-center justify-center py-8 text-gray-500 dark:text-gray-400">
+                        <div class="text-4xl mb-4">
+                            <i class="far fa-bell-slash"></i>
+                        </div>
+                        <p>لا توجد إشعارات</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            notifications.forEach(notification => {
+                const notificationEl = document.createElement('div');
+                notificationEl.className = `p-3 border-b border-gray-200 dark:border-gray-700 ${notification.read ? 'opacity-70' : 'bg-blue-50 dark:bg-blue-900/20'}`;
+                
+                notificationEl.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h4 class="font-semibold text-gray-800 dark:text-gray-200">${notification.title}</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">${notification.body}</p>
+                            <p class="text-xs text-gray-500 mt-1">${formatFullDate(notification.timestamp)}</p>
+                        </div>
+                        ${!notification.read ? `
+                            <button class="mark-read-btn text-blue-500 hover:text-blue-700 text-sm" data-id="${notification.id}">
+                                <i class="fas fa-check"></i>
+                            </button>
+                        ` : ''}
+                    </div>
+                `;
+                
+                list.appendChild(notificationEl);
+                
+                // Add event listener for mark as read button
+                const markReadBtn = notificationEl.querySelector('.mark-read-btn');
+                if (markReadBtn) {
+                    markReadBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const id = parseInt(e.currentTarget.dataset.id);
+                        markNotificationAsRead(id);
+                    });
+                }
+                
+                // Add click event to mark notification as read
+                notificationEl.addEventListener('click', () => {
+                    if (!notification.read) {
+                        markNotificationAsRead(notification.id);
+                    }
+                    
+                    // Handle notification click (e.g., navigate to the relevant conversation)
+                    if (notification.data && notification.data.conversationId) {
+                        const conversation = conversations.find(c => c.id === notification.data.conversationId);
+                        if (conversation) {
+                            openConversation(conversation);
+                            toggleNotificationsPanel();
+                        }
                     }
                 });
-            }
-
-            // تحميل بيانات المستخدم عند الدخول
-            function loadUserData(user) {
-                // هنا يمكنك تحميل الصلاحيات والإعدادات الخاصة بالمستخدم
-                console.log(`تم تسجيل دخول المستخدم: ${user.name} (${user.role})`);
-                
-                // يمكنك إضافة منطق إضافي هنا مثل:
-                // - تحميل الصلاحيات
-                // - تعديل واجهة المستخدم حسب الدور
-                // - جلب بيانات المستخدم من الخادم
-            }
-
-            // التحقق من حالة تسجيل الدخول عند تحميل الصفحة
-            function checkLoginStatus() {
-                const isLoggedIn = sessionStorage.getItem('isLoggedIn');
-                const user = JSON.parse(sessionStorage.getItem('user'));
-                
-                if (isLoggedIn === 'true' && user) {
-                    loginSection.classList.remove('active-section');
-                    loginSection.classList.add('hidden');
-                    appContainer.classList.remove('hidden');
-                    appContainer.classList.add('active-section');
-                    userDisplay.textContent = `مرحباً، ${user.name}`;
-                    loadUserData(user);
-                }
-            }
-
-            // تسجيل الخروج
-            if (logoutBtn) {
-                logoutBtn.addEventListener('click', function() {
-                    // مسح بيانات الجلسة
-                    sessionStorage.removeItem('isLoggedIn');
-                    sessionStorage.removeItem('user');
-                    
-                    // إعادة التوجيه إلى صفحة تسجيل الدخول
-                    appContainer.classList.remove('active-section');
-                    appContainer.classList.add('hidden');
-                    loginSection.classList.add('active-section');
-                    loginSection.classList.remove('hidden');
-                    loginForm.reset();
+            });
+        }
+        
+        function loadEmojis() {
+            const emojiSelector = document.getElementById('emojiSelector');
+            emojiSelector.innerHTML = '';
+            
+            emojis.forEach(emoji => {
+                const emojiBtn = document.createElement('span');
+                emojiBtn.className = 'emoji-btn';
+                emojiBtn.textContent = emoji;
+                emojiBtn.addEventListener('click', () => {
+                    document.getElementById('messageInput').value += emoji;
+                    toggleEmojiSelector();
                 });
+                
+                emojiSelector.appendChild(emojiBtn);
+            });
+        }
+        
+        function populateFriendsForGroup() {
+            const friendsContainer = document.getElementById('friendsForGroup');
+            friendsContainer.innerHTML = '';
+            
+            // Get the user's friends
+            const friendUsernames = conversations
+                .filter(c => c.type === 'private')
+                .map(c => c.participants[0]);
+            
+            const friends = users.filter(user => 
+                friendUsernames.includes(user.username) && 
+                user.username !== currentUser.username
+            );
+            
+            friends.forEach(friend => {
+                const friendEl = document.createElement('div');
+                friendEl.className = 'flex items-center p-2 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-lg';
+                
+                friendEl.innerHTML = `
+                    <input type="checkbox" id="friend-${friend.username}" value="${friend.username}" class="mr-2">
+                    <label for="friend-${friend.username}" class="flex items-center cursor-pointer flex-1">
+                        <img class="w-8 h-8 rounded-full object-cover" src="${friend.profilePic || 'https://cdn.jsdelivr.net/gh/alohe/avatars/png/avatar_1.png'}" alt="${friend.name}">
+                        <span class="mr-2 text-gray-800 dark:text-gray-200">${friend.name}</span>
+                    </label>
+                `;
+                
+                friendsContainer.appendChild(friendEl);
+            });
+        }
+        
+        // Action Functions
+        function openConversation(conversation) {
+            currentChat = conversation;
+            markConversationAsRead(conversation.id);
+            updateMessagesContainer();
+            updateChatHeader();
+            updateConversationsList();
+            
+            // Show message input
+            document.getElementById('messageInputContainer').classList.remove('hidden');
+        }
+        
+        function createPrivateConversation(username) {
+            // Check if conversation already exists
+            const existingConversation = conversations.find(c => 
+                c.type === 'private' && 
+                c.participants.includes(username)
+            );
+            
+            if (existingConversation) {
+                return existingConversation;
             }
-
-            // تبديل بين أقسام التطبيق
-            const navLinks = document.querySelectorAll('.nav-link');
-            const contentSections = document.querySelectorAll('.content-section');
-
-            navLinks.forEach(link => {
-                link.addEventListener('click', function() {
-                    const target = this.getAttribute('data-target');
-                    
-                    // إزالة التنشيط من جميع الروابط
-                    navLinks.forEach(navLink => {
-                        navLink.classList.remove('tab-active');
+            
+            // Get the user object for the name
+            const user = users.find(u => u.username === username);
+            if (!user) return null;
+            
+            // Create new conversation
+            const newConversation = {
+                id: generateId(),
+                type: 'private',
+                name: user.name,
+                participants: [username],
+                createdAt: Date.now(),
+                createdBy: currentUser.username
+            };
+            
+            conversations.push(newConversation);
+            saveConversationsToStorage();
+            
+            return newConversation;
+        }
+        
+        function createGroupConversation(name, participants) {
+            // Create new group conversation
+            const newConversation = {
+                id: generateId(),
+                type: 'group',
+                name,
+                participants,
+                createdAt: Date.now(),
+                createdBy: currentUser.username
+            };
+            
+            conversations.push(newConversation);
+            saveConversationsToStorage();
+            
+            // Send notification to all participants
+            participants.forEach(username => {
+                if (username !== currentUser.username) {
+                    addSystemNotificationForUser(username, {
+                        title: 'تمت إضافتك إلى مجموعة جديدة',
+                        body: `قام ${currentUser.name} بإضافتك إلى مجموعة "${name}"`,
+                        data: { conversationId: newConversation.id }
                     });
+                }
+            });
+            
+            return newConversation;
+        }
+        
+        function sendMessage(content, type = 'text') {
+            if (!currentChat) return;
+            
+            const newMessage = {
+                id: generateId(),
+                conversationId: currentChat.id,
+                sender: currentUser.username,
+                content,
+                type,
+                timestamp: Date.now(),
+                read: false
+            };
+            
+            if (!messages[currentChat.id]) {
+                messages[currentChat.id] = [];
+            }
+            
+            messages[currentChat.id].push(newMessage);
+            saveMessagesToStorage();
+            
+            updateMessagesContainer();
+            updateConversationsList();
+            
+            // Send notification to other participants
+            currentChat.participants.forEach(username => {
+                if (username !== currentUser.username) {
+                    const msgContent = type === 'image' ? '🖼️ صورة' : content;
                     
-                    // إضافة التنشيط للرابط الحالي
-                    this.classList.add('tab-active');
-                    
-                    // إخفاء جميع الأقسام
-                    contentSections.forEach(section => {
-                        section.classList.remove('active-section');
+                    addSystemNotificationForUser(username, {
+                        title: `رسالة جديدة من ${currentUser.name}`,
+                        body: msgContent.length > 50 ? msgContent.substring(0, 50) + '...' : msgContent,
+                        data: { conversationId: currentChat.id }
                     });
-                    
-                    // إظهار القسم المطلوب
-                    document.getElementById(target).classList.add('active-section');
+                }
+            });
+        }
+        
+        function editMessage(message) {
+            const newContent = prompt('تعديل الرسالة:', message.content);
+            if (newContent === null || newContent.trim() === '') return;
+            
+            message.content = newContent.trim();
+            message.edited = true;
+            
+            saveMessagesToStorage();
+            updateMessagesContainer();
+        }
+        
+        function deleteMessage(message) {
+            if (!confirm('هل أنت متأكد من حذف هذه الرسالة؟')) return;
+            
+            const conversationMessages = messages[message.conversationId];
+            const index = conversationMessages.findIndex(m => m.id === message.id);
+            
+            if (index !== -1) {
+                conversationMessages.splice(index, 1);
+                saveMessagesToStorage();
+                updateMessagesContainer();
+                updateConversationsList();
+            }
+        }
+        
+        function createStory(text, imageUrl, backgroundColor) {
+            const newStory = {
+                id: generateId(),
+                username: currentUser.username,
+                timestamp: Date.now(),
+                viewers: [],
+                text,
+                imageUrl,
+                backgroundColor
+            };
+            
+            stories.push(newStory);
+            saveStoriesToStorage();
+            updateStoriesList();
+            
+            // Notify friends
+            const friendUsernames = conversations
+                .filter(c => c.type === 'private')
+                .map(c => c.participants[0]);
+                
+            friendUsernames.forEach(username => {
+                addSystemNotificationForUser(username, {
+                    title: 'حالة جديدة',
+                    body: `${currentUser.name} نشر حالة جديدة`
                 });
             });
-
-            // إغلاق جميع النوافذ المنبثقة
-            document.addEventListener('click', function(e) {
-                if (e.target.classList.contains('close-modal') || e.target.classList.contains('cancel-modal')) {
-                    const modals = document.querySelectorAll('[id$="-modal"]');
-                    modals.forEach(modal => {
+        }
+        
+        function viewUserStories(username) {
+            // Get all stories for the user
+            const userStories = stories.filter(
+                story => story.username === username &&
+                (Date.now() - story.timestamp) < 24 * 60 * 60 * 1000
+            ).sort((a, b) => a.timestamp - b.timestamp);
+            
+            if (userStories.length === 0) return;
+            
+            let currentStoryIndex = 0;
+            
+            function showCurrentStory() {
+                const story = userStories[currentStoryIndex];
+                const user = users.find(u => u.username === story.username);
+                
+                const storyContent = document.getElementById('storyContent');
+                const storyUserPic = document.getElementById('storyUserPic');
+                const storyUsername = document.getElementById('storyUsername');
+                const storyTime = document.getElementById('storyTime');
+                
+                // Set story content
+                if (story.imageUrl) {
+                    storyContent.innerHTML = `<img src="${story.imageUrl}" class="max-h-full max-w-full object-contain" alt="Story">`;
+                    storyContent.style.backgroundColor = 'black';
+                } else {
+                    storyContent.innerHTML = `<div class="p-8 text-white text-2xl font-bold">${story.text}</div>`;
+                    storyContent.style.backgroundColor = story.backgroundColor || '#3b82f6';
+                }
+                
+                // Set user info
+                storyUserPic.src = user?.profilePic || 'https://cdn.jsdelivr.net/gh/alohe/avatars/png/avatar_1.png';
+                storyUsername.innerText = user?.name || username;
+                storyTime.innerText = formatFullDate(story.timestamp);
+                
+                // Mark as viewed
+                if (!story.viewers.includes(currentUser.username)) {
+                    story.viewers.push(currentUser.username);
+                    saveStoriesToStorage();
+                }
+            }
+            
+            // Initialize first story
+            showCurrentStory();
+            
+            // Show the modal
+            document.getElementById('viewStoryModal').classList.remove('hidden');
+            
+            // Add navigate functionality
+            const storyContent = document.getElementById('storyContent');
+            storyContent.addEventListener('click', (e) => {
+                const width = storyContent.offsetWidth;
+                const clickX = e.offsetX;
+                
+                if (clickX < width / 2) {
+                    // Clicked on left side - go to previous
+                    if (currentStoryIndex > 0) {
+                        currentStoryIndex--;
+                        showCurrentStory();
+                    }
+                } else {
+                    // Clicked on right side - go to next
+                    if (currentStoryIndex < userStories.length - 1) {
+                        currentStoryIndex++;
+                        showCurrentStory();
+                    } else {
+                        // Close story view if it's the last one
+                        document.getElementById('viewStoryModal').classList.add('hidden');
+                    }
+                }
+            });
+            
+            // Close button functionality
+            document.getElementById('closeStoryBtn').addEventListener('click', () => {
+                document.getElementById('viewStoryModal').classList.add('hidden');
+            });
+        }
+        
+        function markNotificationAsRead(notificationId) {
+            const notification = notifications.find(n => n.id === notificationId);
+            if (notification) {
+                notification.read = true;
+                saveNotificationsToStorage();
+                updateNotificationsList();
+                updateNotificationBadge();
+            }
+        }
+        
+        function addSystemNotificationForUser(username, notificationData) {
+            // This is a simulation of sending a notification to another user
+            // In a real app, this would involve server-side functionality
+            const userData = getUserData(username);
+            
+            if (userData && userData.notifications) {
+                userData.notifications.unshift({
+                    id: Date.now(),
+                    title: notificationData.title,
+                    body: notificationData.body,
+                    timestamp: Date.now(),
+                    read: false,
+                    isSystem: true,
+                    data: notificationData.data || {}
+                });
+                
+                localStorage.setItem(`tomyousef_user_${username}`, JSON.stringify(userData));
+            }
+        }
+        
+        function openImagePreview(imageUrl) {
+            document.getElementById('previewImageContent').src = imageUrl;
+            document.getElementById('imagePreviewModal').classList.remove('hidden');
+        }
+        
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            isDarkMode = document.body.classList.contains('dark-mode');
+            
+            const moonIcon = document.getElementById('darkModeToggle').querySelector('i');
+            if (isDarkMode) {
+                moonIcon.classList.remove('fa-moon');
+                moonIcon.classList.add('fa-sun');
+            } else {
+                moonIcon.classList.remove('fa-sun');
+                moonIcon.classList.add('fa-moon');
+            }
+            
+            // Save preference
+            currentUser.preferences = currentUser.preferences || {};
+            currentUser.preferences.darkMode = isDarkMode;
+            saveCurrentUser();
+        }
+        
+        function toggleEmojiSelector() {
+            const emojiSelector = document.getElementById('emojiSelector');
+            emojiSelector.style.display = emojiSelector.style.display === 'grid' ? 'none' : 'grid';
+        }
+        
+        function toggleNotificationsPanel() {
+            const panel = document.getElementById('notificationsPanel');
+            panel.classList.toggle('translate-y-0');
+            panel.classList.toggle('translate-y-full');
+            
+            if (panel.classList.contains('translate-y-0')) {
+                updateNotificationsList();
+            }
+        }
+        
+        function toggleMenu() {
+            document.getElementById('menuDropdown').classList.toggle('hidden');
+        }
+        
+        // Local Storage Functions
+        function saveCurrentUser() {
+            localStorage.setItem('tomyousef_current_user', JSON.stringify(currentUser));
+        }
+        
+        function getUserData(username) {
+            const userData = localStorage.getItem(`tomyousef_user_${username}`);
+            return userData ? JSON.parse(userData) : null;
+        }
+        
+        function saveUserToStorage(user) {
+            localStorage.setItem(`tomyousef_user_${user.username}`, JSON.stringify(user));
+            
+            // Also update users array
+            const index = users.findIndex(u => u.username === user.username);
+            if (index !== -1) {
+                users[index] = user;
+            } else {
+                users.push(user);
+            }
+            
+            localStorage.setItem('tomyousef_users', JSON.stringify(users));
+        }
+        
+        function saveMessagesToStorage() {
+            localStorage.setItem('tomyousef_messages', JSON.stringify(messages));
+        }
+        
+        function saveConversationsToStorage() {
+            localStorage.setItem('tomyousef_conversations', JSON.stringify(conversations));
+        }
+        
+        function saveStoriesToStorage() {
+            localStorage.setItem('tomyousef_stories', JSON.stringify(stories));
+        }
+        
+        function saveNotificationsToStorage() {
+            localStorage.setItem(`tomyousef_notifications_${currentUser.username}`, JSON.stringify(notifications));
+        }
+        
+        function loadDataFromStorage() {
+            // Load current user
+            const savedCurrentUser = localStorage.getItem('tomyousef_current_user');
+            if (savedCurrentUser) {
+                currentUser = JSON.parse(savedCurrentUser);
+                
+                // Apply user preferences
+                if (currentUser.preferences && currentUser.preferences.darkMode) {
+                    document.body.classList.add('dark-mode');
+                    isDarkMode = true;
+                    
+                    const moonIcon = document.getElementById('darkModeToggle').querySelector('i');
+                    moonIcon.classList.remove('fa-moon');
+                    moonIcon.classList.add('fa-sun');
+                }
+            }
+            
+            // Load users
+            const savedUsers = localStorage.getItem('tomyousef_users');
+            if (savedUsers) {
+                users = JSON.parse(savedUsers);
+            }
+            
+            // Load conversations
+            const savedConversations = localStorage.getItem('tomyousef_conversations');
+            if (savedConversations) {
+                conversations = JSON.parse(savedConversations);
+            }
+            
+            // Load messages
+            const savedMessages = localStorage.getItem('tomyousef_messages');
+            if (savedMessages) {
+                messages = JSON.parse(savedMessages);
+            }
+            
+            // Load stories
+            const savedStories = localStorage.getItem('tomyousef_stories');
+            if (savedStories) {
+                stories = JSON.parse(savedStories);
+            }
+            
+            // Load notifications
+            if (currentUser) {
+                const savedNotifications = localStorage.getItem(`tomyousef_notifications_${currentUser.username}`);
+                if (savedNotifications) {
+                    notifications = JSON.parse(savedNotifications);
+                }
+                
+                // Get the highest notification ID
+                if (notifications.length > 0) {
+                    lastNotificationId = Math.max(...notifications.map(n => n.id));
+                }
+            }
+        }
+        
+        // Initialization and Event Handlers
+        function initApp() {
+            loadDataFromStorage();
+            
+            // Check if user is logged in
+            if (currentUser) {
+                showMainApp();
+            } else {
+                showAuthScreens();
+            }
+            
+            // Hide loading screen
+            document.getElementById('loadingScreen').classList.add('hidden');
+            
+            // Setup event listeners
+            setupEventListeners();
+        }
+        
+        function setupEventListeners() {
+            // Auth event listeners
+            document.getElementById('showRegisterBtn').addEventListener('click', () => {
+                document.getElementById('loginForm').classList.add('hidden');
+                document.getElementById('registerForm').classList.remove('hidden');
+            });
+            
+            document.getElementById('showLoginBtn').addEventListener('click', () => {
+                document.getElementById('registerForm').classList.add('hidden');
+                document.getElementById('loginForm').classList.remove('hidden');
+            });
+            
+            document.getElementById('loginBtn').addEventListener('click', handleLogin);
+            document.getElementById('registerBtn').addEventListener('click', handleRegister);
+            
+            // Main app event listeners
+            document.getElementById('darkModeToggle').addEventListener('click', toggleDarkMode);
+            document.getElementById('menuBtn').addEventListener('click', toggleMenu);
+            document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+            document.getElementById('addFriendBtn').addEventListener('click', () => {
+                document.getElementById('addFriendModal').classList.remove('hidden');
+                toggleMenu();
+            });
+            document.getElementById('createGroupBtn').addEventListener('click', () => {
+                populateFriendsForGroup();
+                document.getElementById('createGroupModal').classList.remove('hidden');
+            });
+            document.getElementById('editProfileBtn').addEventListener('click', () => {
+                prepareEditProfileModal();
+                document.getElementById('editProfileModal').classList.remove('hidden');
+                toggleMenu();
+            });
+            document.getElementById('createStoryBtn').addEventListener('click', () => {
+                document.getElementById('createStoryModal').classList.remove('hidden');
+                toggleMenu();
+            });
+            document.getElementById('addStoryBtn').addEventListener('click', () => {
+                document.getElementById('createStoryModal').classList.remove('hidden');
+            });
+            document.getElementById('notificationsBtn').addEventListener('click', toggleNotificationsPanel);
+            document.getElementById('closeNotificationsBtn').addEventListener('click', toggleNotificationsPanel);
+            
+            // Close all modals
+            document.querySelectorAll('.close-modal').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.fixed').forEach(modal => {
                         modal.classList.add('hidden');
                     });
+                });
+            });
+            
+            // Sending messages
+            document.getElementById('sendMessageBtn').addEventListener('click', () => {
+                const input = document.getElementById('messageInput');
+                if (input.value.trim() !== '') {
+                    sendMessage(input.value.trim());
+                    input.value = '';
                 }
             });
-
-            // التحقق من حالة تسجيل الدخول عند تحميل الصفحة
-            checkLoginStatus();
-        });
-
-        // دالة لحساب الأقساط (يمكن نقلها لملف JS منفصل)
-        function calculateInstallments(principal, annualRate, years, frequency) {
-            const rate = annualRate / 100 / frequency;
-            const payments = years * frequency;
-            const x = Math.pow(1 + rate, payments);
-            const monthly = (principal * x * rate) / (x - 1);
             
-            return {
-                monthlyPayment: monthly,
-                totalPayment: monthly * payments,
-                totalInterest: (monthly * payments) - principal
-            };
+            document.getElementById('messageInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && e.target.value.trim() !== '') {
+                    sendMessage(e.target.value.trim());
+                    e.target.value = '';
+                }
+            });
+            
+            // Emoji picker
+            document.getElementById('emojiBtn').addEventListener('click', toggleEmojiSelector);
+            loadEmojis();
+            
+            // Image upload (via URL)
+            document.getElementById('imageUploadBtn').addEventListener('click', () => {
+                const imageUrl = prompt('أدخل رابط الصورة:');
+                if (imageUrl && imageUrl.trim() !== '') {
+                    sendMessage(imageUrl.trim(), 'image');
+                }
+            });
+            
+            // Confirm add friend
+            document.getElementById('confirmAddFriend').addEventListener('click', handleAddFriend);
+            
+            // Confirm create group
+            document.getElementById('confirmCreateGroup').addEventListener('click', handleCreateGroup);
+            
+            // Confirm story creation
+            document.getElementById('confirmCreateStory').addEventListener('click', handleCreateStory);
+            
+            // Confirm profile edit
+            document.getElementById('confirmEditProfile').addEventListener('click', handleEditProfile);
+            
+            // Close image preview
+            document.getElementById('closeImagePreviewBtn').addEventListener('click', () => {
+                document.getElementById('imagePreviewModal').classList.add('hidden');
+            });
+            
+            // Story background color selection
+            document.querySelectorAll('.story-bg-option').forEach(option => {
+                option.addEventListener('click', (e) => {
+                    document.querySelectorAll('.story-bg-option').forEach(opt => {
+                        opt.style.border = 'none';
+                    });
+                    e.target.style.border = '3px solid #ffffff';
+                    selectedStoryBgColor = e.target.dataset.color;
+                });
+            });
+            
+            // Search functionality
+            document.getElementById('searchInput').addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                
+                // Filter conversations
+                document.querySelectorAll('#conversationsList > div').forEach(item => {
+                    const name = item.querySelector('h4').innerText.toLowerCase();
+                    if (name.includes(searchTerm)) {
+                        item.style.display = 'flex';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+            
+            // Chat search functionality
+            document.getElementById('chatSearchBtn').addEventListener('click', () => {
+                if (!currentChat) return;
+                
+                const searchTerm = prompt('أدخل كلمات البحث:');
+                if (searchTerm && searchTerm.trim() !== '') {
+                    searchMessages(searchTerm.trim());
+                }
+            });
+            
+            // Profile pic click to edit profile
+            document.getElementById('profilePicContainer').addEventListener('click', () => {
+                prepareEditProfileModal();
+                document.getElementById('editProfileModal').classList.remove('hidden');
+            });
         }
+        
+        function searchMessages(term) {
+            term = term.toLowerCase();
+            const chatMessages = messages[currentChat.id] || [];
+            const matchedMessages = chatMessages.filter(msg => 
+                msg.type === 'text' && msg.content.toLowerCase().includes(term)
+            );
+            
+            if (matchedMessages.length === 0) {
+                alert('لم يتم العثور على نتائج');
+                return;
+            }
+            
+            // Highlight matched messages one by one
+            let currentIndex = 0;
+            
+            function highlightNextMessage() {
+                if (currentIndex >= matchedMessages.length) {
+                    currentIndex = 0;
+                }
+                
+                const message = matchedMessages[currentIndex];
+                const messageElement = document.querySelector(`[data-id="${message.id}"]`);
+                
+                if (messageElement) {
+                    // Remove highlight from all messages
+                    document.querySelectorAll('.message').forEach(el => {
+                        el.style.boxShadow = 'none';
+                    });
+                    
+                    // Highlight this message
+                    messageElement.style.boxShadow = '0 0 0 2px #f59e0b';
+                    messageElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    
+                    currentIndex++;
+                }
+            }
+            
+            highlightNextMessage();
+            
+            // Create a floating next button
+            const nextButton = document.createElement('button');
+            nextButton.innerHTML = 'التالي <i class="fas fa-arrow-down"></i>';
+            nextButton.className = 'fixed bottom-20 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white px-4 py-2 rounded-full shadow-lg z-50';
+            nextButton.addEventListener('click', highlightNextMessage);
+            
+            // Create a close button
+            const closeButton = document.createElement('button');
+            closeButton.innerHTML = '<i class="fas fa-times"></i>';
+            closeButton.className = 'fixed bottom-20 left-1/2 transform -translate-x-1/2 translate-y-12 bg-gray-500 text-white w-8 h-8 rounded-full shadow-lg z-50 flex items-center justify-center';
+            closeButton.addEventListener('click', () => {
+                // Remove highlight from all messages
+                document.querySelectorAll('.message').forEach(el => {
+                    el.style.boxShadow = 'none';
+                });
+                
+                // Remove buttons
+                document.body.removeChild(nextButton);
+                document.body.removeChild(closeButton);
+            });
+            
+            document.body.appendChild(nextButton);
+            document.body.appendChild(closeButton);
+        }
+        
+        function prepareEditProfileModal() {
+            document.getElementById('editProfilePic').src = currentUser.profilePic || 'https://cdn.jsdelivr.net/gh/alohe/avatars/png/avatar_1.png';
+            document.getElementById('editProfilePicUrl').value = currentUser.profilePic || '';
+            document.getElementById('editFullName').value = currentUser.name || '';
+            document.getElementById('editPassword').value = '';
+            document.getElementById('editStatus').value = currentUser.status || 'متصل الآن';
+        }
+        
+        function showMainApp() {
+            document.getElementById('authScreens').classList.add('hidden');
+            document.getElementById('mainApp').classList.remove('hidden');
+            
+            // Update UI with user data
+            document.getElementById('userProfilePic').src = currentUser.profilePic || 'https://cdn.jsdelivr.net/gh/alohe/avatars/png/avatar_1.png';
+            document.getElementById('userFullName').innerText = currentUser.name;
+            
+            // Update UI lists
+            updateConversationsList();
+            updateStoriesList();
+            updateNotificationBadge();
+        }
+        
+        function showAuthScreens() {
+            document.getElementById('authScreens').classList.remove('hidden');
+            document.getElementById('mainApp').classList.add('hidden');
+        }
+        
+        // Handler Functions
+        function handleLogin() {
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!username || !password) {
+                alert('الرجاء إدخال اسم المستخدم وكلمة المرور');
+                return;
+            }
+            
+            const userData = getUserData(username);
+            
+            if (!userData || userData.password !== password) {
+                alert('اسم المستخدم أو كلمة المرور غير صحيحة');
+                return;
+            }
+            
+            // Set the user as logged in
+            currentUser = userData;
+            currentUser.status = 'online';  // Set status to online
+            saveCurrentUser();
+            saveUserToStorage(currentUser);
+            
+            // Load user specific data
+            const savedNotifications = localStorage.getItem(`tomyousef_notifications_${currentUser.username}`);
+            if (savedNotifications) {
+                notifications = JSON.parse(savedNotifications);
+            } else {
+                notifications = [];
+            }
+            
+            // Show welcome notification
+            showNotification('مرحباً بك', `مرحباً بعودتك ${currentUser.name}!`, true);
+            
+            // Show main app
+            showMainApp();
+        }
+        
+        function handleRegister() {
+            const name = document.getElementById('registerName').value;
+            const username = document.getElementById('registerUsername').value;
+            const password = document.getElementById('registerPassword').value;
+            const profilePicUrl = document.getElementById('profilePicUrl').value;
+            
+            if (!name || !username || !password) {
+                alert('الرجاء إدخال جميع البيانات المطلوبة');
+                return;
+            }
+            
+            // Check if username already exists
+            if (getUserData(username)) {
+                alert('اسم المستخدم مستخدم بالفعل. الرجاء اختيار اسم آخر');
+                return;
+            }
+            
+            // Create new user
+            const newUser = {
+                name,
+                username,
+                password,
+                profilePic: profilePicUrl || 'https://cdn.jsdelivr.net/gh/alohe/avatars/png/avatar_1.png',
+                status: 'online',
+                createdAt: Date.now(),
+                notifications: []
+            };
+            
+            // Save user
+            saveUserToStorage(newUser);
+            
+            // Set as current user
+            currentUser = newUser;
+            saveCurrentUser();
+            
+            // Initialize empty notifications array
+            notifications = [];
+            
+            // Show welcome notification
+            showNotification('مرحباً بك', `مرحباً ${name}! نرحب بك في تطبيق tomyousef+ للمراسلة`, true);
+            
+            // Show main app
+            showMainApp();
+        }
+        
+        function handleLogout() {
+            if (currentUser) {
+                // Set user status to offline
+                currentUser.status = 'offline';
+                saveUserToStorage(currentUser);
+                
+                // Clear current user
+                currentUser = null;
+                localStorage.removeItem('tomyousef_current_user');
+                
+                // Show auth screens
+                showAuthScreens();
+                
+                // Reset UI state
+                document.getElementById('messagesContainer').innerHTML = '';
+                currentChat = null;
+                document.getElementById('menuDropdown').classList.add('hidden');
+            }
+        }
+        
+        function handleAddFriend() {
+            const username = document.getElementById('friendUsername').value;
+            
+            if (!username) {
+                alert('الرجاء إدخال اسم المستخدم');
+                return;
+            }
+            
+            if (username === currentUser.username) {
+                alert('لا يمكنك إضافة نفسك كصديق');
+                return;
+            }
+            
+            // Check if user exists
+            const user = users.find(u => u.username === username);
+            if (!user) {
+                alert('المستخدم غير موجود');
+                return;
+            }
+            
+            // Check if already friends (conversation exists)
+            const existingConversation = conversations.find(c => 
+                c.type === 'private' && 
+                c.participants.includes(username)
+            );
+            
+            if (existingConversation) {
+                alert('هذا المستخدم موجود بالفعل في قائمة أصدقائك');
+                document.getElementById('addFriendModal').classList.add('hidden');
+                return;
+            }
+            
+            // Create new conversation
+            const newConversation = createPrivateConversation(username);
+            
+            // Send notification to the friend
+            addSystemNotificationForUser(username, {
+                title: 'صداقة جديدة',
+                body: `${currentUser.name} قام بإضافتك كصديق`,
+                data: { conversationId: newConversation.id }
+            });
+            
+            // Update UI
+            updateConversationsList();
+            document.getElementById('addFriendModal').classList.add('hidden');
+            document.getElementById('friendUsername').value = '';
+            
+            // Show success message
+            showNotification('تمت إضافة صديق', `تمت إضافة ${user.name} كصديق بنجاح`, true);
+        }
+        
+        function handleCreateGroup() {
+            const groupName = document.getElementById('groupName').value;
+            
+            if (!groupName) {
+                alert('الرجاء إدخال اسم المجموعة');
+                return;
+            }
+            
+            // Get selected friends
+            const selectedFriends = [];
+            document.querySelectorAll('#friendsForGroup input:checked').forEach(checkbox => {
+                selectedFriends.push(checkbox.value);
+            });
+            
+            if (selectedFriends.length === 0) {
+                alert('الرجاء اختيار عضو واحد على الأقل');
+                return;
+            }
+            
+            // Add current user to participants
+            const participants = [...selectedFriends, currentUser.username];
+            
+            // Create group conversation
+            const newConversation = createGroupConversation(groupName, participants);
+            
+            // Add initial system message
+            if (!messages[newConversation.id]) {
+                messages[newConversation.id] = [];
+            }
+            
+            messages[newConversation.id].push({
+                id: generateId(),
+                conversationId: newConversation.id,
+                sender: 'system',
+                content: `تم إنشاء المجموعة بواسطة ${currentUser.name}`,
+                type: 'text',
+                timestamp: Date.now(),
+                read: true
+            });
+            
+            saveMessagesToStorage();
+            
+            // Update UI
+            updateConversationsList();
+            document.getElementById('createGroupModal').classList.add('hidden');
+            document.getElementById('groupName').value = '';
+            
+            // Open the new conversation
+            openConversation(newConversation);
+            
+            // Show success message
+            showNotification('تم إنشاء المجموعة', `تم إنشاء مجموعة ${groupName} بنجاح`, true);
+        }
+        
+        function handleCreateStory() {
+            const storyText = document.getElementById('storyText').value;
+            const storyImageUrl = document.getElementById('storyImageUrl').value;
+            
+            if (!storyText && !storyImageUrl) {
+                alert('الرجاء إدخال نص أو إضافة صورة');
+                return;
+            }
+            
+            createStory(storyText, storyImageUrl, selectedStoryBgColor);
+            
+            // Close modal and reset fields
+            document.getElementById('createStoryModal').classList.add('hidden');
+            document.getElementById('storyText').value = '';
+            document.getElementById('storyImageUrl').value = '';
+            
+            // Show success message
+            showNotification('تمت إضافة حالة', 'تم نشر الحالة بنجاح', true);
+        }
+        
+        function handleEditProfile() {
+            const profilePicUrl = document.getElementById('editProfilePicUrl').value;
+            const fullName = document.getElementById('editFullName').value;
+            const password = document.getElementById('editPassword').value;
+            const status = document.getElementById('editStatus').value;
+            
+            if (!fullName) {
+                alert('الرجاء إدخال الاسم الكامل');
+                return;
+            }
+            
+            // Update user data
+            currentUser.name = fullName;
+            if (profilePicUrl) {
+                currentUser.profilePic = profilePicUrl;
+            }
+            if (password) {
+                currentUser.password = password;
+            }
+            currentUser.status = status || 'متصل الآن';
+            
+            // Save changes
+            saveCurrentUser();
+            saveUserToStorage(currentUser);
+            
+            // Update UI
+            document.getElementById('userProfilePic').src = currentUser.profilePic || 'https://cdn.jsdelivr.net/gh/alohe/avatars/png/avatar_1.png';
+            document.getElementById('userFullName').innerText = currentUser.name;
+            
+            // Close modal
+            document.getElementById('editProfileModal').classList.add('hidden');
+            
+            // Show success message
+            showNotification('تم تحديث الملف الشخصي', 'تم تحديث بيانات الملف الشخصي بنجاح', true);
+            
+            // Update any open conversations that show current user's data
+            updateConversationsList();
+        }
+        
+        // Start the application
+        document.addEventListener('DOMContentLoaded', initApp);
     </script>
 </body>
 </html>
