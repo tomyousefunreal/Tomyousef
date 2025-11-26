@@ -1,1 +1,659 @@
 
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مفاجأة لحنين ❤️</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <style>
+:root {
+  --primary-color: #ff4d6d;
+  --secondary-color: #ff8fa3;
+  --bg-gradient-start: #fff0f3;
+  --bg-gradient-end: #ffccd5;
+  --text-color: #590d22;
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.5);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Cairo", sans-serif;
+  background: linear-gradient(
+    135deg,
+    var(--bg-gradient-start),
+    var(--bg-gradient-end)
+  );
+  min-height: 100vh;
+  color: var(--text-color);
+  overflow-x: hidden;
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="%23ff4d6d"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>'),
+    auto;
+}
+
+/* Loading Screen */
+#loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #fff0f3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  transition: opacity 0.5s ease;
+}
+
+.loader-content {
+  text-align: center;
+}
+
+.heart-loader {
+  font-size: 4rem;
+  animation: pulse 1s infinite;
+}
+
+/* Floating Hearts Background */
+.floating-hearts-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.floating-heart {
+  position: absolute;
+  bottom: -20px;
+  color: rgba(255, 77, 109, 0.4);
+  animation: floatUp linear forwards;
+}
+
+@keyframes floatUp {
+  to {
+    transform: translateY(-100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* Container */
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Start Button */
+#start-section {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.8s ease, opacity 0.8s ease;
+}
+
+.heart-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.heart-icon {
+  font-size: 8rem;
+  display: block;
+  filter: drop-shadow(0 0 20px rgba(255, 77, 109, 0.5));
+  animation: pulse 1.5s infinite;
+}
+
+.btn-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-weight: bold;
+  font-size: 1.2rem;
+  white-space: nowrap;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.heart-btn:hover {
+  transform: scale(1.1);
+}
+
+/* Content Sections */
+.message-section {
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 50px;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 1s ease;
+}
+
+.message-section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.content-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  padding: 2rem;
+  border-radius: 20px;
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+  max-width: 90%;
+  width: 100%;
+}
+
+.section-title {
+  color: var(--primary-color);
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+}
+
+.text-reveal {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  line-height: 1.6;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.8s ease;
+}
+
+.text-reveal.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Timeline */
+.timeline {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1.5rem;
+  width: 100%;
+  margin-top: 2rem;
+}
+
+.memory-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.memory-card:hover {
+  transform: translateY(-10px);
+}
+
+.memory-card h3 {
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+/* Interactive Heart */
+.interactive-heart-container {
+  text-align: center;
+  cursor: pointer;
+}
+
+.glowing-heart {
+  font-size: 6rem;
+  transition: all 0.5s ease;
+  filter: drop-shadow(0 0 10px rgba(255, 77, 109, 0.3));
+}
+
+.interactive-heart-container:hover .glowing-heart {
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 30px rgba(255, 77, 109, 0.8));
+}
+
+.hidden-message {
+  margin-top: 1rem;
+  font-size: 1.5rem;
+  color: var(--primary-color);
+  font-weight: bold;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.instruction-text {
+  font-size: 0.9rem;
+  color: #888;
+  margin-top: 1rem;
+  animation: bounce 2s infinite;
+}
+
+/* Typewriter Section */
+.special-card {
+  background: rgba(255, 255, 255, 0.85);
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.typewriter-content {
+  font-size: 1.3rem;
+  line-height: 1.8;
+  white-space: pre-line;
+}
+
+/* Final Section */
+.big-love {
+  font-size: 3rem;
+  color: var(--primary-color);
+  margin-bottom: 2rem;
+  font-family: "Dancing Script", cursive;
+}
+
+.final-text {
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+}
+
+.english-promise {
+  margin-top: 2rem;
+  font-family: "Dancing Script", cursive;
+  font-size: 2.5rem;
+  color: var(--primary-color);
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+/* Animations */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes bounce {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes glow {
+  from {
+    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073;
+  }
+  to {
+    text-shadow: 0 0 20px #fff, 0 0 30px #ff4da6, 0 0 40px #ff4da6;
+  }
+}
+
+/* Utility Classes */
+.hidden {
+  display: none;
+}
+
+/* Mouse Trail */
+.trail-heart {
+  position: fixed;
+  pointer-events: none;
+  font-size: 1rem;
+  animation: fadeOut 1s forwards;
+  z-index: 9999;
+}
+
+@keyframes fadeOut {
+  to {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .heart-icon {
+    font-size: 6rem;
+  }
+  .section-title {
+    font-size: 1.5rem;
+  }
+  .text-reveal {
+    font-size: 1rem;
+  }
+  .big-love {
+    font-size: 2.5rem;
+  }
+  .english-promise {
+    font-size: 2rem;
+  }
+}
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="loader-content">
+            <div class="heart-loader">❤️</div>
+            <p>استني يا حنين… في مفاجأة ليكي ❤️</p>
+        </div>
+    </div>
+
+    <!-- Background Elements -->
+    <div class="floating-hearts-container" id="floating-hearts"></div>
+    <div class="stars"></div>
+
+    <!-- Main Content -->
+    <main class="container">
+        
+        <!-- Start Button Section -->
+        <section id="start-section" class="active-section">
+            <button id="start-btn" class="heart-btn">
+                <span class="heart-icon">❤️</span>
+                <span class="btn-text">اضغطي يا حنين</span>
+            </button>
+        </section>
+
+        <!-- Content Flow -->
+        <div id="content-flow" class="hidden">
+            
+            <!-- Section 1: Intro -->
+            <section class="message-section" id="section-1">
+                <div class="content-card fade-in">
+                    <h2 class="section-title">حنين… ❤️</h2>
+                    <p class="text-reveal delay-1">وإحنا داخلين على 2026، لقيت نفسي بفكر قد إيه وجودك غير حياتي.</p>
+                    <p class="text-reveal delay-2">إنتي مش مجرد شخص قريب… إنتي الشخص اللي عمري مستغني عنه،</p>
+                    <p class="text-reveal delay-3">وإللي وجوده بيهون عليّ كل يوم مهما كان شكله.</p>
+                </div>
+            </section>
+
+            <!-- Section 2: Memories Timeline -->
+            <section class="message-section" id="section-2">
+                <h2 class="section-title fade-in">ذكرياتنا الحلوة ✨</h2>
+                <div class="timeline">
+                    <div class="memory-card bounce-hover delay-1">
+                        <h3>👶 أول يوم</h3>
+                        <p>أول يوم اتعرفتوا واحنا اطفال</p>
+                    </div>
+                    <div class="memory-card bounce-hover delay-2">
+                        <h3>🛡️ خوفنا على بعض</h3>
+                        <p>بنخاف علي بعض</p>
+                    </div>
+                    <div class="memory-card bounce-hover delay-3">
+                        <h3>😄 ضحكتنا</h3>
+                        <p>علي مصايب</p>
+                    </div>
+                    <div class="memory-card bounce-hover delay-4">
+                        <h3>💖 لحظة فرح</h3>
+                        <p>أكتر موقف فرّحك</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 3: Glowing Heart -->
+            <section class="message-section" id="section-3">
+                <div class="interactive-heart-container">
+                    <div class="glowing-heart" id="glowing-heart">
+                        ❤️
+                    </div>
+                    <p class="hidden-message" id="heart-message">عمر ما قلبي اختار حد قدّك…</p>
+                    <p class="instruction-text">اضغطي على القلب ✨</p>
+                </div>
+            </section>
+
+            <!-- Section 4: Promise -->
+            <section class="message-section" id="section-4">
+                <div class="content-card fade-in">
+                    <h2 class="section-title">وعد مني ليكِ 🤞</h2>
+                    <p class="text-reveal delay-1">وعد مني… 2026 هتكون سنة أحلى لينا سوا.</p>
+                    <p class="text-reveal delay-2">سنة نضحك فيها أكتر، ونحقق فيها اللي عايزينه، ونفضل دايمًا سند لبعض…</p>
+                    <p class="text-reveal delay-3">ومافيش حاجة في الدنيا تستاهل نخسر بعض علشانها.</p>
+                </div>
+            </section>
+
+            <!-- Section 5: Deep Message -->
+            <section class="message-section" id="section-5">
+                <div class="content-card special-card">
+                    <div id="typewriter-text" class="typewriter-content"></div>
+                </div>
+            </section>
+
+            <!-- Final Surprise -->
+            <section class="message-section" id="final-section">
+                <div class="final-content">
+                    <h1 class="big-love">بحبك يا حنين ❤️</h1>
+                    <p class="final-text">حنين… 2026 مش هتبقى أحلى إلا بيكي</p>
+                    <p class="final-text">ربنا يخليكي ليا ومايحرمنيش منك…</p>
+                    <p class="final-text">ومهما يحصل… إحنا دايمًا مع بعض.</p>
+                    <div class="english-promise">✨ Stay with me in 2026 ✨</div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <audio id="bg-music" loop>
+        <!-- Placeholder for music file. User needs to add 'music.mp3' -->
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+document.addEventListener("DOMContentLoaded", () => {
+  // Elements
+  const loadingScreen = document.getElementById("loading-screen");
+  const startBtn = document.getElementById("start-btn");
+  const startSection = document.getElementById("start-section");
+  const contentFlow = document.getElementById("content-flow");
+  const bgMusic = document.getElementById("bg-music");
+  const glowingHeart = document.getElementById("glowing-heart");
+  const heartMessage = document.getElementById("heart-message");
+  const instructionText = document.querySelector(".instruction-text");
+
+  // 1. Loading Screen Logic
+  setTimeout(() => {
+    loadingScreen.style.opacity = "0";
+    setTimeout(() => {
+      loadingScreen.style.display = "none";
+    }, 500);
+  }, 3000);
+
+  // 2. Start Experience
+  startBtn.addEventListener("click", () => {
+    // Play Music (User interaction required)
+    bgMusic.volume = 0.3;
+    bgMusic.play().catch((e) => console.log("Audio play failed:", e));
+
+    // Animate out start button
+    startSection.style.transform = "scale(1.5)";
+    startSection.style.opacity = "0";
+
+    setTimeout(() => {
+      startSection.style.display = "none";
+      contentFlow.classList.remove("hidden");
+
+      // Start showing sections
+      revealSections();
+    }, 800);
+  });
+
+  // 3. Scroll & Reveal Logic
+  const observerOptions = {
+    threshold: 0.2,
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("visible");
+
+        // Animate child text elements with delays
+        const textElements = entry.target.querySelectorAll(".text-reveal");
+        textElements.forEach((el, index) => {
+          setTimeout(() => {
+            el.classList.add("show");
+          }, index * 2000); // 2s delay between sentences
+        });
+
+        // Trigger Typewriter if it's the special section
+        if (entry.target.id === "section-5") {
+          startTypewriter();
+        }
+      }
+    });
+  }, observerOptions);
+
+  document.querySelectorAll(".message-section").forEach((section) => {
+    observer.observe(section);
+  });
+
+  function revealSections() {
+    // Manually trigger first section
+    const section1 = document.getElementById("section-1");
+    section1.classList.add("visible");
+    const texts = section1.querySelectorAll(".text-reveal");
+    texts.forEach((el, index) => {
+      setTimeout(() => {
+        el.classList.add("show");
+      }, index * 2000);
+    });
+  }
+
+  // 4. Interactive Heart Logic
+  glowingHeart.parentElement.addEventListener("click", () => {
+    glowingHeart.style.transform = "scale(1.3)";
+    glowingHeart.style.filter = "drop-shadow(0 0 40px #ff4d6d)";
+    heartMessage.style.opacity = "1";
+    instructionText.style.display = "none";
+
+    // Create explosion of mini hearts
+    createHeartExplosion(glowingHeart.getBoundingClientRect());
+  });
+
+  // 5. Typewriter Effect
+  const typeWriterText = `يا حنين…
+أنا مبقتش أحب أتكلم عنّك بس…
+أنا بقيت أحب كل لحظة بتمر وإنتي موجودة فيها.
+إحنا صحاب من زمان… وصحبتك دي حاجة مميزة مش بتتعوض.
+إنتي الإنسانة اللي دايمًا واقفة جنبي…
+والقلب اللي بيطمنّي بكلمة واحدة…
+والشخص اللي مهما عدّى وقت،
+عمري ما لاقيت ولا هلاقي زي روحك ولا طيبتك.`;
+
+  let typeWriterStarted = false;
+
+  function startTypewriter() {
+    if (typeWriterStarted) return;
+    typeWriterStarted = true;
+
+    const container = document.getElementById("typewriter-text");
+    let i = 0;
+
+    function type() {
+      if (i < typeWriterText.length) {
+        container.textContent += typeWriterText.charAt(i);
+        i++;
+        setTimeout(type, 50); // Typing speed
+      }
+    }
+
+    type();
+  }
+
+  // 6. Floating Hearts Background
+  function createFloatingHearts() {
+    const container = document.getElementById("floating-hearts");
+    const heart = document.createElement("div");
+    heart.classList.add("floating-heart");
+    heart.innerHTML = "❤️";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.animationDuration = Math.random() * 3 + 4 + "s"; // 4-7s
+    heart.style.fontSize = Math.random() * 20 + 10 + "px";
+
+    container.appendChild(heart);
+
+    setTimeout(() => {
+      heart.remove();
+    }, 7000);
+  }
+
+  setInterval(createFloatingHearts, 300);
+
+  // 7. Mouse Trail Effect
+  document.addEventListener("mousemove", (e) => {
+    if (Math.random() > 0.8) {
+      // Don't create on every pixel
+      const heart = document.createElement("div");
+      heart.classList.add("trail-heart");
+      heart.innerHTML = "❤️";
+      heart.style.left = e.pageX + "px";
+      heart.style.top = e.pageY + "px";
+      document.body.appendChild(heart);
+
+      setTimeout(() => {
+        heart.remove();
+      }, 1000);
+    }
+  });
+
+  function createHeartExplosion(rect) {
+    for (let i = 0; i < 20; i++) {
+      const heart = document.createElement("div");
+      heart.classList.add("trail-heart");
+      heart.innerHTML = "💖";
+      heart.style.left = rect.left + rect.width / 2 + "px";
+      heart.style.top = rect.top + rect.height / 2 + "px";
+      heart.style.transform = `translate(${Math.random() * 100 - 50}px, ${
+        Math.random() * 100 - 50
+      }px)`;
+      heart.style.transition = "all 1s ease";
+      document.body.appendChild(heart);
+
+      setTimeout(() => {
+        heart.style.opacity = "0";
+        setTimeout(() => heart.remove(), 1000);
+      }, 100);
+    }
+  }
+});
+    </script>
+</body>
+</html>
