@@ -1,1 +1,576 @@
 
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لحنين ❤️</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            background: linear-gradient(135deg, #ffeef8 0%, #fff5f7 50%, #ffe8f5 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        /* Floating Hearts Background */
+        .hearts-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            color: rgba(255, 182, 193, 0.6);
+            animation: float-up 8s infinite ease-in;
+            opacity: 0;
+        }
+
+        @keyframes float-up {
+            0% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* Main Container */
+        .container {
+            position: relative;
+            z-index: 10;
+            width: 90%;
+            max-width: 600px;
+            height: 500px;
+            perspective: 1000px;
+        }
+
+        /* Slide */
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 60px 40px;
+            box-shadow: 0 20px 60px rgba(255, 105, 180, 0.3);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            pointer-events: none;
+            border: 3px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: all;
+        }
+
+        .slide.exit {
+            opacity: 0;
+            transform: scale(1.2);
+        }
+
+        /* Text Styling */
+        .slide h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.5rem;
+            color: #ff69b4;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(255, 105, 180, 0.3);
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                text-shadow: 2px 2px 4px rgba(255, 105, 180, 0.3);
+            }
+            50% {
+                text-shadow: 0 0 20px rgba(255, 105, 180, 0.6),
+                             0 0 30px rgba(255, 105, 180, 0.4);
+            }
+        }
+
+        .slide p {
+            font-size: 1.4rem;
+            color: #555;
+            line-height: 2;
+            margin-bottom: 20px;
+            font-weight: 400;
+        }
+
+        .typing-text {
+            display: inline-block;
+            border-right: 3px solid #ff69b4;
+            padding-right: 5px;
+            animation: blink 0.7s infinite;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        @keyframes blink {
+            0%, 50% { border-color: #ff69b4; }
+            51%, 100% { border-color: transparent; }
+        }
+
+        /* Button Styling */
+        .next-btn {
+            margin-top: 40px;
+            padding: 18px 50px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, #ff69b4, #ff1493);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(255, 105, 180, 0.4);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .next-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .next-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .next-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 40px rgba(255, 105, 180, 0.6);
+        }
+
+        .next-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Shake Animation for Button */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .shake {
+            animation: shake 0.5s ease infinite;
+        }
+
+        /* Special Styling for Final Slide */
+        .slide-final {
+            background: linear-gradient(135deg, #fff0f5, #ffe4e9);
+        }
+
+        .slide-final h1 {
+            font-size: 4rem;
+            background: linear-gradient(135deg, #ff69b4, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: rainbow 3s ease infinite;
+        }
+
+        @keyframes rainbow {
+            0%, 100% {
+                filter: hue-rotate(0deg);
+            }
+            50% {
+                filter: hue-rotate(20deg);
+            }
+        }
+
+        .big-heart {
+            font-size: 5rem;
+            animation: heartbeat 1.5s ease infinite;
+            margin: 20px 0;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+            10%, 30% {
+                transform: scale(1.1);
+            }
+            20%, 40% {
+                transform: scale(1.05);
+            }
+        }
+
+        /* Confetti */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #ff69b4;
+            position: absolute;
+            animation: confetti-fall 3s linear;
+        }
+
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Hug Button */
+        .hug-btn {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #ff69b4;
+            font-weight: 700;
+            margin-top: 30px;
+        }
+
+        .hug-btn:hover {
+            background: linear-gradient(135deg, #ffed4e, #ffd700);
+        }
+
+        /* Emoji Styling */
+        .emoji {
+            font-size: 2.5rem;
+            display: inline-block;
+            animation: bounce 1s ease infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .slide h1 {
+                font-size: 2.5rem;
+            }
+            
+            .slide p {
+                font-size: 1.1rem;
+            }
+            
+            .next-btn {
+                padding: 15px 40px;
+                font-size: 1.1rem;
+            }
+
+            .container {
+                height: 600px;
+            }
+
+            .slide {
+                padding: 40px 30px;
+            }
+        }
+
+        /* Gold Sparkle Effect */
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: gold;
+            border-radius: 50%;
+            animation: sparkle-anim 2s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes sparkle-anim {
+            0%, 100% {
+                opacity: 0;
+                transform: scale(0);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Hearts Background -->
+    <div class="hearts-container" id="heartsContainer"></div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Slide 1 -->
+        <div class="slide active" data-slide="1">
+            <h1>حنين… ❤️</h1>
+            <p class="typing-text" id="text1"></p>
+            <p class="typing-text" id="text1-2"></p>
+            <button class="next-btn shake" onclick="nextSlide()">التالي ✨</button>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="slide" data-slide="2">
+            <span class="emoji">🙏</span>
+            <p class="typing-text" id="text2"></p>
+            <p class="typing-text" id="text2-2"></p>
+            <button class="next-btn" onclick="nextSlide()">التالي ✨</button>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="slide" data-slide="3">
+            <span class="emoji">💖</span>
+            <p class="typing-text" id="text3"></p>
+            <p class="typing-text" id="text3-2"></p>
+            <button class="next-btn" onclick="nextSlide()">التالي ✨</button>
+        </div>
+
+        <!-- Slide 4 -->
+        <div class="slide" data-slide="4">
+            <span class="emoji">😂</span>
+            <p class="typing-text" id="text4"></p>
+            <p class="typing-text" id="text4-2"></p>
+            <button class="next-btn" onclick="nextSlide()">التالي ✨</button>
+        </div>
+
+        <!-- Slide 5 -->
+        <div class="slide" data-slide="5">
+            <span class="emoji">💞</span>
+            <p class="typing-text" id="text5"></p>
+            <p class="typing-text" id="text5-2"></p>
+            <button class="next-btn" onclick="nextSlide()">التالي ✨</button>
+        </div>
+
+        <!-- Slide 6 - Final -->
+        <div class="slide slide-final" data-slide="6">
+            <h1>وآخر حاجة…</h1>
+            <div class="big-heart">❤️</div>
+            <p class="typing-text" id="text6" style="font-size: 1.8rem; font-weight: 600; color: #ff69b4;"></p>
+            <p class="typing-text" id="text6-2" style="font-size: 1.8rem; font-weight: 600; color: #ff69b4;"></p>
+            <button class="next-btn hug-btn" onclick="triggerHug()">🤗 Suggest a Hug</button>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 6;
+
+        // Typing Animation Data
+        const slideTexts = {
+            1: ["قبل ما تقري… خدي نفس بس 😊", ""],
+            2: ["عشان انتي حد غالي عليّا قوي… كنت لازم أصلّحك 🙏❤️", "ومحبّش أشوفك زعلانة مني أبدًا…"],
+            3: ["انتي حد أنا بحبه جدًا… و ربنا يخليكي ليا يا حنين ❤️", "ومش عايز أخسرك مهما حصل…"],
+            4: ["ولما بقولك رغّاية… أنا بهزر معاكي يا مجنونة 😂💗", "ده من كتر ما بحب كلامك أصلاً ❤️"],
+            5: ["عملتلك الرسالة دي… عشان علاقتنا تفضل قوية زي ما هي 💞", "وعشان منساش إننا ملناش غير بعض و بنثق في بعض…"],
+            6: ["إني بحبك.", "بحبك جدًا يا حنين ❤️✨"]
+        };
+
+        // Typing Effect Function
+        function typeText(elementId, text, speed = 50, callback) {
+            const element = document.getElementById(elementId);
+            if (!element) return;
+            
+            element.textContent = '';
+            let i = 0;
+            
+            const typing = setInterval(() => {
+                if (i < text.length) {
+                    element.textContent += text.charAt(i);
+                    i++;
+                } else {
+                    clearInterval(typing);
+                    element.style.borderRight = 'none';
+                    if (callback) callback();
+                }
+            }, speed);
+        }
+
+        // Initialize First Slide
+        function initSlide(slideNum) {
+            const texts = slideTexts[slideNum];
+            if (texts) {
+                typeText(`text${slideNum}`, texts[0], 50, () => {
+                    if (texts[1]) {
+                        setTimeout(() => {
+                            typeText(`text${slideNum}-2`, texts[1], 50);
+                        }, 300);
+                    }
+                });
+            }
+        }
+
+        // Next Slide Function
+        function nextSlide() {
+            if (currentSlide >= totalSlides) return;
+
+            const currentSlideEl = document.querySelector(`.slide[data-slide="${currentSlide}"]`);
+            currentSlideEl.classList.add('exit');
+            
+            setTimeout(() => {
+                currentSlideEl.classList.remove('active', 'exit');
+                currentSlide++;
+                
+                const nextSlideEl = document.querySelector(`.slide[data-slide="${currentSlide}"]`);
+                nextSlideEl.classList.add('active');
+                
+                // Initialize typing for new slide
+                setTimeout(() => {
+                    initSlide(currentSlide);
+                }, 300);
+
+                // Special effect for final slide
+                if (currentSlide === 6) {
+                    setTimeout(() => {
+                        createConfetti();
+                    }, 2000);
+                }
+            }, 600);
+        }
+
+        // Floating Hearts
+        function createFloatingHearts() {
+            const container = document.getElementById('heartsContainer');
+            const heartSymbols = ['❤️', '💕', '💖', '💗', '💓', '💝'];
+            
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDuration = (Math.random() * 3 + 5) + 's';
+                heart.style.animationDelay = Math.random() * 2 + 's';
+                container.appendChild(heart);
+                
+                setTimeout(() => {
+                    heart.remove();
+                }, 8000);
+            }, 800);
+        }
+
+        // Confetti Effect
+        function createConfetti() {
+            const colors = ['#ff69b4', '#ffd700', '#ff1493', '#ffb6c1', '#ff69b4'];
+            
+            for (let i = 0; i < 100; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.top = '-10px';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 3000);
+                }, i * 30);
+            }
+        }
+
+        // Hug Button Action
+        function triggerHug() {
+            // Create massive heart explosion
+            const container = document.getElementById('heartsContainer');
+            
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.style.position = 'fixed';
+                    heart.style.left = '50%';
+                    heart.style.top = '50%';
+                    heart.style.fontSize = (Math.random() * 40 + 20) + 'px';
+                    heart.textContent = '❤️';
+                    heart.style.zIndex = '1000';
+                    heart.style.pointerEvents = 'none';
+                    
+                    const angle = (Math.PI * 2 * i) / 50;
+                    const velocity = Math.random() * 300 + 200;
+                    const tx = Math.cos(angle) * velocity;
+                    const ty = Math.sin(angle) * velocity;
+                    
+                    heart.style.animation = 'none';
+                    document.body.appendChild(heart);
+                    
+                    heart.animate([
+                        { transform: 'translate(-50%, -50%) scale(0)', opacity: 1 },
+                        { transform: `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(1)`, opacity: 0 }
+                    ], {
+                        duration: 2000,
+                        easing: 'cubic-bezier(0, 0.5, 0.5, 1)'
+                    });
+                    
+                    setTimeout(() => heart.remove(), 2000);
+                }, i * 20);
+            }
+
+            // Create more confetti
+            createConfetti();
+            
+            // Change button text
+            event.target.textContent = '❤️ حضن كبير ليكي! ❤️';
+            event.target.style.transform = 'scale(1.2)';
+        }
+
+        // Sparkle Effect on Mouse Move
+        document.addEventListener('mousemove', (e) => {
+            if (Math.random() > 0.9) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.left = e.pageX + 'px';
+                sparkle.style.top = e.pageY + 'px';
+                document.body.appendChild(sparkle);
+                
+                setTimeout(() => sparkle.remove(), 2000);
+            }
+        });
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', () => {
+            createFloatingHearts();
+            initSlide(1);
+        });
+    </script>
+</body>
+</html>
